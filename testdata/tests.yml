@@ -1,0 +1,118 @@
+parsing:
+  - expression: ''
+    formatted: 'true'
+  - expression: 'a and b'
+    formatted: '( a and b )'
+  - expression: 'a or b'
+    formatted: '( a or b )'
+  - expression: 'not a'
+    formatted: 'not ( a )'
+  - expression: '( a and b ) or ( c and d )'
+    formatted: '( ( a and b ) or ( c and d ) )'
+  - expression: 'not a or b and not c or not d or e and f'
+    formatted: '( ( ( not ( a ) or ( b and not ( c ) ) ) or not ( d ) ) or ( e and f ) )'
+  - expression: 'not a\(\) or b and not c or not d or e and f'
+    formatted: '( ( ( not ( a\(\) ) or ( b and not ( c ) ) ) or not ( d ) ) or ( e and f ) )'
+  - expression: 'a\\ and b'
+    formatted: '( a\\ and b )'
+  - expression: '\\a and b'
+    formatted: '( \\a and b )'
+  - expression: 'a\\ and b'
+    formatted: '( a\\ and b )'
+  - expression: 'a and b\\'
+    formatted: '( a and b\\ )'
+  - expression: '( a and b\\\\)'
+    formatted: '( a and b\\\\ )'
+  - expression: 'a\\\( and b\\\)'
+    formatted: '( a\\\( and b\\\) )'
+  - expression: '(a and \\b)'
+    formatted: '( a and \\b )'
+  - expression: 'x or(y) '
+    formatted: '( x or y )'
+  # Operands with escaped parenthesis
+  - expression: 'x\(1\) or(y\(2\))'
+    formatted: '( x\(1\) or y\(2\) )'
+  - expression: '\\x or y\\ or z\\'
+    formatted: '( ( \\x or y\\ ) or z\\ )'
+  # Operands with escaped backslash
+  - expression: 'x\\ or(y\\\)) or(z\\)'
+    formatted: '( ( x\\ or y\\\) ) or z\\ )'
+
+evaluations:
+  - expression: 'not x'
+    tests:
+      - variables: ['x']
+        result: false
+      - variables: ['y']
+        result: true
+  - expression: 'x and y'
+    tests:
+      - variables: ['x', 'y']
+        result: true
+      - variables: ['x']
+        result: false
+      - variables: ['y']
+        result: false
+
+  - expression: 'x or y'
+    tests:
+      - variables: []
+        result: false
+      - variables: ['x', 'y']
+        result: true
+      - variables: ['x']
+        result: true
+      - variables: ['y']
+        result: true
+  - expression: 'x\(1\) or(y\(2\))'
+    tests:
+      - variables: ['x(1)']
+        result: true
+      - variables: ['y(2)']
+        result: true
+  - expression: 'x\\ or(y\\\)) or(z\\)'
+    tests:
+      - variables: ['x\']
+        result: true
+      - variables: ['y\)']
+        result: true
+      - variables: ['z\']
+        result: true
+      - variables: ['x']
+        result: false
+      - variables: ['y)']
+        result: false
+      - variables: ['z']
+        result: false
+  - expression: '\x or y\ or z\'
+    tests:
+      - variables: ['x']
+        result: true
+      - variables: ['y']
+        result: true
+      - variables: ['z']
+        result: true
+      - variables: ['\x']
+        result: false
+      - variables: ['\y']
+        result: false
+      - variables: ['\z']
+        result: false
+
+errors:
+  - expression: '@a @b or'
+    error: 'Syntax error. Expected operator'
+  - expression: '@a and (@b not)'
+    error: 'Syntax error. Expected operator'
+  - expression: '@a and (@b @c) or'
+    error: 'Syntax error. Expected operator'
+  - expression: '@a and or'
+    error: 'Syntax error. Expected operand'
+  - expression: 'or or'
+    error: 'Syntax error. Expected operand'
+  - expression: 'a b'
+    error: 'Syntax error. Expected operator'
+  - expression: '( a and b ) )'
+    error: 'Syntax error. Unmatched )'
+  - expression: '( ( a and b )'
+    error: 'Syntax error. Unmatched ('
