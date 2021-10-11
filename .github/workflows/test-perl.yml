@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  test:
+  test-perl:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -24,12 +24,12 @@ jobs:
         working-directory: perl
 
     - name: Run tests
-      run: cd perl && make test
+      working-directory: perl
+      run: make test
 
     # Run author tests second so as to not 'contaminate' the environment
     # with dependencies listed as author deps when they should have been
     # listed as general deps
     - name: Run author tests
-      run: cd perl && make authortest
-
-
+      working-directory: perl
+      run: make authortest

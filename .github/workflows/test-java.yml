@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  test:
+  test-java:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
