@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  test:
+  test-ruby:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -29,6 +29,5 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
         working-directory: ruby
-    - name: bundle exec rspec
+    - run: bundle exec rspec
       working-directory: ruby
-      run: bundle exec rspec
