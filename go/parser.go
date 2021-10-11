@@ -2,7 +2,6 @@ package tagexpressions
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"strings"
 	"unicode"
@@ -27,13 +26,13 @@ func Parse(infix string) (Evaluatable, error) {
 
 	for _, token := range tokens {
 		if isUnary(token) {
-			if err := check(expectedTokenType, OPERAND); err != nil {
+			if err := check(infix, expectedTokenType, OPERAND); err != nil {
 				return nil, err
 			}
 			operators.Push(token)
 			expectedTokenType = OPERAND
 		} else if isBinary(token) {
-			if err := check(expectedTokenType, OPERATOR); err != nil {
+			if err := check(infix, expectedTokenType, OPERATOR); err != nil {
 				return nil, err
 			}
 			for operators.Len() > 0 &&
@@ -45,27 +44,27 @@ func Parse(infix string) (Evaluatable, error) {
 			operators.Push(token)
 			expectedTokenType = OPERAND
 		} else if "(" == token {
-			if err := check(expectedTokenType, OPERAND); err != nil {
+			if err := check(infix, expectedTokenType, OPERAND); err != nil {
 				return nil, err
 			}
 			operators.Push(token)
 			expectedTokenType = OPERAND
 		} else if ")" == token {
-			if err := check(expectedTokenType, OPERATOR); err != nil {
+			if err := check(infix, expectedTokenType, OPERATOR); err != nil {
 				return nil, err
 			}
 			for operators.Len() > 0 && operators.Peek() != "(" {
 				pushExpr(operators.Pop(), expressions)
 			}
 			if operators.Len() == 0 {
-				return nil, errors.New("Syntax error. Unmatched )")
+				return nil, fmt.Errorf("Tag expression \"%s\" could not be parsed because of syntax error: Unmatched ).", infix)
 			}
 			if operators.Peek() == "(" {
 				operators.Pop()
 			}
 			expectedTokenType = OPERATOR
 		} else {
-			if err := check(expectedTokenType, OPERAND); err != nil {
+			if err := check(infix, expectedTokenType, OPERAND); err != nil {
 				return nil, err
 			}
 			pushExpr(token, expressions)
@@ -75,7 +74,7 @@ func Parse(infix string) (Evaluatable, error) {
 
 	for operators.Len() > 0 {
 		if operators.Peek() == "(" {
-			return nil, errors.New("Syntax error. Unmatched (")
+			return nil, fmt.Errorf("Tag expression \"%s\" could not be parsed because of syntax error: Unmatched (.", infix)
 		}
 		pushExpr(operators.Pop(), expressions)
 	}
@@ -157,9 +156,9 @@ func isOp(token string) bool {
 	return ok
 }
 
-func check(expectedTokenType, tokenType string) error {
+func check(infix, expectedTokenType, tokenType string) error {
 	if expectedTokenType != tokenType {
-		return fmt.Errorf("Syntax error. Expected %s", expectedTokenType)
+		return fmt.Errorf("Tag expression \"%s\" could not be parsed because of syntax error: Expected %s.", infix, expectedTokenType)
 	}
 	return nil
 }

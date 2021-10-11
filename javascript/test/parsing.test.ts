@@ -15,11 +15,11 @@ const tests = yaml.load(fs.readFileSync(`${testDataDir}/parsing.yml`, 'utf-8')) 
 describe('Parsing', () => {
   for (const test of tests) {
     it(`parses "${test.expression}" into "${test.formatted}"`, () => {
-      const node = parse(test.expression)
-      assert.strictEqual(node.toString(), test.formatted)
+      const expression = parse(test.expression)
+      assert.strictEqual(expression.toString(), test.formatted)
 
-      const nodeFromFormatted = parse(node.toString())
-      assert.strictEqual(nodeFromFormatted.toString(), test.formatted)
+      const expressionAgain = parse(expression.toString())
+      assert.strictEqual(expressionAgain.toString(), test.formatted)
     })
   }
 })
