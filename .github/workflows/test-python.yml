@@ -1,0 +1,31 @@
+name: test-python
+
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+        python-version: [ '2.x', '3.x', 'pypy-2.7', 'pypy-3.6', 'pypy-3.7' ]
+        include:
+          - os: macos-latest
+            python-version: '3.x'
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+        architecture: x64
+    - name: test
+      working-directory: python
+      run: make test
