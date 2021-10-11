@@ -30,8 +30,8 @@ public final class TagExpressionParser {
     private TagExpressionParser(String infix) {
 	this.infix = infix;
     }
-    
-    private Expression parse() {	
+
+    private Expression parse() {
         List<String> tokens = tokenize(infix);
         if(tokens.isEmpty()) return new True();
 
@@ -64,7 +64,7 @@ public final class TagExpressionParser {
                     pushExpr(pop(operators), expressions);
                 }
                 if (operators.size() == 0) {
-                    throw new TagExpressionException("Tag expression '%s' could not be parsed because of syntax error: unmatched )", this.infix);
+                    throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Unmatched ).", this.infix);
                 }
                 if ("(".equals(operators.peek())) {
                     pop(operators);
@@ -79,7 +79,7 @@ public final class TagExpressionParser {
 
         while (operators.size() > 0) {
             if ("(".equals(operators.peek())) {
-                throw new TagExpressionException("Tag expression '%s' could not be parsed because of syntax error: unmatched (", infix);
+                throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Unmatched (.", infix);
             }
             pushExpr(pop(operators), expressions);
         }
@@ -133,12 +133,12 @@ public final class TagExpressionParser {
 
     private void check(TokenType expectedTokenType, TokenType tokenType) {
         if (expectedTokenType != tokenType) {
-            throw new TagExpressionException("Tag expression '%s' could not be parsed because of syntax error: expected %s", infix, expectedTokenType.toString().toLowerCase());
+            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Expected %s.", infix, expectedTokenType.toString().toLowerCase());
         }
     }
 
     private <T> T pop(Deque<T> stack) {
-        if (stack.isEmpty()) throw new TagExpressionException("Tag expression '%s' could not be parsed because of an empty stack", infix);
+        if (stack.isEmpty()) throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of an empty stack", infix);
         return stack.pop();
     }
 
@@ -183,7 +183,7 @@ public final class TagExpressionParser {
         RIGHT
     }
 
-    private class Literal implements Expression {
+    private static class Literal implements Expression {
         private final String value;
 
         Literal(String value) {
@@ -201,7 +201,7 @@ public final class TagExpressionParser {
         }
     }
 
-    private class Or implements Expression {
+    private static class Or implements Expression {
         private final Expression left;
         private final Expression right;
 
@@ -221,7 +221,7 @@ public final class TagExpressionParser {
         }
     }
 
-    private class And implements Expression {
+    private static class And implements Expression {
         private final Expression left;
         private final Expression right;
 
@@ -241,7 +241,7 @@ public final class TagExpressionParser {
         }
     }
 
-    private class Not implements Expression {
+    private static class Not implements Expression {
         private final Expression expr;
 
         Not(Expression expr) {
@@ -259,10 +259,15 @@ public final class TagExpressionParser {
         }
     }
 
-    private class True implements Expression {
+    private static class True implements Expression {
         @Override
         public boolean evaluate(List<String> variables) {
             return true;
+        }
+
+        @Override
+        public String toString() {
+            return "true";
         }
     }
 }
