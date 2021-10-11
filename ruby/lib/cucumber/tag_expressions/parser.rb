@@ -18,7 +18,19 @@ module Cucumber
       end
 
       def parse(infix_expression)
-        process_tokens!(infix_expression)
+        expected_token_type = :operand
+
+        tokens = tokenize(infix_expression)
+        return True.new if tokens.empty?
+
+        tokens.each do |token|
+          if @operator_types[token]
+            expected_token_type = send("handle_#{@operator_types[token][:type]}", infix_expression, token, expected_token_type)
+          else
+            expected_token_type = handle_literal(infix_expression, token, expected_token_type)
+          end
+        end
+
         while @operators.any?
           raise %Q{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Unmatched (.} if @operators.last == '('
           push_expression(pop(@operators))
@@ -52,7 +64,7 @@ module Cucumber
         @operator_types[token][:precedence]
       end
 
-      def tokens(infix_expression)
+      def tokenize(infix_expression)
         escaped = false
         token = ""
         result = []
@@ -83,17 +95,6 @@ module Cucumber
           result.push(token)
         end
         result
-      end
-
-      def process_tokens!(infix_expression)
-        expected_token_type = :operand
-        tokens(infix_expression).each do |token|
-          if @operator_types[token]
-            expected_token_type = send("handle_#{@operator_types[token][:type]}", infix_expression, token, expected_token_type)
-          else
-            expected_token_type = handle_literal(infix_expression, token, expected_token_type)
-          end
-        end
       end
 
       def push_expression(token)

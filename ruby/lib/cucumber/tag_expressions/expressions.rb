@@ -61,5 +61,15 @@ module Cucumber
         "( #{@left} and #{@right} )"
       end
     end
+
+    class True
+      def evaluate(variables)
+        true
+      end
+
+      def to_s
+        "true"
+      end
+    end
   end
 end

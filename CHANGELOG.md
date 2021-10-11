@@ -19,6 +19,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+* [Ruby] Empty expression evaluates to true
+
 ## [4.1.0] - 2021-10-08
 
 ### Added
