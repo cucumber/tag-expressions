@@ -1,1 +1,1 @@
-export const testDataDir = process.env.CUCUMBER_TAG_EXPRESSIONS_TEST_DATA_DIR || '../testdata'
+export const testDataDir = process.env.TAG_EXPRESSIONS_TEST_DATA_DIR || '../testdata'
