@@ -15,11 +15,6 @@ jobs:
         os:
           - ubuntu-latest
         perl-version: ['5.14']
-        include:
-          - os: windows-latest
-            perl-version: '5.14'
-          - os: macos-latest
-            perl-version: '5.14'
 
     container:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
