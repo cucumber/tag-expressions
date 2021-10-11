@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+* [JavaScript] Support for EcmaScript modules (aka ESM). ([#5](https://github.com/cucumber/tag-expressions/pull/5))
+
 ### Changed
 
 ### Deprecated
