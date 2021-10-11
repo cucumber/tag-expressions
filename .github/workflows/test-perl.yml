@@ -21,11 +21,5 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: with Perl ${{ matrix.perl-version }} on ${{ matrix.os }}
-      uses: perl-actions/install-with-cpanm@v1
-      working-directory: perl
-      with:
-        cpanfile: "cpanfile"
-        sudo: false
     - run: make test
       working-directory: perl
