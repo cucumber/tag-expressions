@@ -32,7 +32,7 @@ endif
 .PHONY: update-version
 
 .cpanfile_dependencies: cpanfile
-	cpanm --notest --installdeps .
+	cpanm --verbose --notest --installdeps .
 	touch $@
 
 predistribution: dist-clean test CHANGELOG.md
