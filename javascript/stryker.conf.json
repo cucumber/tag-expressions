@@ -13,5 +13,7 @@
   "mochaOptions": {
     "spec": [ "dist/cjs/test/**/*.js" ]
   },
+  "checkers": ["typescript"],
+  "tsconfigFile": "tsconfig.json",
   "coverageAnalysis": "perTest"
 }
