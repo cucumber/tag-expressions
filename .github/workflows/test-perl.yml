@@ -1,4 +1,4 @@
-name: test-javascript
+name: test-perl
 
 on:
   push:
@@ -31,7 +31,5 @@ jobs:
       with:
         cpanfile: "cpanfile"
         sudo: false
-    - run: npm install-test
-      working-directory: perl
-    - run: npm run eslint
+    - run: make test
       working-directory: perl
