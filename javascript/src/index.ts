@@ -81,7 +81,7 @@ export default function parse(infix: string): Node {
 function tokenize(expr: string): string[] {
   const tokens = []
   let isEscaped = false
-  let token
+  let token: string[] | undefined
   for (let i = 0; i < expr.length; i++) {
     const c = expr.charAt(i)
     if ('\\' === c && !isEscaped) {
@@ -142,7 +142,7 @@ function pop<T>(stack: T[]): T {
   if (stack.length === 0) {
     throw new Error('empty stack')
   }
-  return stack.pop()
+  return stack.pop() as T
 }
 
 function pushExpr(token: string, stack: Node[]) {
