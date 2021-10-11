@@ -20,7 +20,7 @@ module Cucumber
       def parse(infix_expression)
         process_tokens!(infix_expression)
         while @operators.any?
-          raise 'Syntax error. Unmatched (' if @operators.last == '('
+          raise %Q{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Unmatched (.} if @operators.last == '('
           push_expression(pop(@operators))
         end
         expression = pop(@expressions)
@@ -89,9 +89,9 @@ module Cucumber
         expected_token_type = :operand
         tokens(infix_expression).each do |token|
           if @operator_types[token]
-            expected_token_type = send("handle_#{@operator_types[token][:type]}", token, expected_token_type)
+            expected_token_type = send("handle_#{@operator_types[token][:type]}", infix_expression, token, expected_token_type)
           else
-            expected_token_type = handle_literal(token, expected_token_type)
+            expected_token_type = handle_literal(infix_expression, token, expected_token_type)
           end
         end
       end
@@ -112,14 +112,14 @@ module Cucumber
       ############################################################################
       # Handlers
       #
-      def handle_unary_operator(token, expected_token_type)
-        check(expected_token_type, :operand)
+      def handle_unary_operator(infix_expression, token, expected_token_type)
+        check(infix_expression, expected_token_type, :operand)
         @operators.push(token)
         :operand
       end
 
-      def handle_binary_operator(token, expected_token_type)
-        check(expected_token_type, :operator)
+      def handle_binary_operator(infix_expression, token, expected_token_type)
+        check(infix_expression, expected_token_type, :operator)
         while @operators.any? && operator?(@operators.last) &&
               lower_precedence?(token)
           push_expression(pop(@operators))
@@ -128,31 +128,31 @@ module Cucumber
         :operand
       end
 
-      def handle_open_paren(token, expected_token_type)
-        check(expected_token_type, :operand)
+      def handle_open_paren(infix_expression, token, expected_token_type)
+        check(infix_expression, expected_token_type, :operand)
         @operators.push(token)
         :operand
       end
 
-      def handle_close_paren(_token, expected_token_type)
-        check(expected_token_type, :operator)
+      def handle_close_paren(infix_expression, _token, expected_token_type)
+        check(infix_expression, expected_token_type, :operator)
         while @operators.any? && @operators.last != '('
           push_expression(pop(@operators))
         end
-        raise 'Syntax error. Unmatched )' if @operators.empty?
+        raise %Q{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Unmatched ).} if @operators.empty?
         pop(@operators) if @operators.last == '('
         :operator
       end
 
-      def handle_literal(token, expected_token_type)
-        check(expected_token_type, :operand)
+      def handle_literal(infix_expression, token, expected_token_type)
+        check(infix_expression, expected_token_type, :operand)
         push_expression(token)
         :operator
       end
 
-      def check(expected_token_type, token_type)
+      def check(infix_expression, expected_token_type, token_type)
         if expected_token_type != token_type
-          raise "Syntax error. Expected #{expected_token_type}"
+          raise %Q{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Expected #{expected_token_type}.}
         end
       end
 
