@@ -1,3 +1,10 @@
+[![test-go](https://github.com/cucumber/tag-expressions/actions/workflows/test-go.yml/badge.svg)](https://github.com/cucumber/tag-expressions/actions/workflows/test-go.yml)
+[![test-java](https://github.com/cucumber/tag-expressions/actions/workflows/test-java.yml/badge.svg)](https://github.com/cucumber/tag-expressions/actions/workflows/test-java.yml)
+[![test-javascript](https://github.com/cucumber/tag-expressions/actions/workflows/test-javascript.yml/badge.svg)](https://github.com/cucumber/tag-expressions/actions/workflows/test-javascript.yml)
+[![test-perl](https://github.com/cucumber/tag-expressions/actions/workflows/test-perl.yml/badge.svg)](https://github.com/cucumber/tag-expressions/actions/workflows/test-perl.yml)
+[![test-python](https://github.com/cucumber/tag-expressions/actions/workflows/test-python.yml/badge.svg)](https://github.com/cucumber/tag-expressions/actions/workflows/test-python.yml)
+[![test-ruby](https://github.com/cucumber/tag-expressions/actions/workflows/test-ruby.yml/badge.svg)](https://github.com/cucumber/tag-expressions/actions/workflows/test-ruby.yml)
+
 # Tag Expressions
 
 Tag Expressions provide a simple query language for tags. The simplest tag expression is
