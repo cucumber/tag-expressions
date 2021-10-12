@@ -7,7 +7,7 @@
 
 # Tag Expressions
 
-Tag Expressions provide a simple query language for tags. The simplest tag expression is
+Tag Expressions is a simple query language for tags. The simplest tag expression is
 simply a single tag, for example:
 
     @smoke
@@ -30,40 +30,11 @@ For more complex Tag Expressions you can use parenthesis for clarity, or to chan
 
 ## Migrating from old style tags
 
+Older versions of Cucumber used a different syntax for tags. The list below
+provides some examples illustrating how to migrate to tag expressions.
+
 * `--tags @dev` stays the same
 * `--tags ~@dev` becomes `--tags 'not @dev'`
 * `--tags @foo,@bar` becomes  `--tags '@foo or @bar'`
 * `--tags @foo --tags @bar` becomes `--tags '@foo and bar'`
 * `--tags ~@foo --tags @bar,@zap` becomes `--tags 'not @foo and (@bar or @zap)'`
-
-## Internal design
-
-The implementation is based on a modified version of Edsger Dijkstra's
-[Shunting Yard algorithm](https://en.wikipedia.org/wiki/Shunting-yard_algorithm)
-that produces an expression tree instead of a postfix notation.
-
-For example this expression:
-
-    expression = "not @a or @b and not @c or not @d or @e and @f"
-
-Would parse into this expression tree:
-
-    # Get the root of the tree - an Expression object.
-    expressionNode = parser.parse(expression)
-
-                or
-              /    \
-            or      and
-           /  \    /   \
-         or  not  @e    @f
-        /  \    \
-      not  and   @d
-     /    /   \
-    @a   @b   not
-                 \
-                  @c
-
-The root node of tree can then be evaluated for different combinations of tags.
-For example:
-
-    result = expressionNode.evaluate(["@a", "@c", "@d"]) # => false
