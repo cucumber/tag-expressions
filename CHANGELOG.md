@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+- [Perl] Fixed missing dependency as well as too new syntax in the tests
+  ([cucumber/tag-expressions#15](https://github.com/cucumber/tag-expressions/pull/15)
+   [ehuelsmann])
+
 ## [4.1.0] - 2021-10-08
 
 ### Added
