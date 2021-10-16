@@ -2,7 +2,13 @@
 
 requires 'perl' => '5.14.4';
 requires 'Moo';
-requires 'List::Util' => '1.63'; # for 'any' and 'all' functions.
+
+# Although List::Util is a core module (better: it's dual life), it only
+# grew support for 'any' and 'all' in 1.33, which doesn't come with some
+# of the older Perl versions. Specifying the number explicitly makes older
+# Perls install this module from CPAN while allowing newer Perls to use the
+# version they come with.
+requires 'List::Util' => '1.33'; # for 'any' and 'all' functions.
 
 on 'test' => sub {
     requires 'Test2::V0';
