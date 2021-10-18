@@ -47,4 +47,20 @@ for my $case ( @{ $cases } ) {
 }
 
 
+$cases = LoadFile('../testdata/parsing.yml');
+
+for my $case ( @{ $cases } ) {
+    my $evaluator;
+    ok(
+        lives {
+            $evaluator = Cucumber::TagExpressions->parse( $case->{expression} );
+        },
+        qq{Parsing "$case->{expression}"} )
+        or diag($@);
+
+    is( $evaluator->stringify,
+        $case->{formatted},
+        "Stringified parser for $case->{expression}" );
+}
+
 done_testing;

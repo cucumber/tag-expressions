@@ -149,7 +149,7 @@ sub _expr {
             # immediately combine _and_ terms
             push @terms,
                 Cucumber::TagExpressions::AndNode->new(
-                    terms => [ $term, pop(@terms) ]
+                    terms => [ pop(@terms), $term ]
                 );
         }
         else {

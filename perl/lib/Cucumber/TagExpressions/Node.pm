@@ -112,7 +112,7 @@ The sub-expressions to evaluate.
     # 'use Moo' implies 'use strict; use warnings;'
     extends 'Cucumber::TagExpressions::Node';
 
-    use List::Util qw( all );
+    use List::Util qw( all reduce );
 
     has terms => ( is => 'ro', required => 1 );
 
@@ -125,9 +125,10 @@ The sub-expressions to evaluate.
     sub stringify {
         my ( $self ) = @_;
 
-        return join('', '( ',
-                    join(' and ', map { $_->stringify } reverse @{ $self->terms } ),
-                    ' )');
+        return
+            reduce { '( ' . $a . ' and ' . $b . ' )' }
+            map { $_->stringify }
+            @{ $self->terms };
     }
 }
 
@@ -153,7 +154,7 @@ The sub-expressions to evaluate.
     # 'use Moo' implies 'use strict; use warnings;'
     extends 'Cucumber::TagExpressions::Node';
 
-    use List::Util qw( any );
+    use List::Util qw( any reduce );
 
     has terms => ( is => 'ro', required => 1 );
 
@@ -166,9 +167,10 @@ The sub-expressions to evaluate.
     sub stringify {
         my ( $self ) = @_;
 
-        return join('', '( ',
-                    join(' or ', map {$_->stringify} @{ $self->terms } ),
-                    ' )');
+        return
+            reduce { '( ' . $a . ' or ' . $b . ' )' }
+            map { $_->stringify }
+            @{ $self->terms };
     }
 }
 
