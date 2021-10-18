@@ -11,7 +11,11 @@ module Cucumber
       end
 
       def to_s
-        @value.gsub(/\\/, "\\\\\\\\").gsub(/\(/, "\\(").gsub(/\)/, "\\)")
+        @value
+          .gsub(/\\/, "\\\\\\\\")
+          .gsub(/\(/, "\\(")
+          .gsub(/\)/, "\\)")
+          .gsub(/\s/, "\\ ")
       end
     end
 
