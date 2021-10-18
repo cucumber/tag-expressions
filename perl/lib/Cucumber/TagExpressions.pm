@@ -26,6 +26,8 @@ on a scenario against the filter expression.
 
 =cut
 
+use strict;
+use warnings;
 
 use Cucumber::TagExpressions::Node;
 
@@ -52,31 +54,41 @@ sub _get_token {
 
     return delete $state->{saved_token} if defined $state->{saved_token};
 
-    my $token = _consume_char( $state, 1 );
-    return if not defined $token;
+    my $token = '';
+    while (1) {
+        my $char = _consume_char( $state, 1 );
+        return ($token ? $token : undef)
+            if not defined $char;
 
-    if ( $token eq '(' or $token eq ')' ) {
-        return $token;
-    }
-    else {
-        $token = '' if $token =~ /\s/;
-        while (1) {
-            my $char = _consume_char( $state, 1 );
-            return $token if not defined $char;
-
-            if ( $char =~ m/\s/ ) {
+        if ( $char =~ m/\s/ ) {
+            if ( $token ) {
                 return $token;
             }
-            elsif ( $char eq '(' or $char eq ')' ) {
+            else {
+                next;
+            }
+        }
+        elsif ( $char eq '(' or $char eq ')' ) {
+            if ( $token ) {
                 _save_token( $state, $char );
                 return $token;
             }
-            if ( $char eq "\\" ) {
-                $token .= _consume_char( $state );
-            }
             else {
+                return $char;
+            }
+        }
+        if ( $char eq "\\" ) {
+            $char = _consume_char( $state, 1 ) // '<end-of-input>';
+            if ( $char eq '(' or $char eq ')'
+                 or $char eq "\\" or $char =~ /\s/ ) {
                 $token .= $char;
             }
+            else {
+                die qq{Tag expression "$state->{text}" could not be parsed because of syntax error: Illegal escape before "$char".};
+            }
+        }
+        else {
+            $token .= $char;
         }
     }
 }
@@ -97,7 +109,11 @@ sub _term_expr {
 
     if ( $token eq '(' ) {
         my $expr = _expr( $state );
-        _expect_token( $state, ')' );
+        my $token = _get_token( $state );
+
+        if ( not $token or $token ne ')' ) {
+            die qq{Tag expression "$state->{text}" could not be parsed because of syntax error: Unmatched (.}
+        }
 
         return $expr;
     }
@@ -106,30 +122,26 @@ sub _term_expr {
             expression => _term_expr( $state )
             );
     }
-    elsif ( $token =~ /^@/ ) {
-        die 'Tag must be longer than the at-sign (@) only'
-            if $token eq '@';
-
-        return Cucumber::TagExpressions::LiteralNode->new( tag => $token );
-    }
     else {
-        die "Unexpected input '$token'";
+        if ( $token eq 'and' or $token eq 'or' or $token eq 'not' ) {
+            die qq{Tag expression "$state->{text}" could not be parsed because of syntax error: Expected operand."};
+        }
+        return Cucumber::TagExpressions::LiteralNode->new( tag => $token );
     }
 }
 
 sub _expr {
     my ( $state ) = @_;
 
-    my @terms = ();
-    push @terms, _term_expr( $state );
+    my @terms = ( _term_expr( $state ) );
     while ( my $token = _get_token( $state ) ) {
-        if ( $token eq ')' ) {
-            _save_token( $state, ')' );
+        if ( not defined $token or $token eq ')' ) {
+            _save_token( $state, $token );
             last;
         }
         if ( not ( $token eq 'or'
                    or $token eq 'and' ) ) {
-            die "Found '$token' where operator ('and'/'or') expected";
+            die qq{Tag expression "$state->{text}" could not be parsed because of syntax error: Expected operator.}
         }
 
         my $term = _term_expr( $state );
@@ -137,7 +149,7 @@ sub _expr {
             # immediately combine _and_ terms
             push @terms,
                 Cucumber::TagExpressions::AndNode->new(
-                    terms => [ $term, pop(@terms) ]
+                    terms => [ pop(@terms), $term ]
                 );
         }
         else {
@@ -164,12 +176,23 @@ L<Cucumber::TagExpressions::ExpressionNode> instance.
 
 sub parse {
     my ( $class, $text ) = @_;
+
+    return Cucumber::TagExpressions::ExpressionNode->new(
+        sub_expression => undef
+        )
+        if $text =~ /^\s*$/; # match the empty string or space-only string as "constant true"
     my $state = { pos => 0, text => $text, saved_token => undef };
     my $expr  = _expr( $state );
 
     my $token = _get_token( $state );
-    die "Junk at end of expression: $token"
-        if defined $token;
+
+    if ( defined $token ) {
+        if ( $token eq ')' ) {
+            die qq{Tag expression "$state->{text}" could not be parsed because of syntax error: Unmatched ).};
+        }
+
+        die "Junk at end of expression: $token";
+    }
 
     return Cucumber::TagExpressions::ExpressionNode->new(
         sub_expression => $expr

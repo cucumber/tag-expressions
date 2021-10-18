@@ -77,11 +77,6 @@ my @good = (
                  { tags => [ qw/@b @d/ ], outcome => 1 },
                  { tags => [ qw/@q/ ],    outcome => !!0 },
           ] },
-    { expr => "\@a\\b",
-      tests => [ { tags => [ "\@a\\b" ],  outcome => !!0 },
-                 { tags => [ '@ab' ],     outcome => 1 },
-                 { tags => [ qw/@a/ ],    outcome => !!0 },
-          ] },
     { expr => "\@a\\\\b",
       tests => [ { tags => [ "\@a\\b" ],  outcome => 1 },
                  { tags => [ '@ab' ],     outcome => !!0 },
@@ -106,20 +101,18 @@ for my $ex (@good) {
 
 
 my %bad_syntax = (
-    '@a @b'      => q{Found '@b' where operator },
-    '@a not'     => q{Found 'not' where operator },
+    '@a @b'      => q{Expected operator.},
+    '@a not'     => q{Expected operator.},
     '@a or'      => 'Unexpected end of input parsing tag expression',
-    '@a not @b'  => q{Found 'not' where operator },
+    '@a not @b'  => q{Expected operator.},
     '@a or ('    => 'Unexpected end of input parsing tag expression',
-    '@'          => 'Tag must be longer than the at-sign',
-    '@a or @'    => 'Tag must be longer than the at-sign',
-    '@a and @b)' => 'Junk at end of expression',
-    "\@a\\"      => 'Unexpected end of string parsing tag expression',
+    '@a and @b)' => q{Unmatched ).},
+    "\@a\\"      => q{Illegal escape before "<end-of-input>"},
     );
 
 for my $expr (keys %bad_syntax) {
     like( dies { Cucumber::TagExpressions->parse($expr); },
-          qr/$bad_syntax{$expr}/,
+          qr/\Q$bad_syntax{$expr}\E/,
           "Parsing bad expression '$expr'" );
 }
 
