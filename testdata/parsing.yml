@@ -6,6 +6,8 @@
   formatted: '( a or b )'
 - expression: 'not a'
   formatted: 'not ( a )'
+- expression: 'a and b and c'
+  formatted: '( ( a and b ) and c )'
 - expression: '( a and b ) or ( c and d )'
   formatted: '( ( a and b ) or ( c and d ) )'
 - expression: 'not a or b and not c or not d or e and f'
