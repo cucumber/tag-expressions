@@ -6,4 +6,5 @@ requires 'List::Util' => '1.33'; # for 'any' and 'all' functions.
 
 on 'test' => sub {
     requires 'Test2::V0';
+    requires 'YAML';
 };
