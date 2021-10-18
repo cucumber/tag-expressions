@@ -91,7 +91,6 @@ public final class TagExpressionParser {
 
     private static List<String> tokenize(String expr) {
         List<String> tokens = new ArrayList<>();
-
         boolean isEscaped = false;
         StringBuilder token = new StringBuilder();
         for (int i = 0; i < expr.length(); i++) {
@@ -103,31 +102,21 @@ public final class TagExpressionParser {
                 } else {
                     throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Illegal escape before \"%s\".", expr, c);
                 }
-            } else {
-                isEscaped = c == ESCAPING_CHAR;
-                if (Character.isWhitespace(c)) { // skip
-                    if (token.length() > 0) { // end of token
-                        tokens.add(token.toString());
-                        token = new StringBuilder();
-                    }
-                } else if(!isEscaped) {
-                    switch (c) {
-                        case '(':
-                        case ')':
-                            if (token.length() > 0) { // end of token
-                                tokens.add(token.toString());
-                                token = new StringBuilder();
-                            }
-                            tokens.add(String.valueOf(c));
-                            break;
-                        default:
-                            token.append(c);
-                            break;
-                    }
+            } else if (c == ESCAPING_CHAR) {
+                isEscaped = true;
+            } else if (c == '(' || c == ')' || Character.isWhitespace(c)) {
+                if (token.length() > 0) {
+                    tokens.add(token.toString());
+                    token = new StringBuilder();
                 }
+                if (!Character.isWhitespace(c)) {
+                    tokens.add(String.valueOf(c));
+                }
+            } else {
+                token.append(c);
             }
         }
-        if (token.length() > 0) { // end of token
+        if (token.length() > 0) {
             tokens.add(token.toString());
         }
         return tokens;
