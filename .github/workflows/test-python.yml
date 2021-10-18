@@ -15,9 +15,9 @@ jobs:
         os:
           - ubuntu-latest
         python-version: [ '2.x', '3.x', 'pypy-2.7', 'pypy-3.6', 'pypy-3.7' ]
-        include:
-          - os: macos-latest
-            python-version: '3.x'
+        # include:
+        #   - os: macos-latest
+        #     python-version: '3.x'
 
     steps:
     - uses: actions/checkout@v2
