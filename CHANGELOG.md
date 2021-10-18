@@ -13,11 +13,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+* Only allow escape character (\) in front of (, ), or \. Throw error otherwise. ([#17](https://github.com/cucumber/tag-expressions/pull/17))
+
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+* Document escaping. ([#16](https://github.com/cucumber/tag-expressions/issues/16), [#17](https://github.com/cucumber/tag-expressions/pull/17))
+* [Ruby] Empty expression evaluates to true
 
 ## [4.1.0] - 2021-10-08
 

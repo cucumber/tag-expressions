@@ -11,7 +11,11 @@ module Cucumber
       end
 
       def to_s
-        @value.gsub(/\\/, "\\\\\\\\").gsub(/\(/, "\\(").gsub(/\)/, "\\)")
+        @value
+          .gsub(/\\/, "\\\\\\\\")
+          .gsub(/\(/, "\\(")
+          .gsub(/\)/, "\\)")
+          .gsub(/\s/, "\\ ")
       end
     end
 
@@ -59,6 +63,16 @@ module Cucumber
 
       def to_s
         "( #{@left} and #{@right} )"
+      end
+    end
+
+    class True
+      def evaluate(variables)
+        true
+      end
+
+      def to_s
+        "true"
       end
     end
   end

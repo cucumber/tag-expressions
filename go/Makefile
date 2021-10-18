@@ -1,4 +1,5 @@
 GO_SOURCE_FILES := $(wildcard *.go)
+TEST_FILES := $(wildcard ../testdata/*.yml)
 
 default: .linted .tested
 .PHONY: default
@@ -7,7 +8,7 @@ default: .linted .tested
 	gofmt -w $^
 	touch $@
 
-.tested: $(GO_SOURCE_FILES)
+.tested: $(GO_SOURCE_FILES) $(TEST_FILES)
 	go test ./...
 	touch $@
 
