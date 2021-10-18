@@ -43,8 +43,10 @@ you can escape it with a `\`. Examples:
 Older versions of Cucumber used a different syntax for tags. The list below
 provides some examples illustrating how to migrate to tag expressions.
 
-* `--tags @dev` stays the same
-* `--tags ~@dev` becomes `--tags 'not @dev'`
-* `--tags @foo,@bar` becomes  `--tags '@foo or @bar'`
-* `--tags @foo --tags @bar` becomes `--tags '@foo and bar'`
-* `--tags ~@foo --tags @bar,@zap` becomes `--tags 'not @foo and (@bar or @zap)'`
+| Old style command line        | Cucumber Expressions style command line |
+| ----------------------------- | --------------------------------------- |
+| --tags @dev                   | --tags @dev                             |
+| --tags ~@dev                  | --tags 'not @dev'                       |
+| --tags @foo,@bar              | --tags '@foo or @bar'                   |
+| --tags @foo --tags @bar       | --tags '@foo and bar'                   |
+| --tags ~@foo --tags @bar,@zap | --tags 'not @foo and (@bar or @zap)     |
