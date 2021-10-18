@@ -176,7 +176,7 @@ Note: some issues while releasing 4.0.1 prevent us to release it again.
 * First stable release!
 
 <!-- Releases -->
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v4.1.0...main
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v4.1.0...HEAD
 [4.1.0]: https://github.com/cucumber/tag-expressions/compare/v4.0.2...v4.1.0
 [4.0.2]: https://github.com/cucumber/tag-expressions/compare/v4.0.0...v4.0.2
 [4.0.0]: https://github.com/cucumber/tag-expressions/compare/v3.0.1...v4.0.0
