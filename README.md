@@ -35,8 +35,8 @@ you can escape it with a `\`. Examples:
 
 | Gherkin Tag   | Escaped Tag Expression |
 | ------------- | ---------------------- |
-| @x(y)         | @x\(y\)                |
-| @x\y          | @x\\y                  |
+| @x(y)         | @x\\(y\\)              |
+| @x\y          | @x\\\\y                |
 
 ## Migrating from old style tags
 
