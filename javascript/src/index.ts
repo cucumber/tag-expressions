@@ -55,7 +55,9 @@ export default function parse(infix: string): Node {
         pushExpr(pop(operators), expressions)
       }
       if (operators.length === 0) {
-        throw Error('Syntax error. Unmatched )')
+        throw new Error(
+          `Tag expression "${infix}" could not be parsed because of syntax error: Unmatched ).`
+        )
       }
       if (peek(operators) === '(') {
         pop(operators)
@@ -70,47 +72,54 @@ export default function parse(infix: string): Node {
 
   while (operators.length > 0) {
     if (peek(operators) === '(') {
-      throw Error('Syntax error. Unmatched (')
+      throw new Error(
+        `Tag expression "${infix}" could not be parsed because of syntax error: Unmatched (.`
+      )
     }
     pushExpr(pop(operators), expressions)
   }
 
   return pop(expressions)
+
+  function check(expectedTokenType: string, tokenType: string) {
+    if (expectedTokenType !== tokenType) {
+      throw new Error(
+        `Tag expression "${infix}" could not be parsed because of syntax error: Expected ${expectedTokenType}.`
+      )
+    }
+  }
 }
 
 function tokenize(expr: string): string[] {
   const tokens = []
   let isEscaped = false
-  let token: string[] | undefined
+  let token: string[] = []
   for (let i = 0; i < expr.length; i++) {
     const c = expr.charAt(i)
-    if ('\\' === c && !isEscaped) {
-      isEscaped = true
-    } else {
-      if (/\s/.test(c)) {
-        // skip
-        if (token) {
-          // end of token
-          tokens.push(token.join(''))
-          token = undefined
-        }
-      } else {
-        if ((c === '(' || c === ')') && !isEscaped) {
-          if (token) {
-            // end of token
-            tokens.push(token.join(''))
-            token = undefined
-          }
-          tokens.push(c)
-          continue
-        }
-        token = token ? token : [] // start of token
+    if (isEscaped) {
+      if (c === '(' || c === ')' || c === '\\' || /\s/.test(c)) {
         token.push(c)
+        isEscaped = false
+      } else {
+        throw new Error(
+          `Tag expression "${expr}" could not be parsed because of syntax error: Illegal escape before "${c}".`
+        )
       }
-      isEscaped = false
+    } else if (c === '\\') {
+      isEscaped = true
+    } else if (c === '(' || c === ')' || /\s/.test(c)) {
+      if (token.length > 0) {
+        tokens.push(token.join(''))
+        token = []
+      }
+      if (!/\s/.test(c)) {
+        tokens.push(c)
+      }
+    } else {
+      token.push(c)
     }
   }
-  if (token) {
+  if (token.length > 0) {
     tokens.push(token.join(''))
   }
   return tokens
@@ -126,12 +135,6 @@ function isBinary(token: string) {
 
 function isOp(token: string) {
   return ASSOC[token] !== undefined
-}
-
-function check(expectedTokenType: string, tokenType: string) {
-  if (expectedTokenType !== tokenType) {
-    throw new Error('Syntax error. Expected ' + expectedTokenType)
-  }
 }
 
 function peek(stack: string[]) {
@@ -171,7 +174,11 @@ class Literal implements Node {
   }
 
   public toString() {
-    return this.value.replace(/\\/g, '\\\\').replace(/\(/g, '\\(').replace(/\)/g, '\\)')
+    return this.value
+      .replace(/\\/g, '\\\\')
+      .replace(/\(/g, '\\(')
+      .replace(/\)/g, '\\)')
+      .replace(/\s/g, '\\ ')
   }
 }
 

@@ -28,13 +28,25 @@ For more complex Tag Expressions you can use parenthesis for clarity, or to chan
 
     (@smoke or @ui) and (not @slow)
 
+## Escaping
+
+If you need to use one of the reserved characters `(`, `)`, `\` or ` ` (whitespace) in a tag,
+you can escape it with a `\`. Examples:
+
+| Gherkin Tag   | Escaped Tag Expression |
+| ------------- | ---------------------- |
+| @x(y)         | @x\\(y\\)              |
+| @x\y          | @x\\\\y                |
+
 ## Migrating from old style tags
 
 Older versions of Cucumber used a different syntax for tags. The list below
 provides some examples illustrating how to migrate to tag expressions.
 
-* `--tags @dev` stays the same
-* `--tags ~@dev` becomes `--tags 'not @dev'`
-* `--tags @foo,@bar` becomes  `--tags '@foo or @bar'`
-* `--tags @foo --tags @bar` becomes `--tags '@foo and bar'`
-* `--tags ~@foo --tags @bar,@zap` becomes `--tags 'not @foo and (@bar or @zap)'`
+| Old style command line        | Cucumber Expressions style command line |
+| ----------------------------- | --------------------------------------- |
+| --tags @dev                   | --tags @dev                             |
+| --tags ~@dev                  | --tags "not @dev"                       |
+| --tags @foo,@bar              | --tags "@foo or @bar"                   |
+| --tags @foo --tags @bar       | --tags "@foo and bar"                   |
+| --tags ~@foo --tags @bar,@zap | --tags "not @foo and (@bar or @zap)"    |
