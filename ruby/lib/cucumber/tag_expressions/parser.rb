@@ -65,36 +65,35 @@ module Cucumber
       end
 
       def tokenize(infix_expression)
+        tokens = []
         escaped = false
         token = ""
-        result = []
         infix_expression.chars.each do | ch |
-          if ch == '\\' && !escaped
-            escaped = true
-          else
-            if ch.match(/\s/)
-              if token.length > 0
-                result.push(token)
-                token = ""
-              end
+          if escaped
+            if ch == '(' || ch == ')' || ch == '\\' || ch.match(/\s/)
+              token += ch
+              escaped = false
             else
-              if (ch == '(' || ch == ')') && !escaped
-                if token.length > 0
-                  result.push(token)
-                  token = ""
-                end
-                result.push(ch)
-              else
-                token = token + ch
-              end
+              raise %Q{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Illegal escape before "#{ch}".}
             end
-            escaped = false
+          elsif ch == '\\'
+            escaped = true
+          elsif ch == '(' || ch == ')' || ch.match(/\s/)
+            if token.length > 0
+              tokens.push(token)
+              token = ""
+            end
+            if !ch.match(/\s/)
+              tokens.push(ch)
+            end
+          else
+            token += ch
           end
         end
         if token.length > 0
-          result.push(token)
+          tokens.push(token)
         end
-        result
+        tokens
       end
 
       def push_expression(token)

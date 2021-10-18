@@ -28,6 +28,16 @@ For more complex Tag Expressions you can use parenthesis for clarity, or to chan
 
     (@smoke or @ui) and (not @slow)
 
+## Escaping
+
+If you need to use one of the reserved characters `(`, `)`, `\` or ` ` (whitespace) in a tag,
+you can escape it with a `\`. Examples:
+
+| Gherkin Tag   | Escaped Tag Expression |
+| ------------- | ---------------------- |
+| @x(y)         | @x\(y\)                |
+| @x\y          | @x\\y                  |
+
 ## Migrating from old style tags
 
 Older versions of Cucumber used a different syntax for tags. The list below

@@ -14,3 +14,7 @@
   error: 'Tag expression "( a and b ) )" could not be parsed because of syntax error: Unmatched ).'
 - expression: '( ( a and b )'
   error: 'Tag expression "( ( a and b )" could not be parsed because of syntax error: Unmatched (.'
+- expression: 'x or \y or z'
+  error: 'Tag expression "x or \y or z" could not be parsed because of syntax error: Illegal escape before "y".'
+- expression: 'x\ or y'
+  error: 'Tag expression "x\ or y" could not be parsed because of syntax error: Expected operator.'

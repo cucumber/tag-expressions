@@ -16,7 +16,10 @@ type Evaluatable interface {
 }
 
 func Parse(infix string) (Evaluatable, error) {
-	tokens := tokenize(infix)
+	tokens, err := tokenize(infix)
+	if err != nil {
+		return nil, err
+	}
 	if len(tokens) == 0 {
 		return &trueExpr{}, nil
 	}
@@ -96,51 +99,38 @@ var PREC = map[string]int{
 	"not": 2,
 }
 
-func tokenize(expr string) []string {
+func tokenize(expr string) ([]string, error) {
 	var tokens []string
 	var token bytes.Buffer
 
-	collectToken := func() {
-		if token.Len() > 0 {
-			tokens = append(tokens, token.String())
-			token.Reset()
-		}
-	}
-
 	escaped := false
 	for _, c := range expr {
-		if unicode.IsSpace(c) {
-			collectToken()
-			escaped = false
-			continue
-		}
-
-		ch := string(c)
-
-		switch ch {
-		case "\\":
-			if escaped {
-				token.WriteString(ch)
+		if escaped {
+			if c == '(' || c == ')' || c == '\\' || unicode.IsSpace(c) {
+				token.WriteRune(c)
 				escaped = false
 			} else {
-				escaped = true
+				return nil, fmt.Errorf("Tag expression \"%s\" could not be parsed because of syntax error: Illegal escape before \"%s\".", expr, string(c))
 			}
-		case "(", ")":
-			if escaped {
-				token.WriteString(ch)
-				escaped = false
-			} else {
-				collectToken()
-				tokens = append(tokens, ch)
+		} else if c == '\\' {
+			escaped = true
+		} else if c == '(' || c == ')' || unicode.IsSpace(c) {
+			if token.Len() > 0 {
+				tokens = append(tokens, token.String())
+				token.Reset()
 			}
-		default:
-			token.WriteString(ch)
-			escaped = false
+			if !unicode.IsSpace(c) {
+				tokens = append(tokens, string(c))
+			}
+		} else {
+			token.WriteRune(c)
 		}
 	}
+	if token.Len() > 0 {
+		tokens = append(tokens, token.String())
+	}
 
-	collectToken()
-	return tokens
+	return tokens, nil
 }
 
 func isUnary(token string) bool {
@@ -197,17 +187,11 @@ func (l *literalExpr) Evaluate(variables []string) bool {
 }
 
 func (l *literalExpr) ToString() string {
-	return strings.Replace(
-		strings.Replace(
-			strings.Replace(l.value, "\\", "\\\\", -1),
-			"(",
-			"\\(",
-			-1,
-		),
-		")",
-		"\\)",
-		-1,
-	)
+	s1 := l.value
+	s2 := strings.Replace(s1, "\\", "\\\\", -1)
+	s3 := strings.Replace(s2, "(", "\\(", -1)
+	s4 := strings.Replace(s3, ")", "\\)", -1)
+	return strings.Replace(s4, " ", "\\ ", -1)
 }
 
 type orExpr struct {

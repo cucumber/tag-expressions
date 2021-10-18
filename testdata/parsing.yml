@@ -28,11 +28,11 @@
   formatted: '( a and \\b )'
 - expression: 'x or(y) '
   formatted: '( x or y )'
-# Operands with escaped parenthesis
 - expression: 'x\(1\) or(y\(2\))'
   formatted: '( x\(1\) or y\(2\) )'
 - expression: '\\x or y\\ or z\\'
   formatted: '( ( \\x or y\\ ) or z\\ )'
-# Operands with escaped backslash
 - expression: 'x\\ or(y\\\)) or(z\\)'
   formatted: '( ( x\\ or y\\\) ) or z\\ )'
+- expression: 'x\  or y'
+  formatted: '( x\  or y )'
