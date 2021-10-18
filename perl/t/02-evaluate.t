@@ -96,8 +96,8 @@ for my $ex (@good) {
         }, "Parsing $ex->{expr}")
         or note($@);
 
-    for my $test ($ex->{tests}->@*) {
-        my @tags = $test->{tags}->@*;
+    for my $test ( @{ $ex->{tests} } ) {
+        my @tags = @{ $test->{tags} };
         is( $e->evaluate(@tags), $test->{outcome},
             "Expr $ex->{expr}; Tags: @tags; Outcome: $test->{outcome} " )
             or diag( "Parsed expression: " . $e->stringify );

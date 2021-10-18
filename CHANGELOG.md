@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
+* [Perl] Fixed missing dependency as well as new syntax in the tests
+  ([cucumber/tag-expressions#15](https://github.com/cucumber/tag-expressions/pull/15)
+   [ehuelsmann])
 * Document escaping. ([#16](https://github.com/cucumber/tag-expressions/issues/16), [#17](https://github.com/cucumber/tag-expressions/pull/17))
 * [Ruby] Empty expression evaluates to true
 
