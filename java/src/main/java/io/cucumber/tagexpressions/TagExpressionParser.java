@@ -189,15 +189,11 @@ public final class TagExpressionParser {
 
         @Override
         public String toString() {
-            String v1 = value
-                    .replaceAll(Pattern.quote("\\"), Matcher.quoteReplacement("\\\\"));
-            String v2 = v1
-                    .replaceAll(Pattern.quote("("), Matcher.quoteReplacement("\\("));
-            String v3 = v2
-                    .replaceAll(Pattern.quote(")"), Matcher.quoteReplacement("\\)"));
-            String v4 = v3
+            return value
+                    .replaceAll(Pattern.quote("\\"), Matcher.quoteReplacement("\\\\"))
+                    .replaceAll(Pattern.quote("("), Matcher.quoteReplacement("\\("))
+                    .replaceAll(Pattern.quote(")"), Matcher.quoteReplacement("\\)"))
                     .replaceAll("\\s", "\\\\ ");
-            return v4;
         }
     }
 
