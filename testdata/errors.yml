@@ -8,6 +8,8 @@
   error: 'Tag expression "@a and or" could not be parsed because of syntax error: Expected operand.'
 - expression: 'or or'
   error: 'Tag expression "or or" could not be parsed because of syntax error: Expected operand.'
+- expression: 'a and or'
+  error: 'Tag expression "a and or" could not be parsed because of syntax error: Expected operand.'
 - expression: 'a b'
   error: 'Tag expression "a b" could not be parsed because of syntax error: Expected operator.'
 - expression: '( a and b ) )'
