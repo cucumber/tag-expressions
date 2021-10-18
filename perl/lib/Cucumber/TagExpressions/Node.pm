@@ -86,7 +86,7 @@ The tag to test presence for.
     sub stringify {
         my ( $self ) = @_;
 
-        return $self->tag;
+        return ($self->tag =~ s/([ ()\\])/\\$1/gr);
     }
 }
 
@@ -125,9 +125,9 @@ The sub-expressions to evaluate.
     sub stringify {
         my ( $self ) = @_;
 
-        return join('', '(and ',
-                    join(' ', map { $_->stringify } @{ $self->terms } ),
-                    ')');
+        return join('', '( ',
+                    join(' and ', map { $_->stringify } reverse @{ $self->terms } ),
+                    ' )');
     }
 }
 
@@ -166,9 +166,9 @@ The sub-expressions to evaluate.
     sub stringify {
         my ( $self ) = @_;
 
-        return join('', '(or ',
-                    join(' ', map {$_->stringify} @{ $self->terms } ),
-                    ')');
+        return join('', '( ',
+                    join(' or ', map {$_->stringify} @{ $self->terms } ),
+                    ' )');
     }
 }
 
@@ -204,7 +204,7 @@ The wrapped node class instance for which to negate the result.
     sub stringify {
         my ( $self ) = @_;
 
-        return '(not ' . $self->expression->stringify . ')';
+        return 'not ( ' . $self->expression->stringify . ' )';
     }
 }
 
@@ -236,12 +236,14 @@ An instance of one of the other node class types.
         my $tags = (ref $tags[0] and ref $tags[0] eq 'HASH') ? $tags[0]
             : { map { $_ => 1 } @tags };
 
+        return 1==1 if not defined $self->sub_expression;
         return not not $self->sub_expression->evaluate( $tags );
     }
 
     sub stringify {
         my ( $self ) = @_;
 
+        return 'true' if not defined $self->sub_expression;
         return $self->sub_expression->stringify;
     }
 }

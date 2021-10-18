@@ -176,6 +176,11 @@ L<Cucumber::TagExpressions::ExpressionNode> instance.
 
 sub parse {
     my ( $class, $text ) = @_;
+
+    return Cucumber::TagExpressions::ExpressionNode->new(
+        sub_expression => undef
+        )
+        if $text =~ /^\s*$/; # match the empty string or space-only string as "constant true"
     my $state = { pos => 0, text => $text, saved_token => undef };
     my $expr  = _expr( $state );
 
