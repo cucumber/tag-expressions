@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 * [Perl] Fixed missing dependency as well as new syntax in the tests
   ([cucumber/tag-expressions#15](https://github.com/cucumber/tag-expressions/pull/15)
-   [ehuelsmann])
+   [ehuelsmann](https://github.com/ehuelsmann))
 * Document escaping. ([#16](https://github.com/cucumber/tag-expressions/issues/16), [#17](https://github.com/cucumber/tag-expressions/pull/17))
 * [Ruby], [Perl] Empty expression evaluates to true
 
@@ -32,12 +32,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 * [Perl] Add new implementation
-  ([#1782](https://github.com/cucumber/common/pull/1782) [ehuelsmann])
+  ([#1782](https://github.com/cucumber/common/pull/1782) [ehuelsmann](https://github.com/ehuelsmann))
 
 ### Fixed
 
 * [Go], [JavaScript], [Java], [Ruby] Support backslash-escape in tag expressions
-  ([#1778](https://github.com/cucumber/common/pull/1778) [yusuke-noda])
+  ([#1778](https://github.com/cucumber/common/pull/1778) [yusuke-noda](https://github.com/yusuke-noda))
 
 ## [4.0.2] - 2021-09-13
 
@@ -47,7 +47,7 @@ Note: some issues while releasing 4.0.1 prevent us to release it again.
 
 * [Python] Remove call to deprecated `2to3` library causing `pip install` to fail
   ([#1736](https://github.com/cucumber/common/issues/1736)
-   [krisgesling])
+   [krisgesling](https://github.com/krisgesling))
 
 ## [4.0.0] - 2021-09-02
 
@@ -68,7 +68,7 @@ Note: some issues while releasing 4.0.1 prevent us to release it again.
 
 * [Java] Enable consumers to find our version at runtime using `clazz.getPackage().getImplementationVersion()` by upgrading to `cucumber-parent:2.1.0`
   ([#976](https://github.com/cucumber/cucumber/pull/976)
-   [aslakhellesoy])
+   [aslakhellesoy](https://github.com/aslakhellesoy))
 
 ### Changed
 
@@ -76,7 +76,7 @@ Note: some issues while releasing 4.0.1 prevent us to release it again.
 * [Java] Reduced public API to the bare minimum required.
 * [Java] Added more informative error messages for `TagExpressionParser` through the `TagExpressionException`.
   ([#1005](https://github.com/cucumber/cucumber/pull/1005)
-  [cyocum])
+  [cyocum](https://github.com/cyocum)
 
 ## [2.0.4] - 2020-01-10
 
@@ -112,7 +112,7 @@ Note: some issues while releasing 4.0.1 prevent us to release it again.
 ### Added
 * Go: New implementation.
   ([#339](https://github.com/cucumber/cucumber/pull/339)
-   [charlierudolph])
+   [charlierudolph](https://github.com/charlierudolph))
 
 ### Changed
 * JavaScript: Changed API to return a `parse` function rather than a class with a `parse` method.
@@ -121,38 +121,38 @@ Note: some issues while releasing 4.0.1 prevent us to release it again.
 ### Removed
 * Java: OSGi support has been removed.
   ([#412](https://github.com/cucumber/cucumber/issues/412)
-   [aslakhellesoy])
+   [aslakhellesoy](https://github.com/aslakhellesoy))
 
 ### Fixed
 * Documentation links now point to new website (cucumber.io)
   ([#560](https://github.com/cucumber/cucumber/issues/560)
-   [luke-hill])
+   [luke-hill](https://github.com/luke-hill))
 
 ## [1.1.1] - 2017-12-01
 
 ### Fixed
 * Java: Fix OSGI exported package
   ([#309](https://github.com/cucumber/cucumber/pull/309)
-   by [mpkorstanje])
+   by [mpkorstanje](https://github.com/mpkorstanje))
 
 ## [1.1.0] - 2017-11-28
 
 ### Added
 * Ruby: Added `tag-expressions` command-line tool for tag expressions
   ([#282](https://github.com/cucumber/cucumber/pull/282)
-   by [aslakhellesoy])
+   by [aslakhellesoy](https://github.com/aslakhellesoy))
 * Escape special chars in tags
   ([#286](https://github.com/cucumber/cucumber/pull/286)
    [#285](https://github.com/cucumber/cucumber/issues/285)
-   by [link89])
+   by [link89](https://github.com/link89))
 
 ### Fixed
 * Don't support RPN
   ([#304](https://github.com/cucumber/cucumber/issues/304)
-   by [aslakhellesoy])
+   by [aslakhellesoy](https://github.com/aslakhellesoy))
 * Parse empty tag expressions (always evaluates to true)
   ([#296](https://github.com/cucumber/cucumber/issues/296)
-   by [aslakhellesoy])
+   by [aslakhellesoy](https://github.com/aslakhellesoy))
 
 ## [1.0.1] - 2017-05-28
 
@@ -161,13 +161,13 @@ Note: some issues while releasing 4.0.1 prevent us to release it again.
   ([#76](https://github.com/cucumber/cucumber/pull/76)
    [#78](https://github.com/cucumber/cucumber/pull/78)
    [#104](https://github.com/cucumber/cucumber/issues/104)
-   by [charlierudolph])
+   by [charlierudolph](https://github.com/charlierudolph))
 * java: Make the jar a bundle to support OSGi
   ([#99](https://github.com/cucumber/cucumber/pull/99)
-    by [brasmusson])
+    by [brasmusson](https://github.com/brasmusson))
 * Add a [changelog](keepachangelog.com)
   ([#213](https://github.com/cucumber/cucumber/issues/213)
-   by [aslakhellesoy])
+   by [aslakhellesoy](https://github.com/aslakhellesoy))
 
 ## 1.0.0 - 2016-09-01
 
@@ -175,7 +175,6 @@ Note: some issues while releasing 4.0.1 prevent us to release it again.
 
 * First stable release!
 
-<!-- Releases -->
 [Unreleased]: https://github.com/cucumber/tag-expressions/compare/v4.1.0...HEAD
 [4.1.0]: https://github.com/cucumber/tag-expressions/compare/v4.0.2...v4.1.0
 [4.0.2]: https://github.com/cucumber/tag-expressions/compare/v4.0.0...v4.0.2
@@ -189,12 +188,3 @@ Note: some issues while releasing 4.0.1 prevent us to release it again.
 [1.1.0]: https://github.com/cucumber/tag-expressions/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/cucumber/tag-expressions/compare/v1.0.0...v1.0.1
 [1.0.1]: https://github.com/cucumber/tag-expressions/releases/tag/v1.0.0
-
-<!-- Contributors -->
-[aslakhellesoy]:    https://github.com/aslakhellesoy
-[brasmusson]:       https://github.com/brasmusson
-[charlierudolph]:   https://github.com/charlierudolph
-[ehuelsmann]:       https://github.com/ehuelsmann
-[link89]:           https://github.com/link89
-[luke-hill]:        https://github.com/luke-hill
-[yusuke-noda]:      https://github.com/yusuke-noda
