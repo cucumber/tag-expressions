@@ -1,20 +1,21 @@
 # =====================================================
-# INVOKE CONFIGURATION:
+# INVOKE CONFIGURATION FOR: cucumber-tag-expressions
 # =====================================================
-# -- ON WINDOWS:
-# run:
-#   echo: true
-#   pty:  false
-#   shell: C:\Windows\System32\cmd.exe
+# USAGE: invoke --list
+# USAGE: invoke <TASK>
+# DESCRIPTION:
+#   invoke is a small, Python based build system.
+#
+# SEE ALSO:
+#   * https://www.pyinvoke.org
 # =====================================================
-# MAYBE: tasks: auto_dash_names: false
 
 project:
-    name: cucumber_tag_expressions
+    name: cucumber-tag-expressions
 
 run:
     echo: true
-    # DISABLED: pty:  true
+
 cleanup:
     extra_directories:
       - "build"
@@ -22,5 +23,10 @@ cleanup:
 
 cleanup_all:
     extra_directories:
+      - .direnv
       - .hypothesis
       - .pytest_cache
+      - __pypackages__
+    extra_files:
+      - "*.lock"
+      - .pdm.toml
