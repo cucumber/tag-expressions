@@ -57,6 +57,7 @@ install-packages $(INSTALL_PACKAGES_DONE_MARKER_FILE): $(PY_REQUIREMENT_FILES)
 clean:
 	-rm -f $(INSTALL_PACKAGES_DONE_MARKER_FILE)
 	-rm -rf build dist .tox .venv* .dotenv/
+	-rm -rf get-pip.py
 	-py.cleanup
 
 test: $(INSTALL_PACKAGES_DONE_MARKER_FILE)

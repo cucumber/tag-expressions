@@ -30,3 +30,4 @@ cleanup_all:
     extra_files:
       - "*.lock"
       - .pdm.toml
+      - get-pip.py
