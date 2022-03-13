@@ -24,7 +24,7 @@ modernize >= 0.5
 # -- STATIC CODE ANALYSIS:
 # PREPARED: prospector >= 0.12.7
 pylint >= 1.7
-bandit >= 1.4
+bandit >= 1.4; python_version >= '3.7'
 
 # -- LOCAL CI (for Python):
 # Test with different Python versions.
