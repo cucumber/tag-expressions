@@ -1,8 +1,8 @@
 Cucumber Tag Expressions for Python
 ===============================================================================
 
-.. image:: https://img.shields.io/circleci/build/github/cucumber/common/main?job=tag-expressions-python
-    :target: https://circleci.com/gh/cucumber/common
+.. image:: https://github.com/cucumber/tag-expressions/actions/workflows/test-python.yml/badge.svg
+    :target: https://github.com/cucumber/tag-expressions/actions/workflows/test-python.yml
     :alt: CI Build Status
 
 .. image:: https://img.shields.io/pypi/v/cucumber-tag-expressions.svg
