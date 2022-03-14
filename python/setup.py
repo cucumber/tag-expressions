@@ -53,7 +53,7 @@ setup(
     version = "4.1.0",
     author = "Jens Engel",
     author_email = "jenisys@noreply.github.com",
-    url = "https://github.com/cucumber/tag-expressions-python",
+    url = "https://github.com/cucumber/tag-expressions",
     download_url= "https://pypi.org/project/cucumber-tag-expressions",
     description = "Provides a tag-expression parser and evaluation logic for cucumber/behave",
     long_description = long_description,
