@@ -4,7 +4,7 @@ IS_TESTDATA = $(findstring -testdata,${CURDIR})
 SETUP_PY = $(shell find . -name "setup.py")
 
 update-dependencies:
-	@echo "\033[0;31mPlease update dependencies for python manually!!\033[0m"
+	@echo "\033[0;32m$(@): DONE\033[0m"
 .PHONY: update-dependencies
 
 pre-release: update-version update-dependencies clean default

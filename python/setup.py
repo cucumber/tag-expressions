@@ -54,8 +54,8 @@ setup(
     author = "Jens Engel",
     author_email = "jenisys@noreply.github.com",
     url = "https://github.com/cucumber/tag-expressions",
-    download_url= "http://pypi.python.org/pypi/cucumber-tag-expressions",
-    description = "Provides tag-expression parser for cucumber/behave",
+    download_url= "https://pypi.org/project/cucumber-tag-expressions",
+    description = "Provides a tag-expression parser and evaluation logic for cucumber/behave",
     long_description = long_description,
     keywords= "BDD, testing, cucumber, tag-expressions, behave",
     license = "MIT",
@@ -73,14 +73,22 @@ setup(
     ],
     extras_require={
         # PREPARED: 'docs': ["sphinx>=1.5"],
-        'develop': [
+        "develop": [
             "coverage",
             "pytest >= 3.2",
             "pytest-html >= 1.19.0",
             "tox >= 2.9",
-            "invoke",
-            "path.py",
-            "pylint"
+            "pylint",
+            # -- INVOKE SUPPORT:
+            "invoke >= 1.4.1",
+            "six >= 1.15.0",
+            "path >= 13.1.0;    python_version >= '3.5'",
+            "path.py >= 11.5.0; python_version <  '3.5'",
+            # PYTHON2 BACKPORTS:
+            "pathlib;    python_version <= '3.4'",
+            "backports.shutil_which; python_version <= '3.3'",
+            # CLEANUP SUPPORT: py.cleanup is provided by: pycmd
+            "pycmd",
         ],
     },
 
