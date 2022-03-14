@@ -6,7 +6,7 @@
 # DESCRIPTION:
 #    This makefile uses "pip" to automatically install the required packages:
 #
-#    * CASE 1: If a Python a virtual environment was setup and activated,
+#    * CASE 1: If a Python a virtual environment was set up and activated,
 #      the packages are installed into the virtual environment.
 #
 #    * CASE 2: The packages are installed in the $HOME directory.
@@ -49,10 +49,12 @@ all: .ensure.packages_are_installed test
 
 .ensure.packages_are_installed: $(INSTALL_PACKAGES_DONE_MARKER_FILE)
 install-packages $(INSTALL_PACKAGES_DONE_MARKER_FILE): $(PY_REQUIREMENT_FILES)
-	@echo "$(@): ..."
+	@echo "INSTALL-PACKAGES: ..."
 	test -d $(INSTALL_PACKAGES_DONE_MARKER_DIR) || mkdir -p $(INSTALL_PACKAGES_DONE_MARKER_DIR)
 	$(PIP) install $(PIP_INSTALL_OPTIONS) $(addprefix -r ,$(PY_REQUIREMENT_FILES))
 	touch $(INSTALL_PACKAGES_DONE_MARKER_FILE)
+	@echo "INSTALL-PACKAGES: done"
+	@echo ""
 
 clean:
 	-rm -f $(INSTALL_PACKAGES_DONE_MARKER_FILE)

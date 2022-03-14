@@ -250,7 +250,7 @@ USE CASE: Use "dotenv" to simplify Setup of Environment Variables
 -------------------------------------------------------------------------------
 
 `direnv`_ simplifies the setup and cleanup of environment variables.
-If `direnv`_ is setup:
+If `direnv`_ is set up:
 
 * On entering this directory: Environment variables from ``.envrc`` file are set up.
 * On leaving  this directory: The former environment is restored.
