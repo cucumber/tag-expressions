@@ -35,7 +35,7 @@ import sys
 from invoke import Collection
 
 # -- TASK-LIBRARY:
-from . import _tasklet_cleanup as cleanup
+from . import invoke_cleanup as cleanup
 from . import test
 from . import release
 

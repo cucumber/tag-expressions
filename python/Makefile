@@ -1,17 +1,20 @@
 # =============================================================================
-# GNU MAKEFILE: tag-expressions for Python
+# GNU MAKEFILE: Cucumber tag-expressions for Python
 # =============================================================================
-# NOTE: bootstrap requires ON-LINE access.
+# NOTE: install-packages/bootstrap requires ON-LINE access.
 # REQUIRES: Python >= 2.7 is installed
-# REQUIRES: pip is installed (normally w/ newer python versions)
 # DESCRIPTION:
-#    This makefile uses "pipenv" to automatically setup a virtual environment
-#    (for Python) in the HOME directory of the user (for this directory).
+#    This makefile uses "pip" to automatically install the required packages:
+#
+#    * CASE 1: If a Python a virtual environment was setup and activated,
+#      the packages are installed into the virtual environment.
+#
+#    * CASE 2: The packages are installed in the $HOME directory.
+#      On macOS: $HOME/Library/Python/$(PYTHON_VERSION)/lib
+#      HINT: May need PATH="$HOME/Library/Python/$(PYTHON_VERSION)/bin:${PATH}"
 #
 # SEE ALSO:
-#  * https://pypi.python.org/pypi/pipenv/
-#  * https://docs.pipenv.org
-#  * https://github.com/pypa/pipenv
+#  * https://pip.pypa.io/en/stable/
 # =============================================================================
 
 .PHONY: clean clean-all default test test.coverage tox
@@ -19,73 +22,54 @@
 # -----------------------------------------------------------------------------
 # PROJECT CONFIGURATION:
 # -----------------------------------------------------------------------------
-BOOTSTRAP_DONE_MARKER_FILE := build/.bootstrap.DONE
-BOOTSTRAP_DONE_MARKER_DIR  := $(dir $(BOOTSTRAP_DONE_MARKER_FILE))
-PIPENV := pipenv
-PIPENV_RUN := pipenv run
-PIPENV_VERSION := 8.3.2
-USE_PIPENV := yes
-SUDO := sudo
+PYTHON ?= python3
+PYTHON_VERSION := $(shell $(PYTHON) -c "import sys; print(sys.version.split()[0])")
+PIP := $(PYTHON) -mpip
+PIP_INSTALL_OPTIONS ?= --quiet
+PIP_RUN :=
 
-PY_REQUIREMENT_FILES := py.requirements/basic_and_testing.txt
-PY_REQUIREMENT_OPTIONAL_FILES := tasks/py.requirements.txt
+PY_REQUIREMENT_FILES := py.requirements/all.txt
 
-PYTHONPATH ?= .
+INSTALL_PACKAGES_DONE_MARKER_FILE := build/.done.install_packages.python_v$(PYTHON_VERSION)
+INSTALL_PACKAGES_DONE_MARKER_DIR  := $(dir $(INSTALL_PACKAGES_DONE_MARKER_FILE))
+
+PYTHONPATH ?= $(CURDIR)
 export PYTHONPATH
-
-# -----------------------------------------------------------------------------
-# MAKE VARIATION LOGIC:
-# -----------------------------------------------------------------------------
-ifeq ($(TRAVIS),true)
-  USE_PIPENV := no
-endif
-
-_PIPENV_RESOLVED = $(shell which pipenv)
-ifneq ($(USE_PIPENV),yes)
-    PIPENV := pip
-    PIPENV_RUN :=
-    _PIPENV_RESOLVED := pip
-endif
 
 # -----------------------------------------------------------------------------
 # MAKE RULES:
 # -----------------------------------------------------------------------------
-$(info USING: $(PIPENV))
+.PHONY: all clean install-packages test test.coverage tox
 
-all: default
-default: bootstrap test
+# -- DIAGNOSTICS:
+$(info USING: PYTHON_VERSION=$(PYTHON_VERSION))
+$(info USING: PYTHONPATH=$(PYTHONPATH))
 
-bootstrap: $(BOOTSTRAP_DONE_MARKER_FILE)
-_bootstrap $(BOOTSTRAP_DONE_MARKER_FILE):
-	@echo "bootstrap: Python environment ..."
-	test -d $(BOOTSTRAP_DONE_MARKER_DIR) || mkdir -p $(BOOTSTRAP_DONE_MARKER_DIR)
-ifeq ($(_PIPENV_RESOLVED),)
-	@echo "INSTALL-REQUIRED: pipenv"
-	$(SUDO) pip install pipenv==$(PIPENV_VERSION)
-endif
+all: .ensure.packages_are_installed test
 
-	$(PIPENV) install $(addprefix -r ,$(PY_REQUIREMENT_FILES))
-	touch $(BOOTSTRAP_DONE_MARKER_FILE)
-
-#	$(PIPENV) install -r py.requirements/testing.txt
-#	$(PIPENV) install -r tasks/py.requirements.txt
+.ensure.packages_are_installed: $(INSTALL_PACKAGES_DONE_MARKER_FILE)
+install-packages $(INSTALL_PACKAGES_DONE_MARKER_FILE): $(PY_REQUIREMENT_FILES)
+	@echo "$(@): ..."
+	test -d $(INSTALL_PACKAGES_DONE_MARKER_DIR) || mkdir -p $(INSTALL_PACKAGES_DONE_MARKER_DIR)
+	$(PIP) install $(PIP_INSTALL_OPTIONS) $(addprefix -r ,$(PY_REQUIREMENT_FILES))
+	touch $(INSTALL_PACKAGES_DONE_MARKER_FILE)
 
 clean:
-	-rm -f $(BOOTSTRAP_DONE_MARKER_FILE)
-	-rm -rf build
-	-rm -rf .tox
-	-rm -rf .venv*
+	-rm -f $(INSTALL_PACKAGES_DONE_MARKER_FILE)
+	-rm -rf build dist .tox .venv* .dotenv/
+	-rm -rf get-pip.py
 	-py.cleanup
-	-pipenv --rm
-	-find . -name "*.pyc" | xargs rm -f
 
-test: $(BOOTSTRAP_DONE_MARKER_FILE)
-	$(PIPENV_RUN) pytest $(PYTEST_ARGS)
+test: $(INSTALL_PACKAGES_DONE_MARKER_FILE)
+	$(PIP_RUN) pytest $(PYTEST_ARGS)
 
-test.coverage: $(BOOTSTRAP_DONE_MARKER_FILE)
-	$(PIPENV_RUN) invoke test.coverage
+test.coverage: $(INSTALL_PACKAGES_DONE_MARKER_FILE)
+	$(PIP_RUN) coverage run -m pytest $(PYTEST_ARGS); coverage combine; coverage report; coverage html
 
-tox: $(BOOTSTRAP_DONE_MARKER_FILE)
-	$(PIPENV_RUN) tox $(TOX_ARGS)
+tox: $(INSTALL_PACKAGES_DONE_MARKER_FILE)
+	$(PIP_RUN) tox $(TOX_ARGS)
 
 include default.mk
+
+# -- ADD DEPENDENCY:
+update-dependencies: .ensure.packages_are_installed

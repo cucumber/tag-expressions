@@ -1,5 +1,6 @@
 *.egg-info
 *.log
+*.lock
 *.pyc
 *.pyo
 *$py.class
@@ -9,6 +10,7 @@ downloads/
 __pycache__/
 __*/
 .cache/
+.direnv/
 .eggs/
 .hypothesis/
 .idea/
@@ -18,5 +20,5 @@ __*/
 .DS_Store
 .coverage
 .deps
+.pdm.toml
 .tested
-Pipfile.lock
