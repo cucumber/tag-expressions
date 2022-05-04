@@ -43,9 +43,9 @@
   },
   "homepage": "https://github.com/cucumber/tag-expressions",
   "devDependencies": {
-    "@stryker-mutator/core": "6.0.0",
-    "@stryker-mutator/mocha-runner": "6.0.0",
-    "@stryker-mutator/typescript-checker": "6.0.0",
+    "@stryker-mutator/core": "6.0.1",
+    "@stryker-mutator/mocha-runner": "6.0.1",
+    "@stryker-mutator/typescript-checker": "6.0.1",
     "@types/js-yaml": "^4.0.3",
     "@types/mocha": "9.1.1",
     "@types/node": "16.11.33",
