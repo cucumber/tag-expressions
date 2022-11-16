@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - [JavaScript] Support for EcmaScript modules (aka ESM). ([#5](https://github.com/cucumber/tag-expressions/pull/5))
+- [Java] Enabled reproducible builds
 
 ### Changed
 - Only allow escape character `\` in front of `(`, `)`, `\` or whitespace. Throw error otherwise. ([#17](https://github.com/cucumber/tag-expressions/pull/17))

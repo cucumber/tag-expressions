@@ -16,6 +16,7 @@
     <url>https://github.com/cucumber/tag-expressions-java</url>
 
     <properties>
+        <project.build.outputTimestamp>1000000</project.build.outputTimestamp>
         <project.Automatic-Module-Name>io.cucumber.tagexpressions</project.Automatic-Module-Name>
     </properties>
 
