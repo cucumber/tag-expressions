@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 [ehuelsmann](https://github.com/ehuelsmann))
 - Document escaping. ([#16](https://github.com/cucumber/tag-expressions/issues/16), [#17](https://github.com/cucumber/tag-expressions/pull/17))
 - [Ruby], [Perl] Empty expression evaluates to true
+- [Go] Fix module name ([#82](https://github.com/cucumber/tag-expressions/pull/82))
 
 ### Removed
 
