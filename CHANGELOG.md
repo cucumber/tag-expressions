@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- [Java] Fix scm and project urls
 
 ## [5.0.0] - 2023-01-02
 ### Added

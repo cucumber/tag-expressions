@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
     <name>Cucumber Tag Expressions</name>
     <description>Parses boolean infix expressions</description>
-    <url>https://github.com/cucumber/tag-expressions-java</url>
+    <url>https://github.com/cucumber/tag-expressions</url>
 
     <properties>
         <project.build.outputTimestamp>1672696883</project.build.outputTimestamp>
@@ -21,9 +21,9 @@
     </properties>
 
     <scm>
-        <connection>scm:git:git://github.com/cucumber/tag-expressions-java.git</connection>
-        <developerConnection>scm:git:git@github.com:cucumber/tag-expressions-java.git</developerConnection>
-        <url>git://github.com/cucumber/tag-expressions-java.git</url>
+        <connection>scm:git:git://github.com/cucumber/tag-expressions.git</connection>
+        <developerConnection>scm:git:git@github.com:cucumber/tag-expressions.git</developerConnection>
+        <url>git://github.com/cucumber/tag-expressions.git</url>
         <tag>HEAD</tag>
     </scm>
 
