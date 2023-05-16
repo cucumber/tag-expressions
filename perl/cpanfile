@@ -2,7 +2,7 @@
 
 requires 'perl' => '5.14.4';
 requires 'Moo';
-requires 'List::Util' => '1.33'; # for 'any' and 'all' functions.
+requires 'List::Util' => '1.63'; # for 'any' and 'all' functions.
 
 on 'test' => sub {
     requires 'Test2::V0';
