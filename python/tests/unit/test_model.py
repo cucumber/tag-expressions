@@ -95,6 +95,14 @@ class TestNotOperation(object):
         expression = Not(Literal("a"))
         assert expression.evaluate(tags) == expected
 
+    # -- HINT: Not with binary operator was using double-parenthesis in the past
+    @pytest.mark.parametrize("expected, expression", [
+        ("not ( a and b )",  Not(And(Literal("a"), Literal("b"))) ),
+        ("not ( a or b )",   Not(Or(Literal("a"), Literal("b"))) ),
+        ("( a and not ( b or c ) )", And(Literal("a"), Not(Or(Literal("b"), Literal("c")))) ),
+    ])
+    def test_convert_to_string(self, expected, expression):
+        assert expected == str(expression)
 
 class TestTrueOperation(object):
     @pytest.mark.parametrize("expected, tags, case", [

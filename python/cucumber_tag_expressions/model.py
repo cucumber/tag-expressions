@@ -144,7 +144,11 @@ class Not(Expression):
         return not self.term.evaluate(values_)
 
     def __str__(self):
-        return "not ( %s )" % self.term
+        schema = "not ( {0} )"
+        if isinstance(self.term, (And, Or)):
+            # -- REASON: Binary operators have parenthesis already.
+            schema = "not {0}"
+        return schema.format(self.term)
 
     def __repr__(self):
         return "Not(%r)" % self.term

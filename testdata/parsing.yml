@@ -14,6 +14,14 @@
   formatted: '( ( ( not ( a ) or ( b and not ( c ) ) ) or not ( d ) ) or ( e and f ) )'
 - expression: 'not a\(\) or b and not c or not d or e and f'
   formatted: '( ( ( not ( a\(\) ) or ( b and not ( c ) ) ) or not ( d ) ) or ( e and f ) )'
+
+- expression: 'not (a and b)'
+  formatted: 'not ( a and b )'
+- expression: 'not (a or b)'
+  formatted: 'not ( a or b )'
+- expression: 'not (a and b) and c or not (d or f)'
+  formatted: '( ( not ( a and b ) and c ) or not ( d or f ) )'
+
 - expression: 'a\\ and b'
   formatted: '( a\\ and b )'
 - expression: '\\a and b'
