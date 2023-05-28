@@ -2,8 +2,15 @@
 # PYTHON PACKAGE REQUIREMENTS FOR: For testing only
 # ============================================================================
 
-pytest >= 3.2
-pytest-html >= 1.19
+# -- TESTING: Unit tests and behave self-tests.
+pytest <  5.0; python_version <  '3.0' # pytest >= 4.2
+pytest >= 5.0; python_version >= '3.0'
+
+pytest-html >= 1.19.0,<2.0; python_version <  '3.0'
+pytest-html >= 2.0;         python_version >= '3.0'
+
+PyYAML >= 5.4.1
+pathlib; python_version <= '3.4'
 
 # -- DEVELOPMENT SUPPORT: Testing
 coverage >= 4.2

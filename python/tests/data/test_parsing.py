@@ -23,7 +23,7 @@ DTestData4Parsing = namedtuple("DTestData4Parsing", ("expression", "formatted"))
 
 def read_testdata(data_filename):
     testdata_items = []
-    with open(data_filename) as f:
+    with open(str(data_filename)) as f:
         for item in yaml.safe_load(f):
             assert isinstance(item, dict)
             data_item = DTestData4Parsing(item["expression"], item["formatted"])
@@ -40,7 +40,7 @@ this_testdata = read_testdata(TESTDATA_FILE)
 @pytest.mark.parametrize("expression, formatted", this_testdata)
 def test_parsing_with_datafile(expression, formatted):
     if "\\" in expression:
-        pytest.skip(reason="BACKSLASH-ESCAPING: Not supported yet")
+        pytest.skip("BACKSLASH-ESCAPING: Not supported yet")
 
     tag_expression = TagExpressionParser().parse(expression)
     actual_text = str(tag_expression)

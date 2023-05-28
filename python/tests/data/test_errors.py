@@ -25,7 +25,7 @@ DTestData4Error = namedtuple("DTestData4Error", ("expression", "error"))
 
 def read_testdata(data_filename):
     testdata_items = []
-    with open(data_filename) as f:
+    with open(str(data_filename)) as f:
         for item in yaml.safe_load(f):
             assert isinstance(item, dict)
             data_item = DTestData4Error(item["expression"], item["error"])
@@ -43,7 +43,7 @@ this_testdata = read_testdata(TESTDATA_FILE)
 @pytest.mark.parametrize("expression, error", this_testdata)
 def test_errors_with_datafile(expression, error):
     if "\\" in expression:
-        pytest.skip(reason="BACKSLASH-ESCAPING: Not supported yet")
+        pytest.skip("BACKSLASH-ESCAPING: Not supported yet")
 
     with pytest.raises(TagExpressionError) as exc_info:
         _ = TagExpressionParser().parse(expression)

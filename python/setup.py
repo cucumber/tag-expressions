@@ -68,20 +68,27 @@ setup(
         "enum34; python_version < '3.4'"
     ],
     tests_require=[
-        "pytest >= 3.2",
-        "pytest-html >= 1.19.0",
+        "pytest <  5.0; python_version <  '3.0'",
+        "pytest >= 5.0; python_version >= '3.0'",
+        "pytest-html >= 1.19.0,<2.0; python_version <  '3.0'",
+        "pytest-html >= 2.0;         python_version >= '3.0'",
+        "PyYAML >= 5.4.1",
+        "pathlib; python_version <= '3.4'",
     ],
     extras_require={
         # PREPARED: 'docs': ["sphinx>=1.5"],
         "develop": [
             "coverage",
-            "pytest >= 3.2",
-            "pytest-html >= 1.19.0",
-            "tox >= 2.9",
+            "pytest <  5.0; python_version <  '3.0'",
+            "pytest >= 5.0; python_version >= '3.0'",
+            "pytest-html >= 1.19.0,<2.0; python_version <  '3.0'",
+            "pytest-html >= 2.0;         python_version >= '3.0'",
+            "tox >=2.9,<4.0",
             "pylint",
+            "ruff",
             # -- INVOKE SUPPORT:
-            "invoke >= 1.4.1",
-            "six >= 1.15.0",
+            "invoke >= 1.7.3",
+            "six >= 1.16.0",
             "path >= 13.1.0;    python_version >= '3.5'",
             "path.py >= 11.5.0; python_version <  '3.5'",
             # PYTHON2 BACKPORTS:
