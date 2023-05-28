@@ -214,8 +214,8 @@ class Not implements Node {
   }
 
   public toString() {
-    if ((this.expr instanceof And) || (this.expr instanceof Or)) {
-      // -- HINT: Binary Operators already have already ' ( ... ) '.
+    if (this.expr instanceof And || this.expr instanceof Or) {
+      // -- HINT: Binary Operators already have already '( ... )'.
       return 'not ' + this.expr.toString()
     }
     // -- OTHERWISE:
