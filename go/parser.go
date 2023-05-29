@@ -13,6 +13,7 @@ const OPERATOR = "operator"
 type Evaluatable interface {
 	Evaluate(variables []string) bool
 	ToString() string
+	IsBinaryOperator() bool
 }
 
 func Parse(infix string) (Evaluatable, error) {
@@ -194,6 +195,10 @@ func (l *literalExpr) ToString() string {
 	return strings.Replace(s4, " ", "\\ ", -1)
 }
 
+func (l *literalExpr) IsBinaryOperator() bool {
+	return false
+}
+
 type orExpr struct {
 	leftExpr  Evaluatable
 	rightExpr Evaluatable
@@ -205,6 +210,10 @@ func (o *orExpr) Evaluate(variables []string) bool {
 
 func (o *orExpr) ToString() string {
 	return fmt.Sprintf("( %s or %s )", o.leftExpr.ToString(), o.rightExpr.ToString())
+}
+
+func (o *orExpr) IsBinaryOperator() bool {
+	return true
 }
 
 type andExpr struct {
@@ -220,6 +229,10 @@ func (a *andExpr) ToString() string {
 	return fmt.Sprintf("( %s and %s )", a.leftExpr.ToString(), a.rightExpr.ToString())
 }
 
+func (a *andExpr) IsBinaryOperator() bool {
+	return true
+}
+
 type notExpr struct {
 	expr Evaluatable
 }
@@ -229,7 +242,15 @@ func (n *notExpr) Evaluate(variables []string) bool {
 }
 
 func (n *notExpr) ToString() string {
+	if n.expr.IsBinaryOperator() {
+		// -- HINT: Binary Operators already have already '( ... )'.
+		return fmt.Sprintf("not %s", n.expr.ToString())
+	}
 	return fmt.Sprintf("not ( %s )", n.expr.ToString())
+}
+
+func (n *notExpr) IsBinaryOperator() bool {
+	return false
 }
 
 type trueExpr struct{}
@@ -240,4 +261,8 @@ func (t *trueExpr) Evaluate(variables []string) bool {
 
 func (t *trueExpr) ToString() string {
 	return "true"
+}
+
+func (t *trueExpr) IsBinaryOperator() bool {
+	return false
 }
