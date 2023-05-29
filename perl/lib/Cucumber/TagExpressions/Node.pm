@@ -50,6 +50,17 @@ Returns a string representation of the expression node.
 
 sub stringify { }
 
+=head2 isBinaryOperator
+
+Indicates if this node is a binary operator node (true for: And, Or).
+
+=cut
+
+sub isBinaryOperator {
+    # -- DEFAULT IMPLEMENTATION HERE: For other cases.
+    return 0;
+}
+
 =head1 NODE CLASSES
 
 =cut
@@ -130,6 +141,10 @@ The sub-expressions to evaluate.
             map { $_->stringify }
             @{ $self->terms };
     }
+
+    sub isBinaryOperator {
+        return 1;
+    }
 }
 
 package Cucumber::TagExpressions::OrNode {
@@ -172,6 +187,10 @@ The sub-expressions to evaluate.
             map { $_->stringify }
             @{ $self->terms };
     }
+
+    sub isBinaryOperator {
+        return 1;
+    }
 }
 
 package Cucumber::TagExpressions::NotNode {
@@ -205,7 +224,10 @@ The wrapped node class instance for which to negate the result.
 
     sub stringify {
         my ( $self ) = @_;
-
+        if ( $self->expression->isBinaryOperator() ) {
+            # -- HINT: Binary Operators already have already '( ... )'.
+            return 'not ' . $self->expression->stringify;
+        }
         return 'not ( ' . $self->expression->stringify . ' )';
     }
 }
