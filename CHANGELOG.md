@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- [All] `Not.to_string()` conversion has unneeded double-parenthesis if binary operator is contained
+([#94](https://github.com/cucumber/tag-expressions/issues/94)
+by [jenisys](https://github.com/jenisys))
+
+### Added
+
+- [Python] Make tests pass against shared test data (except: backslash-escaped)
+([#18](https://github.com/cucumber/tag-expressions/issues/18) 
+by [jenisys](https://github.com/jenisys))
+
 ## [5.0.1] - 2023-01-03
 ### Fixed
 - [Java] Fix scm and project urls
