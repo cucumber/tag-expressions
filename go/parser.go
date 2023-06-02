@@ -220,7 +220,7 @@ func (a *andExpr) ToString() string {
 	return fmt.Sprintf("( %s and %s )", a.leftExpr.ToString(), a.rightExpr.ToString())
 }
 
-func IsBinaryOperator(e Evaluatable) bool {
+func isBinaryOperator(e Evaluatable) bool {
 	_, isBinaryAnd := e.(*andExpr)
 	_, isBinaryOr := e.(*orExpr)
 	return isBinaryAnd || isBinaryOr
@@ -235,7 +235,7 @@ func (n *notExpr) Evaluate(variables []string) bool {
 }
 
 func (n *notExpr) ToString() string {
-	if IsBinaryOperator(n.expr) {
+	if isBinaryOperator(n.expr) {
 		// -- HINT: Binary Operators already have already '( ... )'.
 		return fmt.Sprintf("not %s", n.expr.ToString())
 	}
