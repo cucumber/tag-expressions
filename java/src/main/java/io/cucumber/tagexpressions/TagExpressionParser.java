@@ -251,6 +251,10 @@ public final class TagExpressionParser {
 
         @Override
         public String toString() {
+            if (And.class.isInstance(expr) || Or.class.isInstance(expr)) {
+                // -- HINT: Binary Operators already have already ' ( ... ) '.
+                return "not " + expr.toString();
+            }
             return "not ( " + expr.toString() + " )";
         }
     }

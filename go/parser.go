@@ -220,6 +220,12 @@ func (a *andExpr) ToString() string {
 	return fmt.Sprintf("( %s and %s )", a.leftExpr.ToString(), a.rightExpr.ToString())
 }
 
+func isBinaryOperator(e Evaluatable) bool {
+	_, isBinaryAnd := e.(*andExpr)
+	_, isBinaryOr := e.(*orExpr)
+	return isBinaryAnd || isBinaryOr
+}
+
 type notExpr struct {
 	expr Evaluatable
 }
@@ -229,6 +235,10 @@ func (n *notExpr) Evaluate(variables []string) bool {
 }
 
 func (n *notExpr) ToString() string {
+	if isBinaryOperator(n.expr) {
+		// -- HINT: Binary Operators already have already '( ... )'.
+		return fmt.Sprintf("not %s", n.expr.ToString())
+	}
 	return fmt.Sprintf("not ( %s )", n.expr.ToString())
 }
 

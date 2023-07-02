@@ -205,7 +205,11 @@ The wrapped node class instance for which to negate the result.
 
     sub stringify {
         my ( $self ) = @_;
-
+        if ($self->expression->isa('Cucumber::TagExpressions::AndNode') ||
+            $self->expression->isa('Cucumber::TagExpressions::OrNode')) {
+            # -- HINT: Binary Operators already have already '( ... )'.
+            return 'not ' . $self->expression->stringify;
+        }
         return 'not ( ' . $self->expression->stringify . ' )';
     }
 }
