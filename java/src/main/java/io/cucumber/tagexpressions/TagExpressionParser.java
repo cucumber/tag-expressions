@@ -10,6 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class TagExpressionParser {
+    //regex for operands to ensure no oprerand has ',' in them later can be customized further
+    private final static String VALID_OPERAND = "^[^,]*$";
     private static final Map<String, Assoc> ASSOC = new HashMap<String, Assoc>() {{
         put("or", Assoc.LEFT);
         put("and", Assoc.LEFT);
@@ -106,6 +108,7 @@ public final class TagExpressionParser {
                 isEscaped = true;
             } else if (c == '(' || c == ')' || Character.isWhitespace(c)) {
                 if (token.length() > 0) {
+                    isOperandValid(token,expr);
                     tokens.add(token.toString());
                     token = new StringBuilder();
                 }
@@ -116,10 +119,25 @@ public final class TagExpressionParser {
                 token.append(c);
             }
         }
-        if (token.length() > 0) {
+        isOperandValid(token,expr);
+        if (token.length() > 0)  {
             tokens.add(token.toString());
         }
         return tokens;
+    }
+
+    /**
+     * this method checks if the operand comply with the req
+     * regex if not throws exception
+     * @param token supposed tag of token
+     * @param expr entire expression
+     */
+    private static void isOperandValid(StringBuilder token,String expr){
+        if(!String.valueOf(token).matches(VALID_OPERAND)){
+            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Tag names should follow this pattern \"%s\"",
+             expr, VALID_OPERAND);
+        }
+
     }
 
     private void check(TokenType expectedTokenType, TokenType tokenType) {
