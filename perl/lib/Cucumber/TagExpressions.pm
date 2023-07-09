@@ -30,7 +30,7 @@ use strict;
 use warnings;
 
 use Cucumber::TagExpressions::Node;
-
+our $VALID_TOKEN = qr/^(?:@[^@]*|and|or|not|\(|\))$/;
 sub _expect_token {
     my ( $state, $token ) = @_;
 
@@ -57,11 +57,19 @@ sub _get_token {
     my $token = '';
     while (1) {
         my $char = _consume_char( $state, 1 );
-        return ($token ? $token : undef)
-            if not defined $char;
+        if (!defined $char) {
+           if ($token){
+           _is_token_valid( $state, $token);
+            return $token;
+           }
+           else{
+           return undef;
+           }
+        }
 
         if ( $char =~ m/\s/ ) {
             if ( $token ) {
+                _is_token_valid( $state, $token);
                 return $token;
             }
             else {
@@ -70,6 +78,7 @@ sub _get_token {
         }
         elsif ( $char eq '(' or $char eq ')' ) {
             if ( $token ) {
+                _is_token_valid( $state, $token);
                 _save_token( $state, $char );
                 return $token;
             }
@@ -90,6 +99,13 @@ sub _get_token {
         else {
             $token .= $char;
         }
+    }
+}
+
+sub _is_token_valid {
+    my ($state, $token) = @_;
+    if ($token !~ $VALID_TOKEN) {
+         die qq{Tag expression "$state->{text}" could not be parsed because of syntax error: Please adhere to the Gherkin tag naming convention, using tags like "\@tag1" and avoiding more than one "\@" in the tag name.}
     }
 }
 
