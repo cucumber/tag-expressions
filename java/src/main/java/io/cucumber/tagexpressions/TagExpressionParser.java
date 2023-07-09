@@ -134,8 +134,8 @@ public final class TagExpressionParser {
      */
     private static void isTokenValid(StringBuilder token,String expr){
         if(!String.valueOf(token).matches(VALID_TOKEN)){
-            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: An invalid tag combination operator was detected. The use of a comma (',') to combine tags is not supported. Please" +
-             " replace it with either the 'or' or 'and' operators for tag combinations. For example, use '@tag1 or @tag2' or '@tag1 and @tag2'",
+            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: An invalid tag combination operator was detected. The use of a comma (\",\") to combine tags is not supported. Please" +
+             " replace it with either the \"or\" or \"and\" operators for tag combinations. For example, use \"@tag1 or @tag2\" or \"@tag1 and @tag2\"",
              expr);
         }
 
