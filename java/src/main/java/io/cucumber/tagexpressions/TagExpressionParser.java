@@ -10,8 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class TagExpressionParser {
-    //regex for operands to ensure no oprerand has ',' in them later can be customized further
-    private final static String VALID_OPERAND = "^[^,]*$";
+    //regex for token to ensure no token has ',' in them later can be customized further
+    private final static String VALID_TOKEN = "^[^,]*$";
     private static final Map<String, Assoc> ASSOC = new HashMap<String, Assoc>() {{
         put("or", Assoc.LEFT);
         put("and", Assoc.LEFT);
@@ -108,7 +108,7 @@ public final class TagExpressionParser {
                 isEscaped = true;
             } else if (c == '(' || c == ')' || Character.isWhitespace(c)) {
                 if (token.length() > 0) {
-                    isOperandValid(token,expr);
+                    isTokenValid(token,expr);
                     tokens.add(token.toString());
                     token = new StringBuilder();
                 }
@@ -119,23 +119,24 @@ public final class TagExpressionParser {
                 token.append(c);
             }
         }
-        isOperandValid(token,expr);
         if (token.length() > 0)  {
+            isTokenValid(token,expr);
             tokens.add(token.toString());
         }
         return tokens;
     }
 
     /**
-     * this method checks if the operand comply with the req
+     * this method checks if the token comply with the req
      * regex if not throws exception
-     * @param token supposed tag of token
+     * @param token supposed tag or operator of the expresiion
      * @param expr entire expression
      */
-    private static void isOperandValid(StringBuilder token,String expr){
-        if(!String.valueOf(token).matches(VALID_OPERAND)){
-            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Tag names should follow this pattern \"%s\"",
-             expr, VALID_OPERAND);
+    private static void isTokenValid(StringBuilder token,String expr){
+        if(!String.valueOf(token).matches(VALID_TOKEN)){
+            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: An invalid tag combination operator was detected. The use of a comma (',') to combine tags is not supported. Please" +
+             " replace it with either the 'or' or 'and' operators for tag combinations. For example, use '@tag1 or @tag2' or '@tag1 and @tag2'",
+             expr);
         }
 
     }
