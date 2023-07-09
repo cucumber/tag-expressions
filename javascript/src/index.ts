@@ -12,7 +12,7 @@ const ASSOC: { [key: string]: string } = {
   and: 'left',
   not: 'right',
 }
-const VALID_TOKEN = /(?:@[^@]*|and|or|not|/(|/))$/;
+const VALID_TOKEN = /^(?:@[^@]*|and|or|not|\(|\))$/;
 
 /**
  * Parses infix boolean expression (using Dijkstra's Shunting Yard algorithm)
@@ -110,7 +110,7 @@ function tokenize(expr: string): string[] {
       isEscaped = true
     } else if (c === '(' || c === ')' || /\s/.test(c)) {
       if (token.length > 0) {
-        isTokenValid(token,expr);
+        isTokenValid(token.join(''),expr);
         tokens.push(token.join(''))
         token = []
       }
@@ -122,16 +122,16 @@ function tokenize(expr: string): string[] {
     }
   }
   if (token.length > 0) {
-    isTokenValid(token,expr);
+    isTokenValid(token.join(''),expr);
     tokens.push(token.join(''))
   }
   return tokens
 }
 
-function isTokenValid(token: string[], expr: string): void {
-  if (!token.toString().match(VALID_TOKEN)) {
+function isTokenValid(token: string, expr: string): void {
+  if (!token.match(VALID_TOKEN)) {
     throw new Error(
-      `Tag expression "${expr}" could not be parsed because of syntax error: An invalid tag combination operator was detected. The use of a comma (",") to combine tags is not supported. Please replace it with either the "or" or "and" operators for tag combinations. For example, use "@tag1 or @tag2" or "@tag1 and @tag2"`
+      `Tag expression "${expr}" could not be parsed because of syntax error: Please adhere to the Gherkin tag naming convention, using tags like "@tag1" and avoiding more than one "@" in the tag name.`
     );
   }
 }
