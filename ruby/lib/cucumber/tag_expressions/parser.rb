@@ -7,6 +7,7 @@ module Cucumber
       def initialize
         @expressions = []
         @operators = []
+        @valid_token = /(?:@[^@]*|and|or|not|\(|\))$/.freeze
 
         @operator_types = {
           'or'  => { type: :binary_operator,    precedence: 0, assoc: :left },
@@ -80,6 +81,7 @@ module Cucumber
             escaped = true
           elsif ch == '(' || ch == ')' || ch.match(/\s/)
             if token.length > 0
+              isTokenValid(token,infix_expression)
               tokens.push(token)
               token = ""
             end
@@ -91,9 +93,16 @@ module Cucumber
           end
         end
         if token.length > 0
+          isTokenValid(token,infix_expression)
           tokens.push(token)
         end
         tokens
+      end
+
+      def is_token_valid(token, expr)
+        unless token.to_s.match?(@valid_token)
+          raise TagExpressionException, format('Tag expression "%s" could not be parsed because of syntax error: An invalid tag combination operator was detected. The use of a comma (",") to combine tags is not supported. Please replace it with either the "or" or "and" operators for tag combinations. For example, use "@tag1 or @tag2" or "@tag1 and @tag2"', expr)
+        end
       end
 
       def push_expression(token)

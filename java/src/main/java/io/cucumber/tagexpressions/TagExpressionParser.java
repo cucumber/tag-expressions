@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 public final class TagExpressionParser {
     //regex for token to ensure no token has ',' in them later can be customized further
-    private final static String VALID_TOKEN = "^[^,]*$";
+    private final static String VALID_TOKEN = "(?:@[^@]*|and|or|not|/(|/))$";
     private static final Map<String, Assoc> ASSOC = new HashMap<String, Assoc>() {{
         put("or", Assoc.LEFT);
         put("and", Assoc.LEFT);
@@ -133,7 +133,8 @@ public final class TagExpressionParser {
      * @param expr entire expression
      */
     private static void isTokenValid(StringBuilder token,String expr){
-        if(!String.valueOf(token).matches(VALID_TOKEN)){
+
+        if(token.length()>0&&!String.valueOf(token).matches(VALID_TOKEN)){
             throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: An invalid tag combination operator was detected. The use of a comma (\",\") to combine tags is not supported. Please" +
              " replace it with either the \"or\" or \"and\" operators for tag combinations. For example, use \"@tag1 or @tag2\" or \"@tag1 and @tag2\"",
              expr);
