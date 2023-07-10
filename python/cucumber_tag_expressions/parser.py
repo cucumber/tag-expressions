@@ -17,6 +17,8 @@ UNSUPPORTED:
 from __future__ import absolute_import
 from enum import Enum
 from cucumber_tag_expressions.model import Literal, And, Or, Not, True_
+import re
+
 
 
 # -----------------------------------------------------------------------------
@@ -156,6 +158,9 @@ class TagExpressionParser(object):
     TOKEN_MAP = {token.keyword: token
                  for token in Token.__members__.values()}
 
+    valid_token_pattern = r'^(?:@[^@]*|and|or|not|\(|\))$'
+    valid_token_regex = re.compile(valid_token_pattern)
+
     @classmethod
     def select_token(cls, text):
         """Select the token that matches the text or return None.
@@ -164,6 +169,13 @@ class TagExpressionParser(object):
         :return: Token object or None, if not found.
         """
         return cls.TOKEN_MAP.get(text, None)
+
+    @classmethod
+    def check_valid_token(cls,part,expr):
+        if not cls.valid_token_regex.match(part):
+              message = 'Tag expression "%s" could not be parsed because of syntax error: Please adhere to the Gherkin tag naming convention, using tags like "@tag1" and avoiding more than one "@" in the tag name.'
+              raise TagExpressionError(message % (expr))
+
 
     @classmethod
     def make_operand(cls, text):
@@ -201,6 +213,7 @@ class TagExpressionParser(object):
 
         for index, part in enumerate(parts):
             token = cls.select_token(part)
+            cls.check_valid_token(part,text)
             if token is None:
                 # -- CASE OPERAND: Literal or ...
                 ensure_expected_token_type(TokenType.OPERAND)
