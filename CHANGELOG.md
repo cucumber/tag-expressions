@@ -7,16 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-### Fixed
-
-- [All] `Not.to_string()` conversion has unneeded double-parenthesis if binary operator is contained
-([#94](https://github.com/cucumber/tag-expressions/issues/94)
+## [5.0.2] - 2023-07-15
+### Added
+- [Python] Make tests pass against shared test data (except: backslash-escaped)
+([#18](https://github.com/cucumber/tag-expressions/issues/18)
 by [jenisys](https://github.com/jenisys))
 
-### Added
-
-- [Python] Make tests pass against shared test data (except: backslash-escaped)
-([#18](https://github.com/cucumber/tag-expressions/issues/18) 
+### Fixed
+- [All] `Not.to_string()` conversion has unneeded double-parenthesis if binary operator is contained
+([#94](https://github.com/cucumber/tag-expressions/issues/94)
 by [jenisys](https://github.com/jenisys))
 
 ## [5.0.1] - 2023-01-03
@@ -162,7 +161,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v5.0.1...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v5.0.2...HEAD
+[5.0.2]: https://github.com/cucumber/tag-expressions/compare/v5.0.1...v5.0.2
 [5.0.1]: https://github.com/cucumber/tag-expressions/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/cucumber/tag-expressions/compare/v4.1.0...v5.0.0
 [4.1.0]: https://github.com/cucumber/tag-expressions/compare/v4.0.2...v4.1.0
