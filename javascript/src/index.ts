@@ -183,7 +183,10 @@ class Literal implements Node {
 }
 
 class Or implements Node {
-  constructor(private readonly leftExpr: Node, private readonly rightExpr: Node) {}
+  constructor(
+    private readonly leftExpr: Node,
+    private readonly rightExpr: Node
+  ) {}
 
   public evaluate(variables: string[]) {
     return this.leftExpr.evaluate(variables) || this.rightExpr.evaluate(variables)
@@ -195,7 +198,10 @@ class Or implements Node {
 }
 
 class And implements Node {
-  constructor(private readonly leftExpr: Node, private readonly rightExpr: Node) {}
+  constructor(
+    private readonly leftExpr: Node,
+    private readonly rightExpr: Node
+  ) {}
 
   public evaluate(variables: string[]) {
     return this.leftExpr.evaluate(variables) && this.rightExpr.evaluate(variables)
