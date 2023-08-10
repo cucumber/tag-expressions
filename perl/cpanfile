@@ -8,7 +8,7 @@ requires 'Moo';
 # of the older Perl versions. Specifying the number explicitly makes older
 # Perls install this module from CPAN while allowing newer Perls to use the
 # version they come with.
-requires 'List::Util' => '1.33'; # for 'any' and 'all' functions.
+requires 'List::Util' => '1.63'; # for 'any' and 'all' functions.
 
 on 'test' => sub {
     requires 'Test2::V0';
