@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- [Perl] Fixed CPAN upload in release process
+  by [ehuelsmann](https://github.com/ehuelsmann))
 
 ## [5.0.2] - 2023-07-15
 ### Added
