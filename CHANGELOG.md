@@ -6,9 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [5.0.3] - 2023-08-10
 ### Fixed
 - [Perl] Fixed CPAN upload in release process
-  by [ehuelsmann](https://github.com/ehuelsmann))
+by [ehuelsmann](https://github.com/ehuelsmann))
 
 ## [5.0.2] - 2023-07-15
 ### Added
@@ -164,7 +166,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v5.0.2...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v5.0.3...HEAD
+[5.0.3]: https://github.com/cucumber/tag-expressions/compare/v5.0.2...v5.0.3
 [5.0.2]: https://github.com/cucumber/tag-expressions/compare/v5.0.1...v5.0.2
 [5.0.1]: https://github.com/cucumber/tag-expressions/compare/v5.0.0...v5.0.1
 [5.0.0]: https://github.com/cucumber/tag-expressions/compare/v4.1.0...v5.0.0
