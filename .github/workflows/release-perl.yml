@@ -16,3 +16,4 @@ jobs:
         with:
           cpan-user: ${{ secrets.CPAN_USER }}
           cpan-password: ${{ secrets.CPAN_PASSWORD }}
+          working-directory: "perl"
