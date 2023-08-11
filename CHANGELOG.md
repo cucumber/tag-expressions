@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- [Perl] Fixed inclusion of CHANGELOG.md causing release to fail
+(by [ehuelsmann](https://github.com/ehuelsmann))
+
 
 ## [5.0.4] - 2023-08-10
 ### Fixed
