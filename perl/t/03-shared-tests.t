@@ -11,6 +11,8 @@ use YAML qw(LoadFile);
 
 use Cucumber::TagExpressions;
 
+plan skip_all => 'AUTHOR_TESTING not enabled'
+   if not $ENV{AUTHOR_TESTING};
 
 my $cases = LoadFile('../testdata/evaluations.yml');
 

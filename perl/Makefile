@@ -1,11 +1,11 @@
 include default.mk
 
 test: .cpanfile_dependencies
-	AUTHOR_TESTS=1 prove -l
+	AUTHOR_TESTING=1 prove -l
 .PHONY: test
 
 authortest: .cpanfile_dev_dependencies
-	AUTHOR_TESTS=1 prove -l
+	AUTHOR_TESTING=1 prove -l
 .PHONY: authortest
 
 clean:
