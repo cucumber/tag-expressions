@@ -83,7 +83,7 @@ setup(
             "pytest >= 5.0; python_version >= '3.0'",
             "pytest-html >=3.2,<3.3; python_version <  '3.0'",
             "pytest-html >= 2.0;         python_version >= '3.0'",
-            "tox >=4.7,<4.8",
+            "tox >=4.8,<4.9",
             "pylint",
             "ruff",
             # -- INVOKE SUPPORT:
