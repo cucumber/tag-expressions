@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- [Perl] Include README.md and LICENSE in the release tarball
+(by [ehuelsmann](https://github.com/ehuelsmann))
 
 ## [5.0.6] - 2023-08-13
 ### Fixed
