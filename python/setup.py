@@ -70,7 +70,7 @@ setup(
     tests_require=[
         "pytest <7.5; python_version <  '3.0'",
         "pytest >= 5.0; python_version >= '3.0'",
-        "pytest-html >=3.2,<3.3; python_version <  '3.0'",
+        "pytest-html >=4,<4.1; python_version <  '3.0'",
         "pytest-html >= 2.0;         python_version >= '3.0'",
         "PyYAML >= 5.4.1",
         "pathlib; python_version <= '3.4'",
@@ -81,7 +81,7 @@ setup(
             "coverage",
             "pytest <7.5; python_version <  '3.0'",
             "pytest >= 5.0; python_version >= '3.0'",
-            "pytest-html >=3.2,<3.3; python_version <  '3.0'",
+            "pytest-html >=4,<4.1; python_version <  '3.0'",
             "pytest-html >= 2.0;         python_version >= '3.0'",
             "tox >=4.11,<4.12",
             "pylint",
