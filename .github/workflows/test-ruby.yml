@@ -30,6 +30,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+        rubygems: '3.0.8'
         working-directory: ruby
     - run: bundle exec rspec
       working-directory: ruby
