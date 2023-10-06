@@ -10,6 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class TagExpressionParser {
+    //regex for token to ensure no token has ',' in them later can be customized further
+    private final static String VALID_TOKEN = "^(?:@[^@]*|and|or|not|\\(|\\))$";
     private static final Map<String, Assoc> ASSOC = new HashMap<String, Assoc>() {{
         put("or", Assoc.LEFT);
         put("and", Assoc.LEFT);
@@ -106,6 +108,7 @@ public final class TagExpressionParser {
                 isEscaped = true;
             } else if (c == '(' || c == ')' || Character.isWhitespace(c)) {
                 if (token.length() > 0) {
+                    isTokenValid(token,expr);
                     tokens.add(token.toString());
                     token = new StringBuilder();
                 }
@@ -116,10 +119,26 @@ public final class TagExpressionParser {
                 token.append(c);
             }
         }
-        if (token.length() > 0) {
+        if (token.length() > 0)  {
+            isTokenValid(token,expr);
             tokens.add(token.toString());
         }
         return tokens;
+    }
+
+    /**
+     * this method checks if the token comply with the req
+     * regex if not throws exception
+     * @param token supposed tag or operator of the expresiion
+     * @param expr entire expression
+     */
+    private static void isTokenValid(StringBuilder token,String expr){
+
+        if(token.length()>0&&!String.valueOf(token).matches(VALID_TOKEN)){
+            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Please adhere to the Gherkin tag naming convention, using tags like \"@tag1\" and avoiding more than one \"@\" in the tag name.",
+             expr);
+        }
+
     }
 
     private void check(TokenType expectedTokenType, TokenType tokenType) {

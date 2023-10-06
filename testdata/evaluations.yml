@@ -1,59 +1,59 @@
-- expression: 'not x'
+- expression: 'not @x'
   tests:
-    - variables: ['x']
+    - variables: ['@x']
       result: false
-    - variables: ['y']
+    - variables: ['@y']
       result: true
-- expression: 'x and y'
+- expression: '@x and @y'
   tests:
-    - variables: ['x', 'y']
+    - variables: ['@x', '@y']
       result: true
-    - variables: ['x']
+    - variables: ['@x']
       result: false
-    - variables: ['y']
+    - variables: ['@y']
       result: false
 
-- expression: 'x or y'
+- expression: '@x or @y'
   tests:
     - variables: []
       result: false
-    - variables: ['x', 'y']
+    - variables: ['@x', '@y']
       result: true
-    - variables: ['x']
+    - variables: ['@x']
       result: true
-    - variables: ['y']
+    - variables: ['@y']
       result: true
-- expression: 'x\(1\) or y\(2\)'
+- expression: '@x\(1\) or @y\(2\)'
   tests:
-    - variables: ['x(1)']
+    - variables: ['@x(1)']
       result: true
-    - variables: ['y(2)']
+    - variables: ['@y(2)']
       result: true
-- expression: 'x\\ or y\\\) or z\\'
+- expression: '@x\\ or @y\\\) or @z\\'
   tests:
-    - variables: ['x\']
+    - variables: ['@x\']
       result: true
-    - variables: ['y\)']
+    - variables: ['@y\)']
       result: true
-    - variables: ['z\']
+    - variables: ['@z\']
       result: true
-    - variables: ['x']
+    - variables: ['@x']
       result: false
-    - variables: ['y)']
+    - variables: ['@y)']
       result: false
-    - variables: ['z']
+    - variables: ['@z']
       result: false
-- expression: '\\x or y\\ or z\\'
+- expression: '@\\x or @y\\ or @z\\'
   tests:
-    - variables: ['\x']
+    - variables: ['@\x']
       result: true
-    - variables: ['y\']
+    - variables: ['@y\']
       result: true
-    - variables: ['z\']
+    - variables: ['@z\']
       result: true
-    - variables: ['x']
+    - variables: ['@x']
       result: false
-    - variables: ['y']
+    - variables: ['@y']
       result: false
-    - variables: ['z']
+    - variables: ['@z']
       result: false

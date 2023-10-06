@@ -12,6 +12,7 @@ const ASSOC: { [key: string]: string } = {
   and: 'left',
   not: 'right',
 }
+const VALID_TOKEN = /^(?:@[^@]*|and|or|not|\(|\))$/;
 
 /**
  * Parses infix boolean expression (using Dijkstra's Shunting Yard algorithm)
@@ -109,6 +110,7 @@ function tokenize(expr: string): string[] {
       isEscaped = true
     } else if (c === '(' || c === ')' || /\s/.test(c)) {
       if (token.length > 0) {
+        isTokenValid(token.join(''),expr);
         tokens.push(token.join(''))
         token = []
       }
@@ -120,9 +122,18 @@ function tokenize(expr: string): string[] {
     }
   }
   if (token.length > 0) {
+    isTokenValid(token.join(''),expr);
     tokens.push(token.join(''))
   }
   return tokens
+}
+
+function isTokenValid(token: string, expr: string): void {
+  if (!token.match(VALID_TOKEN)) {
+    throw new Error(
+      `Tag expression "${expr}" could not be parsed because of syntax error: Please adhere to the Gherkin tag naming convention, using tags like "@tag1" and avoiding more than one "@" in the tag name.`
+    );
+  }
 }
 
 function isUnary(token: string) {

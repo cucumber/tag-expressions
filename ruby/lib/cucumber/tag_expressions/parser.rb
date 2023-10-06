@@ -7,6 +7,7 @@ module Cucumber
       def initialize
         @expressions = []
         @operators = []
+        @valid_token = /^(?:@[^@]*|and|or|not|\(|\))$/
 
         @operator_types = {
           'or'  => { type: :binary_operator,    precedence: 0, assoc: :left },
@@ -80,6 +81,7 @@ module Cucumber
             escaped = true
           elsif ch == '(' || ch == ')' || ch.match(/\s/)
             if token.length > 0
+              is_token_valid(token,infix_expression)
               tokens.push(token)
               token = ""
             end
@@ -91,9 +93,16 @@ module Cucumber
           end
         end
         if token.length > 0
+          is_token_valid(token,infix_expression)
           tokens.push(token)
         end
         tokens
+      end
+
+      def is_token_valid(token, expr)
+        unless token.to_s.match?(@valid_token)
+          raise %Q{Tag expression "#{expr}" could not be parsed because of syntax error: Please adhere to the Gherkin tag naming convention, using tags like \"@tag1\" and avoiding more than one \"@\" in the tag name.}
+        end
       end
 
       def push_expression(token)

@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"strings"
 	"unicode"
+	"regexp"
 )
 
 const OPERAND = "operand"
 const OPERATOR = "operator"
+var VALID_TOKEN = regexp.MustCompile(`^(?:@[^@]*|and|or|not|\(|\))$`)
 
 type Evaluatable interface {
 	Evaluate(variables []string) bool
@@ -116,6 +118,10 @@ func tokenize(expr string) ([]string, error) {
 			escaped = true
 		} else if c == '(' || c == ')' || unicode.IsSpace(c) {
 			if token.Len() > 0 {
+			    err := isTokenValid(token.String(), expr)
+			    if err != nil {
+                	return nil, err
+                }
 				tokens = append(tokens, token.String())
 				token.Reset()
 			}
@@ -127,6 +133,10 @@ func tokenize(expr string) ([]string, error) {
 		}
 	}
 	if token.Len() > 0 {
+	    err := isTokenValid(token.String(), expr)
+        if err != nil {
+          return nil, err
+        }
 		tokens = append(tokens, token.String())
 	}
 
@@ -149,6 +159,12 @@ func isOp(token string) bool {
 func check(infix, expectedTokenType, tokenType string) error {
 	if expectedTokenType != tokenType {
 		return fmt.Errorf("Tag expression \"%s\" could not be parsed because of syntax error: Expected %s.", infix, expectedTokenType)
+	}
+	return nil
+}
+func isTokenValid(token string, expr string) error {
+	if !VALID_TOKEN.MatchString(token) {
+		return fmt.Errorf("Tag expression \"%s\" could not be parsed because of syntax error: Please adhere to the Gherkin tag naming convention, using tags like \"@tag1\" and avoiding more than one \"@\" in the tag name.", expr)
 	}
 	return nil
 }
