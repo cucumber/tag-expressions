@@ -1,7 +1,5 @@
 Gemfile.lock
 coverage/
 acceptance/
-*.gem
-.deps
 *-go
 *.iml

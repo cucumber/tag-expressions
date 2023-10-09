@@ -2,7 +2,6 @@ require 'cucumber/tag_expressions/expressions.rb'
 
 module Cucumber
   module TagExpressions
-    # Ruby tag expression parser
     class Parser
       def initialize
         @expressions = []
@@ -33,6 +32,7 @@ module Cucumber
 
         while @operators.any?
           raise %Q{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Unmatched (.} if @operators.last == '('
+
           push_expression(pop(@operators))
         end
         expression = pop(@expressions)
@@ -41,9 +41,6 @@ module Cucumber
 
       private
 
-      ############################################################################
-      # Helpers
-      #
       def assoc_of(token, value)
         @operator_types[token][:assoc] == value
       end
@@ -109,9 +106,6 @@ module Cucumber
         end
       end
 
-      ############################################################################
-      # Handlers
-      #
       def handle_unary_operator(infix_expression, token, expected_token_type)
         check(infix_expression, expected_token_type, :operand)
         @operators.push(token)
@@ -140,6 +134,7 @@ module Cucumber
           push_expression(pop(@operators))
         end
         raise %Q{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Unmatched ).} if @operators.empty?
+
         pop(@operators) if @operators.last == '('
         :operator
       end
@@ -159,6 +154,7 @@ module Cucumber
       def pop(array, n = 1)
         result = array.pop(n)
         raise('Empty stack') if result.size != n
+
         n == 1 ? result.first : result
       end
     end
