@@ -7,10 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
-- [Ruby] Initial rubocop gems and basic compliance added (More work to come) ([#xx](https://github.com/cucumber/tag-expressions/pull/xx))
+- [Ruby] Initial rubocop gems and basic compliance added (More work to come) ([#133](https://github.com/cucumber/tag-expressions/pull/133))
 
 ### Changed
-- [Ruby] Minimum ruby version is now bumped from 1.9 to 2.3 ([#xx](https://github.com/cucumber/tag-expressions/pull/xx))
+- [Ruby] Minimum ruby version is now bumped from 1.9 to 2.3 ([#133](https://github.com/cucumber/tag-expressions/pull/133))
   
 ### Fixed
 - [Perl] Include README.md and LICENSE in the release tarball
