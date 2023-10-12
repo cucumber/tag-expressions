@@ -48,7 +48,7 @@
     "@stryker-mutator/typescript-checker": "7.2.0",
     "@types/js-yaml": "^4.0.3",
     "@types/mocha": "10.0.2",
-    "@types/node": "18.18.4",
+    "@types/node": "18.18.5",
     "@typescript-eslint/eslint-plugin": "6.7.5",
     "@typescript-eslint/parser": "6.7.5",
     "eslint": "8.51.0",
