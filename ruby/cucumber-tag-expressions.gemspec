@@ -1,5 +1,3 @@
-# -*- encoding: utf-8 -*-
-
 version = File.read(File.expand_path("VERSION", __dir__)).strip
 
 Gem::Specification.new do |s|
@@ -12,7 +10,8 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://cucumber.io/docs/cucumber/api/#tag-expressions'
   s.platform    = Gem::Platform::RUBY
   s.license     = 'MIT'
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.3'
+  s.required_rubygems_version = '>= 3.0.8'
 
   s.metadata    = {
                     'bug_tracker_uri'   => 'https://github.com/cucumber/cucumber/issues',
@@ -23,9 +22,9 @@ Gem::Specification.new do |s|
                   }
 
   s.add_development_dependency 'rake', '~> 13.0', '>= 13.0.6'
-  s.add_development_dependency 'rspec', '~> 3.10', '>= 3.10.0'
+  s.add_development_dependency 'rspec', '~> 3.11'
+  s.add_development_dependency 'rubocop', '~> 0.79.0'
 
-  s.rubygems_version = '>= 1.6.1'
   s.files            = Dir[
     'README.md',
     'LICENSE',

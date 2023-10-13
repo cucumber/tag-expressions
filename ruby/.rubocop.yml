@@ -1,0 +1,35 @@
+# TODO: Re-enable once tag-expressions > 7.0
+#require:
+#  - rubocop-performance
+#  - rubocop-rake
+#  - rubocop-rspec
+
+inherit_from: .rubocop_todo.yml
+
+inherit_mode:
+  merge:
+    - Exclude
+
+AllCops:
+  TargetRubyVersion: 2.3
+# TODO: Re-enable once rubocop > 1.10
+#  NewCops: enable
+
+# Disabled on our repo's to enable polyglot-release
+# TODO: Re-enable once rubocop > 1.40
+#Gemspec/RequireMFA:
+#  Enabled: false
+
+Layout/LineLength:
+  Max: 200
+
+Style/Documentation:
+  Enabled: false
+
+Style/RegexpLiteral:
+  EnforcedStyle: slashes
+  AllowInnerSlashes: true
+
+# TODO: Re-enable once rubocop-rspec > 1.20
+#RSpec/MessageSpies:
+#  EnforcedStyle: receive
