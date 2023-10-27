@@ -14,10 +14,10 @@ module Cucumber
 
       def to_s
         @value
-          .gsub(/\\/, "\\\\\\\\")
-          .gsub(/\(/, "\\(")
-          .gsub(/\)/, "\\)")
-          .gsub(/\s/, "\\ ")
+          .gsub(/\\/, '\\\\\\\\')
+          .gsub(/\(/, '\\(')
+          .gsub(/\)/, '\\)')
+          .gsub(/\s/, '\\ ')
       end
     end
 
@@ -79,7 +79,7 @@ module Cucumber
       end
 
       def to_s
-        "true"
+        'true'
       end
     end
   end

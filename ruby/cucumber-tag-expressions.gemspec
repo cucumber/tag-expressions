@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-version = File.read(File.expand_path("VERSION", __dir__)).strip
+version = File.read(File.expand_path('VERSION', __dir__)).strip
 
 Gem::Specification.new do |s|
   s.name        = 'cucumber-tag-expressions'
   s.version     = version
-  s.authors     = ['Andrea Nodari', "Aslak Hellesøy"]
+  s.authors     = ['Andrea Nodari', 'Aslak Hellesøy']
   s.description = 'Cucumber tag expressions for ruby'
   s.summary     = "#{s.name}-#{s.version}"
   s.email       = 'cukes@googlegroups.com'

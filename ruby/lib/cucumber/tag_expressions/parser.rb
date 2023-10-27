@@ -66,7 +66,7 @@ module Cucumber
       def tokenize(infix_expression)
         tokens = []
         escaped = false
-        token = ""
+        token = ''
         infix_expression.chars.each do |ch|
           if escaped
             if ch == '(' || ch == ')' || ch == '\\' || ch.match(/\s/)
@@ -80,7 +80,7 @@ module Cucumber
           elsif ch == '(' || ch == ')' || ch.match(/\s/)
             if token.length > 0
               tokens.push(token)
-              token = ""
+              token = ''
             end
             if !ch.match(/\s/)
               tokens.push(ch)
