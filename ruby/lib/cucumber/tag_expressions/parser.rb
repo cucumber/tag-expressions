@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'cucumber/tag_expressions/expressions.rb'
 
 module Cucumber
