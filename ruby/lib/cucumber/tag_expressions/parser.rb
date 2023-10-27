@@ -33,7 +33,7 @@ module Cucumber
         end
 
         while @operators.any?
-          raise %Q{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Unmatched (.} if @operators.last == '('
+          raise %{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Unmatched (.} if @operators.last == '('
 
           push_expression(pop(@operators))
         end
@@ -73,7 +73,7 @@ module Cucumber
               token += ch
               escaped = false
             else
-              raise %Q{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Illegal escape before "#{ch}".}
+              raise %(Tag expression "#{infix_expression}" could not be parsed because of syntax error: Illegal escape before "#{ch}".)
             end
           elsif ch == '\\'
             escaped = true
@@ -135,7 +135,7 @@ module Cucumber
         while @operators.any? && @operators.last != '('
           push_expression(pop(@operators))
         end
-        raise %Q{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Unmatched ).} if @operators.empty?
+        raise %{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Unmatched ).} if @operators.empty?
 
         pop(@operators) if @operators.last == '('
         :operator
@@ -149,7 +149,7 @@ module Cucumber
 
       def check(infix_expression, expected_token_type, token_type)
         if expected_token_type != token_type
-          raise %Q{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Expected #{expected_token_type}.}
+          raise %(Tag expression "#{infix_expression}" could not be parsed because of syntax error: Expected #{expected_token_type}.)
         end
       end
 
