@@ -67,7 +67,7 @@ module Cucumber
         tokens = []
         escaped = false
         token = ""
-        infix_expression.chars.each do | ch |
+        infix_expression.chars.each do |ch|
           if escaped
             if ch == '(' || ch == ')' || ch == '\\' || ch.match(/\s/)
               token += ch

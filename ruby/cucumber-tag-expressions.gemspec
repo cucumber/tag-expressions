@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>= 2.3'
   s.required_rubygems_version = '>= 3.0.8'
 
-  s.metadata    = {
+  s.metadata = {
     'bug_tracker_uri' => 'https://github.com/cucumber/cucumber/issues',
     'changelog_uri' => 'https://github.com/cucumber/tag-expressions/blob/main/CHANGELOG.md',
     'documentation_uri' => 'https://cucumber.io/docs/cucumber/api/#tag-expressions',
@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 3.11'
   s.add_development_dependency 'rubocop', '~> 0.79.0'
 
-  s.files            = Dir[
+  s.files = Dir[
     'README.md',
     'LICENSE',
     'lib/**/*'

@@ -32,7 +32,7 @@ module Cucumber
       end
 
       def to_s
-        if @expression.is_a?(And)|| @expression.is_a?(Or)
+        if @expression.is_a?(And) || @expression.is_a?(Or)
           # -- HINT: Binary operatos provides already "( ... )"
           "not #{@expression}"
         else
