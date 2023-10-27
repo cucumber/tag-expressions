@@ -10,11 +10,11 @@ module Cucumber
         @operators = []
 
         @operator_types = {
-          'or'  => { type: :binary_operator,    precedence: 0, assoc: :left },
+          'or' => { type: :binary_operator,    precedence: 0, assoc: :left },
           'and' => { type: :binary_operator,   precedence: 1, assoc: :left },
           'not' => { type: :unary_operator,   precedence: 2, assoc: :right },
-          ')'   => { type: :close_paren,       precedence: -1 },
-          '('   => { type: :open_paren,        precedence: 1 }
+          ')' => { type: :close_paren,       precedence: -1 },
+          '(' => { type: :open_paren,        precedence: 1 }
         }
       end
 
