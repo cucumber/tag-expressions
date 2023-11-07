@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
     'changelog_uri' => 'https://github.com/cucumber/tag-expressions/blob/main/CHANGELOG.md',
     'documentation_uri' => 'https://cucumber.io/docs/cucumber/api/#tag-expressions',
     'mailing_list_uri' => 'https://groups.google.com/forum/#!forum/cukes',
-    'source_code_uri' => 'https://github.com/cucumber/tag-expressions/tree/main/ruby',
+    'source_code_uri' => 'https://github.com/cucumber/tag-expressions/tree/main/ruby'
   }
 
   s.add_development_dependency 'rake', '~> 13.0', '>= 13.0.6'
