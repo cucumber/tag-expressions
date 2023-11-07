@@ -44,49 +44,44 @@ module Cucumber
       private
 
       def assoc_of(token, value)
-        @operator_types[token][:assoc] == value
+        @operator_types.dig(token, :assoc) == value
       end
 
       def lower_precedence?(operation)
-        (assoc_of(operation, :left) &&
-         precedence(operation) <= precedence(@operators.last)) ||
-          (assoc_of(operation, :right) &&
-           precedence(operation) < precedence(@operators.last))
+        (assoc_of(operation, :left) && precedence(operation) <= precedence(@operators.last)) ||
+          (assoc_of(operation, :right) && precedence(operation) < precedence(@operators.last))
       end
 
       def operator?(token)
-        @operator_types[token][:type] == :unary_operator ||
-            @operator_types[token][:type] == :binary_operator
+        @operator_types.dig(token, :type) == :unary_operator || @operator_types.dig(token, :type) == :binary_operator
       end
 
       def precedence(token)
-        @operator_types[token][:precedence]
+        @operator_types.dig(token, :precedence)
       end
 
       def tokenize(infix_expression)
         tokens = []
         escaped = false
         token = +''
-        infix_expression.chars.each do |ch|
+        infix_expression.chars.each do |char|
           if escaped
-            if ch == '(' || ch == ')' || ch == '\\' || ch.match(/\s/)
-              token += ch
+            if char == '(' || char == ')' || char == '\\' || char.match(/\s/)
+              token += char
               escaped = false
             else
-              raise %(Tag expression "#{infix_expression}" could not be parsed because of syntax error: Illegal escape before "#{ch}".)
+              raise %(Tag expression "#{infix_expression}" could not be parsed because of syntax error: Illegal escape before "#{char}".)
             end
-          elsif ch == '\\'
+          elsif char == '\\'
             escaped = true
-          elsif ch == '(' || ch == ')' || ch.match(/\s/)
+          elsif char == '(' || char == ')' || char.match(/\s/)
             if token.length.positive?
               tokens.push(token)
               token = +''
             end
-            if !ch.match(/\s/)
-              tokens.push(ch)
-            end
+            tokens.push(char) unless char.match(/\s/)
           else
-            token += ch
+            token += char
           end
         end
         tokens.push(token) if token.length.positive?
@@ -110,8 +105,7 @@ module Cucumber
 
       def handle_binary_operator(infix_expression, token, expected_token_type)
         check(infix_expression, expected_token_type, :operator)
-        while @operators.any? && operator?(@operators.last) &&
-              lower_precedence?(token)
+        while @operators.any? && operator?(@operators.last) && lower_precedence?(token)
           push_expression(pop(@operators))
         end
         @operators.push(token)
