@@ -136,11 +136,11 @@ module Cucumber
         raise %(Tag expression "#{infix_expression}" could not be parsed because of syntax error: Expected #{expected_token_type}.)
       end
 
-      def pop(array, n = 1)
-        result = array.pop(n)
-        raise('Empty stack') if result.length != n
+      def pop(array, amount = 1)
+        result = array.pop(amount)
+        raise('Empty stack') if result.length != amount
 
-        n == 1 ? result.first : result
+        amount == 1 ? result.first : result
       end
 
       def whitespace?(char)
