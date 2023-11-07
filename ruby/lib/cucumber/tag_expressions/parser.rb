@@ -66,7 +66,7 @@ module Cucumber
       def tokenize(infix_expression)
         tokens = []
         escaped = false
-        token = ''
+        token = +''
         infix_expression.chars.each do |ch|
           if escaped
             if ch == '(' || ch == ')' || ch == '\\' || ch.match(/\s/)
@@ -78,9 +78,9 @@ module Cucumber
           elsif ch == '\\'
             escaped = true
           elsif ch == '(' || ch == ')' || ch.match(/\s/)
-            if token.length > 0
+            if token.length.positive?
               tokens.push(token)
-              token = ''
+              token = +''
             end
             if !ch.match(/\s/)
               tokens.push(ch)
@@ -89,22 +89,16 @@ module Cucumber
             token += ch
           end
         end
-        if token.length > 0
-          tokens.push(token)
-        end
+        tokens.push(token) if token.length.positive?
         tokens
       end
 
       def push_expression(token)
         case token
-        when 'and'
-          @expressions.push(And.new(*pop(@expressions, 2)))
-        when 'or'
-          @expressions.push(Or.new(*pop(@expressions, 2)))
-        when 'not'
-          @expressions.push(Not.new(pop(@expressions)))
-        else
-          @expressions.push(Literal.new(token))
+        when 'and'; @expressions.push(And.new(*pop(@expressions, 2)))
+        when 'or';  @expressions.push(Or.new(*pop(@expressions, 2)))
+        when 'not'; @expressions.push(Not.new(pop(@expressions)))
+        else        @expressions.push(Literal.new(token))
         end
       end
 
