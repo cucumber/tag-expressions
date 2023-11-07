@@ -65,12 +65,12 @@ module Cucumber
         token = +''
         infix_expression.chars.each do |char|
           if escaped
-            if char == '(' || char == ')' || char == '\\' || whitespace?(char)
-              token += char
-              escaped = false
-            else
+            unless char == '(' || char == ')' || char == '\\' || whitespace?(char)
               raise %(Tag expression "#{infix_expression}" could not be parsed because of syntax error: Illegal escape before "#{char}".)
             end
+
+            token += char
+            escaped = false
           elsif char == '\\'
             escaped = true
           elsif char == '(' || char == ')' || whitespace?(char)
@@ -131,14 +131,14 @@ module Cucumber
       end
 
       def check(infix_expression, expected_token_type, token_type)
-        if expected_token_type != token_type
-          raise %(Tag expression "#{infix_expression}" could not be parsed because of syntax error: Expected #{expected_token_type}.)
-        end
+        return if expected_token_type == token_type
+
+        raise %(Tag expression "#{infix_expression}" could not be parsed because of syntax error: Expected #{expected_token_type}.)
       end
 
       def pop(array, n = 1)
         result = array.pop(n)
-        raise('Empty stack') if result.size != n
+        raise('Empty stack') if result.length != n
 
         n == 1 ? result.first : result
       end
