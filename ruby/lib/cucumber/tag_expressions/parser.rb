@@ -105,9 +105,7 @@ module Cucumber
 
       def handle_binary_operator(infix_expression, token, expected_token_type)
         check(infix_expression, expected_token_type, :operator)
-        while @operators.any? && operator?(@operators.last) && lower_precedence?(token)
-          push_expression(pop(@operators))
-        end
+        push_expression(pop(@operators)) while @operators.any? && operator?(@operators.last) && lower_precedence?(token)
         @operators.push(token)
         :operand
       end
@@ -120,9 +118,7 @@ module Cucumber
 
       def handle_close_paren(infix_expression, _token, expected_token_type)
         check(infix_expression, expected_token_type, :operator)
-        while @operators.any? && @operators.last != '('
-          push_expression(pop(@operators))
-        end
+        push_expression(pop(@operators)) while @operators.any? && @operators.last != '('
         raise %{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Unmatched ).} if @operators.empty?
 
         pop(@operators) if @operators.last == '('
