@@ -33,7 +33,7 @@ module Cucumber
 
       def to_s
         if @expression.is_a?(And) || @expression.is_a?(Or)
-          # -- HINT: Binary operatos provides already "( ... )"
+          # -- HINT: Binary operations already provide "( ... )"
           "not #{@expression}"
         else
           "not ( #{@expression} )"
@@ -74,7 +74,7 @@ module Cucumber
     end
 
     class True
-      def evaluate(variables)
+      def evaluate(_variables)
         true
       end
 
