@@ -20,13 +20,12 @@ module Cucumber
 
       def parse(infix_expression)
         expected_token_type = :operand
-
         tokens = tokenize(infix_expression)
         return True.new if tokens.empty?
 
         tokens.each do |token|
           if @operator_types[token]
-            expected_token_type = send("handle_#{@operator_types[token][:type]}", infix_expression, token, expected_token_type)
+            expected_token_type = send("handle_#{@operator_types.dig(token, :type)}", infix_expression, token, expected_token_type)
           else
             expected_token_type = handle_literal(infix_expression, token, expected_token_type)
           end
@@ -53,7 +52,7 @@ module Cucumber
       end
 
       def operator?(token)
-        @operator_types.dig(token, :type) == :unary_operator || @operator_types.dig(token, :type) == :binary_operator
+        [:unary_operator, :binary_operator].include?(@operator_types.dig(token, :type))
       end
 
       def precedence(token)
@@ -66,7 +65,7 @@ module Cucumber
         token = +''
         infix_expression.chars.each do |char|
           if escaped
-            if char == '(' || char == ')' || char == '\\' || char.match(/\s/)
+            if char == '(' || char == ')' || char == '\\' || whitespace?(char)
               token += char
               escaped = false
             else
@@ -74,12 +73,12 @@ module Cucumber
             end
           elsif char == '\\'
             escaped = true
-          elsif char == '(' || char == ')' || char.match(/\s/)
+          elsif char == '(' || char == ')' || whitespace?(char)
             if token.length.positive?
               tokens.push(token)
               token = +''
             end
-            tokens.push(char) unless char.match(/\s/)
+            tokens.push(char) unless whitespace?(char)
           else
             token += char
           end
@@ -142,6 +141,10 @@ module Cucumber
         raise('Empty stack') if result.size != n
 
         n == 1 ? result.first : result
+      end
+
+      def whitespace?(char)
+        char.match(/\s/)
       end
     end
   end
