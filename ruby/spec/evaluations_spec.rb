@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'cucumber/tag_expressions/parser'
-require 'yaml'
-
 evaluations = YAML.load_file('../testdata/evaluations.yml')
 
 describe 'Evaluations' do
