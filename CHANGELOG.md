@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- [Ruby] Fixed up around 75% of all rubocop offenses ([#138](https://github.com/cucumber/tag-expressions/pull/138))
 
 ## [6.0.0] - 2023-10-13
 ### Added

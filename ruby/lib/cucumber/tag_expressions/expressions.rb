@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Cucumber
   module TagExpressions
     # Literal expression node
@@ -12,10 +14,10 @@ module Cucumber
 
       def to_s
         @value
-          .gsub(/\\/, "\\\\\\\\")
-          .gsub(/\(/, "\\(")
-          .gsub(/\)/, "\\)")
-          .gsub(/\s/, "\\ ")
+          .gsub(/\\/, '\\\\\\\\')
+          .gsub(/\(/, '\\(')
+          .gsub(/\)/, '\\)')
+          .gsub(/\s/, '\\ ')
       end
     end
 
@@ -30,8 +32,8 @@ module Cucumber
       end
 
       def to_s
-        if @expression.is_a?(And)|| @expression.is_a?(Or)
-          # -- HINT: Binary operatos provides already "( ... )"
+        if @expression.is_a?(And) || @expression.is_a?(Or)
+          # -- HINT: Binary operations already provide "( ... )"
           "not #{@expression}"
         else
           "not ( #{@expression} )"
@@ -72,12 +74,12 @@ module Cucumber
     end
 
     class True
-      def evaluate(variables)
+      def evaluate(_variables)
         true
       end
 
       def to_s
-        "true"
+        'true'
       end
     end
   end
