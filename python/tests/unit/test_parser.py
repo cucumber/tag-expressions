@@ -123,6 +123,12 @@ class TestTagExpressionParser(object):
         print(exc_text)
         assert error_message in exc_text
 
+    @staticmethod
+    def assert_tokenize_expression_equals_token_list(text, expected):
+        parser = TagExpressionParser()
+        tokens = parser.tokenize(text)
+        assert expected == tokens
+
 
     # -- TESTS FOR: TagExpressionParser.parse()
     correct_test_data = [
@@ -171,6 +177,18 @@ class TestTagExpressionParser(object):
     ])
     def test_parse__with_not_not(self, text, expected):
         self.assert_parse_expression_equals_expression_string(text, expected)
+
+    @pytest.mark.parametrize("text, expected", [
+        (r"@a\(1\) and @b\(2\)", "( @a\\(1\\) and @b\\(2\\) )"),
+    ])
+    def test_parse__with_escape(self, text, expected):
+        self.assert_parse_expression_equals_expression_string(text, expected)
+
+    @pytest.mark.parametrize("text, expected", [
+        (r"@a\(1\) and @b\(2\)", "And(Literal('@a(1)'), Literal('@b(2)'))"),
+    ])
+    def test_parse__with_escape_repr(self, text, expected):
+        self.assert_parse_expression_equals_expression_repr(text, expected)
 
 
     # -- BAD CASES:
@@ -270,4 +288,19 @@ class TestTagExpressionParser(object):
         token = TagExpressionParser.select_token(text)
         assert token is expected
 
+
+    @pytest.mark.parametrize("text, expected", [
+        ("not (a and b) or c", ["not", "(", "a", "and", "b", ")", "or", "c"])
+    ])
+    def test_tokenize__without_escape(self, text, expected):
+        """Ensures that tokenize works when there are no escapes."""
+        self.assert_tokenize_expression_equals_token_list(text, expected)
+
+    @pytest.mark.parametrize("text, expected", [
+        (r"@a\(1\) and @b\(2\)", ["@a(1)", "and", "@b(2)"]),
+        (r"@a\ 1 and @b\ 2", ["@a 1", "and", "@b 2"])
+    ])
+    def test_tokenize__with_escape(self, text, expected):
+        """Ensures that tokenize works when there are no escapes."""
+        self.assert_tokenize_expression_equals_token_list(text, expected)
 

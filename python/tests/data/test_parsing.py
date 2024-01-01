@@ -39,9 +39,6 @@ this_testdata = read_testdata(TESTDATA_FILE)
 
 @pytest.mark.parametrize("expression, formatted", this_testdata)
 def test_parsing_with_datafile(expression, formatted):
-    if "\\" in expression:
-        pytest.skip("BACKSLASH-ESCAPING: Not supported yet")
-
     tag_expression = TagExpressionParser().parse(expression)
     actual_text = str(tag_expression)
     assert actual_text == formatted

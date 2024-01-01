@@ -9,9 +9,6 @@ Provides parsing of boolean tag expressions.
     assert True == expression.evaluate(["a", "other"])
     assert "( a and ( b or not (c) ) )" == str(expression)
 
-UNSUPPORTED:
-
-* Support special tags w/ escaped-parens: ``@reqid\\(10\\)``
 """
 
 from __future__ import absolute_import
@@ -172,6 +169,39 @@ class TagExpressionParser(object):
         return Literal(text)
 
     @classmethod
+    def tokenize(cls, text):
+        """Creates a list of tokens from text.
+
+        :param text: Textual tag-expression (as string).
+        :raises: TagExpressionError, if the escape is incorrectly used.
+        :return: list of tokens (strings).
+        """
+        tokens = []
+        escaped = False
+        token = ''
+        for char in text:
+            if escaped:
+                if char not in ['(', ')', '\\'] and not char.isspace():
+                    message = ('Tag expression "%s" could not be parsed because '
+                               'of syntax error: Illegal escape before "%s".')
+                    raise TagExpressionError(message % (text, char))
+                token += char
+                escaped = False
+            elif char == '\\':
+                escaped = True
+            elif char == '(' or char == ')' or char.isspace():
+                if token:
+                    tokens.append(token)
+                    token = ''
+                if char != ' ':
+                    tokens.append(char)
+            else:
+                token += char
+        if token:
+            tokens.append(token)
+        return tokens
+
+    @classmethod
     def parse(cls, text):
         """Parse a textual tag-expression and return the expression (tree).
 
@@ -182,7 +212,7 @@ class TagExpressionParser(object):
         # pylint: disable=too-many-branches
         # -- NOTE: Use whitespace-split to simplify tokenizing.
         #    This makes opening-/closing-parenthesis easier to parse.
-        parts = text.replace("(", " ( ").replace(")", " ) ").strip().split()
+        parts = cls.tokenize(text)
         if not parts:
             #  -- CASE: Empty tag-expression is always true.
             return True_()
