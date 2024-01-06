@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- [Python] Support the feature of escaping also in Python ([#144](https://github.com/cucumber/tag-expressions/pull/144))
+
 ### Fixed
 - [Ruby] Fixed up around 75% of all rubocop offenses ([#138](https://github.com/cucumber/tag-expressions/pull/138))
 
