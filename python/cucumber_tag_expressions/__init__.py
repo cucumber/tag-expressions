@@ -8,8 +8,10 @@ Theses selected items are normally included in a test run.
 
 .. see also:: https://cucumber.io/docs/cucumber/api/#tag-expressions
 
+    # pylint: disable=line-too-long
 .. _`cucumber tag-expressions`: https://cucumber.io/docs/cucumber/api/#tag-expressions
 .. _`Gherkin`: https://cucumber.io/docs/gherkin/reference/
+    # pylint: disable=line-too-long
 .. _`behave: Gherkin`: https://behave.readthedocs.io/en/latest/philosophy.html#the-gherkin-language
 """
 

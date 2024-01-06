@@ -57,6 +57,7 @@ class Token(Enum):
     OPEN_PARENTHESIS  = ("(", -2) # Java, Javascript: -2, Ruby: 1
     CLOSE_PARENTHESIS = (")", -1)
 
+    # pylint: disable=line-too-long
     def __init__(self, keyword, precedence, assoc=None, token_type=TokenType.OPERAND):
         self.keyword = keyword
         self.precedence = precedence
@@ -147,6 +148,7 @@ class TagExpressionParser(object):
         * `Shunting Yard algorithm`_
         * http://rosettacode.org/wiki/Parsing/Shunting-yard_algorithm
 
+    # pylint: disable=line-too-long
     .. _`Shunting Yard algorithm`: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
     """
     # pylint: disable=too-few-public-methods
@@ -217,7 +219,7 @@ class TagExpressionParser(object):
             #  -- CASE: Empty tag-expression is always true.
             return True_()
 
-        def ensure_expected_token_type(token_type):
+        def ensure_expected_token_type(token_type, index):
             if expected_token_type != token_type:
                 message = "Syntax error. Expected %s after %s" % \
                           (expected_token_type.name.lower(), last_part)
@@ -233,15 +235,15 @@ class TagExpressionParser(object):
             token = cls.select_token(part)
             if token is None:
                 # -- CASE OPERAND: Literal or ...
-                ensure_expected_token_type(TokenType.OPERAND)
+                ensure_expected_token_type(TokenType.OPERAND, index)
                 expressions.append(cls.make_operand(part))
                 expected_token_type = TokenType.OPERATOR
             elif token.is_unary:
-                ensure_expected_token_type(TokenType.OPERAND)
+                ensure_expected_token_type(TokenType.OPERAND, index)
                 operations.append(token)
                 expected_token_type = TokenType.OPERAND
             elif token.is_operation:
-                ensure_expected_token_type(TokenType.OPERATOR)
+                ensure_expected_token_type(TokenType.OPERATOR, index)
                 while (operations and operations[-1].is_operation and
                        token.has_lower_precedence_than(operations[-1])):
                     last_operation = operations.pop()
@@ -249,11 +251,11 @@ class TagExpressionParser(object):
                 operations.append(token)
                 expected_token_type = TokenType.OPERAND
             elif token is Token.OPEN_PARENTHESIS:
-                ensure_expected_token_type(TokenType.OPERAND)
+                ensure_expected_token_type(TokenType.OPERAND, index)
                 operations.append(token)
                 expected_token_type = TokenType.OPERAND
             elif token is Token.CLOSE_PARENTHESIS:
-                ensure_expected_token_type(TokenType.OPERATOR)
+                ensure_expected_token_type(TokenType.OPERATOR, index)
                 while operations and operations[-1] != Token.OPEN_PARENTHESIS:
                     last_operation = operations.pop()
                     cls._push_expression(last_operation, expressions)
