@@ -30,6 +30,8 @@ Provides model classes to evaluate parsed boolean tag expressions.
     assert False == expression.evaluate([])
 """
 
+import re
+
 
 # -----------------------------------------------------------------------------
 # TAG-EXPRESSION MODEL CLASSES:
@@ -60,7 +62,9 @@ class Literal(Expression):
         return bool(truth_value)
 
     def __str__(self):
-        return self.name
+        return re.sub(r'(\s)', r'\\\1',
+                      self.name.replace('\\', '\\\\').
+                      replace('(', '\\(').replace(')', '\\)'))
 
     def __repr__(self):
         return "Literal('%s')" % self.name
