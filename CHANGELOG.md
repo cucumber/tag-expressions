@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [Python] Support the feature of escaping also in Python ([#144](https://github.com/cucumber/tag-expressions/pull/144))
 
 ### Fixed
-- [Python] Added workflow to release to Pypi ([#145](https://github.com/cucumber/tag-expressions/pull/145))
+- [Python] Added workflow to release to Pypi ([#145](https://github.com/cucumber/tag-expressions/pull/145), [#146](https://github.com/cucumber/tag-expressions/pull/146), [#20](https://github.com/cucumber/tag-expressions/issues/20))
 - [Ruby] Fixed up around 75% of all rubocop offenses ([#138](https://github.com/cucumber/tag-expressions/pull/138))
 
 ## [6.0.0] - 2023-10-13
