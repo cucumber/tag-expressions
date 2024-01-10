@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [6.1.0] - 2024-01-10
 ### Added
 - [Python] Support the feature of escaping also in Python ([#144](https://github.com/cucumber/tag-expressions/pull/144))
 
@@ -199,7 +201,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v6.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v6.1.0...HEAD
+[6.1.0]: https://github.com/cucumber/tag-expressions/compare/v6.0.0...v6.1.0
 [6.0.0]: https://github.com/cucumber/tag-expressions/compare/v5.0.6...v6.0.0
 [5.0.6]: https://github.com/cucumber/tag-expressions/compare/v5.0.5...v5.0.6
 [5.0.5]: https://github.com/cucumber/tag-expressions/compare/v5.0.4...v5.0.5
