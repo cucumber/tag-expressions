@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Changed
-- [Python] Reuse the action cucumber/action-publish-pypi in release ([#265](https://github.com/cucumber/tag-expressions/pull/265))
+- [Python] Reuse the action cucumber/action-publish-pypi in release ([#147](https://github.com/cucumber/tag-expressions/pull/147))
 
 ## [6.1.0] - 2024-01-10
 ### Added
