@@ -89,10 +89,10 @@ module Cucumber
 
       def push_expression(token)
         case token
-        when 'and'; @expressions.push(And.new(*pop(@expressions, 2)))
-        when 'or';  @expressions.push(Or.new(*pop(@expressions, 2)))
-        when 'not'; @expressions.push(Not.new(pop(@expressions)))
-        else        @expressions.push(Literal.new(token))
+        when 'and' then @expressions.push(And.new(*pop(@expressions, 2)))
+        when 'or'  then @expressions.push(Or.new(*pop(@expressions, 2)))
+        when 'not' then @expressions.push(Not.new(pop(@expressions)))
+        else            @expressions.push(Literal.new(token))
         end
       end
 
