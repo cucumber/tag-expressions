@@ -52,7 +52,7 @@ module Cucumber
       end
 
       def operator?(token)
-        [:unary_operator, :binary_operator].include?(@operator_types.dig(token, :type))
+        %i[unary_operator binary_operator].include?(@operator_types.dig(token, :type))
       end
 
       def precedence(token)
