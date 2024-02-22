@@ -8,14 +8,6 @@ module Cucumber
       def initialize
         @expressions = []
         @operators = []
-
-        @operator_types = {
-          'or' => { type: :binary_operator, precedence: 0, assoc: :left },
-          'and' => { type: :binary_operator, precedence: 1, assoc: :left },
-          'not' => { type: :unary_operator, precedence: 2, assoc: :right },
-          ')' => { type: :close_paren, precedence: -1 },
-          '(' => { type: :open_paren, precedence: 1 }
-        }
       end
 
       def parse(infix_expression)
@@ -24,12 +16,7 @@ module Cucumber
         return True.new if tokens.empty?
 
         tokens.each do |token|
-          expected_token_type =
-            if @operator_types[token]
-              send("handle_#{@operator_types.dig(token, :type)}", infix_expression, token, expected_token_type)
-            else
-              handle_literal(infix_expression, token, expected_token_type)
-            end
+          expected_token_type = handle_sequential_tokens(token, infix_expression, expected_token_type)
         end
 
         while @operators.any?
@@ -44,7 +31,7 @@ module Cucumber
       private
 
       def assoc_of(token, value)
-        @operator_types.dig(token, :assoc) == value
+        operator_types.dig(token, :assoc) == value
       end
 
       def lower_precedence?(operation)
@@ -53,11 +40,11 @@ module Cucumber
       end
 
       def operator?(token)
-        %i[unary_operator binary_operator].include?(@operator_types.dig(token, :type))
+        %i[unary_operator binary_operator].include?(operator_types.dig(token, :type))
       end
 
       def precedence(token)
-        @operator_types.dig(token, :precedence)
+        operator_types.dig(token, :precedence)
       end
 
       def tokenize(infix_expression)
@@ -94,6 +81,14 @@ module Cucumber
         when 'or'  then @expressions.push(Or.new(*pop(@expressions, 2)))
         when 'not' then @expressions.push(Not.new(pop(@expressions)))
         else            @expressions.push(Literal.new(token))
+        end
+      end
+
+      def handle_sequential_tokens(token, infix_expression, expected_token_type)
+        if operator_types[token]
+          send("handle_#{operator_types.dig(token, :type)}", infix_expression, token, expected_token_type)
+        else
+          handle_literal(infix_expression, token, expected_token_type)
         end
       end
 
@@ -142,6 +137,16 @@ module Cucumber
         raise('Empty stack') if result.length != amount
 
         amount == 1 ? result.first : result
+      end
+
+      def operator_types
+        {
+          'or' => { type: :binary_operator, precedence: 0, assoc: :left },
+          'and' => { type: :binary_operator, precedence: 1, assoc: :left },
+          'not' => { type: :unary_operator, precedence: 2, assoc: :right },
+          ')' => { type: :close_paren, precedence: -1 },
+          '(' => { type: :open_paren, precedence: 1 }
+        }
       end
 
       def whitespace?(char)
