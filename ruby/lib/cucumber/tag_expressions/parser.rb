@@ -10,11 +10,11 @@ module Cucumber
         @operators = []
 
         @operator_types = {
-          'or' => { type: :binary_operator,    precedence: 0, assoc: :left },
-          'and' => { type: :binary_operator,   precedence: 1, assoc: :left },
-          'not' => { type: :unary_operator,   precedence: 2, assoc: :right },
-          ')' => { type: :close_paren,       precedence: -1 },
-          '(' => { type: :open_paren,        precedence: 1 }
+          'or' => { type: :binary_operator, precedence: 0, assoc: :left },
+          'and' => { type: :binary_operator, precedence: 1, assoc: :left },
+          'not' => { type: :unary_operator, precedence: 2, assoc: :right },
+          ')' => { type: :close_paren, precedence: -1 },
+          '(' => { type: :open_paren, precedence: 1 }
         }
       end
 
@@ -24,11 +24,12 @@ module Cucumber
         return True.new if tokens.empty?
 
         tokens.each do |token|
-          if @operator_types[token]
-            expected_token_type = send("handle_#{@operator_types.dig(token, :type)}", infix_expression, token, expected_token_type)
-          else
-            expected_token_type = handle_literal(infix_expression, token, expected_token_type)
-          end
+          expected_token_type =
+            if @operator_types[token]
+              send("handle_#{@operator_types.dig(token, :type)}", infix_expression, token, expected_token_type)
+            else
+              handle_literal(infix_expression, token, expected_token_type)
+            end
         end
 
         while @operators.any?

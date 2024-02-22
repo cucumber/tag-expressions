@@ -39,29 +39,29 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Max: 14
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SingleLineConditionsOnly, IncludeTernaryExpressions.
-# SupportedStyles: assign_to_condition, assign_inside_condition
-Style/ConditionalAssignment:
-  Exclude:
-    - 'lib/cucumber/tag_expressions/parser.rb'
+## Offense count: 1
+## Cop supports --auto-correct.
+## Configuration parameters: EnforcedStyle, SingleLineConditionsOnly, IncludeTernaryExpressions.
+## SupportedStyles: assign_to_condition, assign_inside_condition
+#Style/ConditionalAssignment:
+#  Exclude:
+#    - 'lib/cucumber/tag_expressions/parser.rb'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-Style/ExpandPathArguments:
-  Exclude:
-    - 'Rakefile'
+## Offense count: 1
+## Cop supports --auto-correct.
+#Style/ExpandPathArguments:
+#  Exclude:
+#    - 'Rakefile'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: MinSize.
-# SupportedStyles: percent, brackets
-Style/SymbolArray:
-  EnforcedStyle: brackets
-
-# Offense count: 3
-# Cop supports --auto-correct.
-Style/WhenThen:
-  Exclude:
-    - 'lib/cucumber/tag_expressions/parser.rb'
+## Offense count: 1
+## Cop supports --auto-correct.
+## Configuration parameters: MinSize.
+## SupportedStyles: percent, brackets
+#Style/SymbolArray:
+#  EnforcedStyle: brackets
+#
+## Offense count: 3
+## Cop supports --auto-correct.
+#Style/WhenThen:
+#  Exclude:
+#    - 'lib/cucumber/tag_expressions/parser.rb'
