@@ -68,7 +68,7 @@ setup(
         "enum34; python_version < '3.4'"
     ],
     tests_require=[
-        "pytest <8.2; python_version <  '3.0'",
+        "pytest <8.3; python_version <  '3.0'",
         "pytest >= 5.0; python_version >= '3.0'",
         "pytest-html >=4,<4.2; python_version <  '3.0'",
         "pytest-html >= 2.0;         python_version >= '3.0'",
@@ -79,7 +79,7 @@ setup(
         # PREPARED: 'docs': ["sphinx>=1.5"],
         "develop": [
             "coverage",
-            "pytest <8.2; python_version <  '3.0'",
+            "pytest <8.3; python_version <  '3.0'",
             "pytest >= 5.0; python_version >= '3.0'",
             "pytest-html >=4,<4.2; python_version <  '3.0'",
             "pytest-html >= 2.0;         python_version >= '3.0'",
