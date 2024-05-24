@@ -10,9 +10,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [Python] Reuse the action cucumber/action-publish-pypi in release ([#147](https://github.com/cucumber/tag-expressions/pull/147))
 - [Ruby] Fixed up remaining simple cops and began to reduce complexity of code ([#158](https://github.com/cucumber/tag-expressions/pull/158))
 
-### Fixed
-- [Java] Altered workflow to use Java 17 LTS over Java 16 ([#167](https://github.com/cucumber/tag-expressions/pull/167))
-
 ## [6.1.0] - 2024-01-10
 ### Added
 - [Python] Support the feature of escaping also in Python ([#144](https://github.com/cucumber/tag-expressions/pull/144))
