@@ -13,12 +13,9 @@ pip >= 9.0.1
 virtualenv >=15.0.1,<=20.4.4; python_version <= '2.7'
 virtualenv >=20.4.5; python_version >= '3.0'
 
-# -- CONFIGURATION MANAGEMENT (helpers):
-# FORMER: bumpversion >= 0.4.0
-bump2version >= 0.5.6
-
 # -- RELEASE MANAGEMENT: Push package to pypi.
 twine >= 1.13.0
+-r packaging.txt
 
 # -- DEVELOPMENT SUPPORT:
 # -- PYTHON2/3 COMPATIBILITY: pypa/modernize

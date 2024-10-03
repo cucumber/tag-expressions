@@ -1,19 +1,26 @@
 Cucumber Tag Expressions for Python
 ===============================================================================
 
-.. image:: https://github.com/cucumber/tag-expressions/actions/workflows/test-python.yml/badge.svg
+.. |badge.CI_status| image:: https://github.com/cucumber/tag-expressions/actions/workflows/test-python.yml/badge.svg
     :target: https://github.com/cucumber/tag-expressions/actions/workflows/test-python.yml
     :alt: CI Build Status
 
-.. image:: https://img.shields.io/pypi/v/cucumber-tag-expressions.svg
+.. |badge.latest_version| image:: https://img.shields.io/pypi/v/cucumber-tag-expressions.svg
     :target: https://pypi.python.org/pypi/cucumber-tag-expressions
     :alt: Latest Version
 
-.. image:: https://img.shields.io/pypi/l/cucumber-tag-expressions.svg
-    :target: https://pypi.python.org/pypi/cucumber-tag-expressions/
+.. |badge.license| image:: https://img.shields.io/pypi/l/cucumber-tag-expressions.svg
+    :target: https://pypi.python.org/pypi/cucumber-tag-expressions
     :alt: License
 
+.. |badge.downloads| image:: https://img.shields.io/pypi/dm/cucumber-tag-expressions.svg
+    :target: https://pypi.python.org/pypi/cucumber-tag-expressions
+    :alt: Downloads
+
 .. |logo| image:: https://github.com/cucumber-ltd/brand/raw/master/images/png/notm/cucumber-black/cucumber-black-128.png
+
+
+|badge.CI_status| |badge.latest_version| |badge.license| |badge.downloads|
 
 Cucumber tag-expressions for Python.
 

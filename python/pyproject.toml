@@ -1,0 +1,134 @@
+# =============================================================================
+# PACKAGING: cucumber-tag-expressions
+# =============================================================================
+# SEE ALSO:
+#   * https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+#   * https://setuptools-scm.readthedocs.io/en/latest/usage/
+#   * https://pypi.org/classifiers/
+# =============================================================================
+# PYTHON3: requires = ["setuptools>=64", "setuptools_scm>=8", "wheel"]
+
+[build-system]
+requires = ["setuptools", "setuptools_scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "cucumber-tag-expressions"
+authors = [
+    {name = "Jens Engel", email = "jenisys@noreply.github.com"},
+]
+description = "Provides a tag-expression parser and evaluation logic for cucumber/behave"
+dynamic = ["version"]
+keywords= ["BDD", "testing", "cucumber", "tag-expressions", "behave"]
+license = {text = "MIT"}
+readme = "README.rst"
+requires-python = ">=2.7"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = [
+    "enum34; python_version < '3.4'"
+]
+
+
+[project.urls]
+Homepage = "https://github.com/cucumber/tag-expressions"
+Download = "https://pypi.org/project/cucumber-tag-expressions"
+Repository = "https://github.com/cucumber/tag-expressions"
+Issues = "https://github.com/cucumber/tag-expressions/issues/"
+
+
+[project.optional-dependencies]
+develop = [
+    "setuptools",
+    "setuptools-scm",
+    "wheel",
+    "build >= 0.5.1",
+    "twine >= 1.13.0",
+    "coverage",
+    "pytest <  5.0; python_version <  '3.0'",
+    "pytest >= 5.0; python_version >= '3.0'",
+    "pytest-html >= 1.19.0",
+    "tox >=4.21,<4.22",
+    "pylint",
+    "ruff",
+
+     # -- INVOKE SUPPORT:
+    "invoke >= 1.7.3",
+    "six >= 1.16.0",
+    "path >= 13.1.0;    python_version >= '3.5'",
+    "path.py >= 11.5.0; python_version <  '3.5'",
+    # -- PYTHON2 BACKPORTS:
+    "pathlib;    python_version <= '3.4'",
+    "backports.shutil_which; python_version <= '3.3'",
+    "pycmd",
+]
+testing = [
+    "pytest <  5.0; python_version <  '3.0'", # >= 4.2
+    "pytest >= 5.0; python_version >= '3.0'",
+    "pytest-html >= 1.19.0",
+    "PyYAML >= 5.4.1",
+    "pathlib; python_version <= '3.4'",
+]
+
+
+[tool.distutils.bdist_wheel]
+universal = true
+
+
+# -----------------------------------------------------------------------------
+# PACAKING TOOL SPECIFIC PARTS:
+# -----------------------------------------------------------------------------
+[tool.setuptools]
+platforms = ["any"]
+zip-safe = true
+
+# -- DISABLED:
+# [tool.setuptools.dynamic]
+# version = {attr = "cucumber_tag_expressions._version.version"}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cucumber_tag_expressions*"]
+exclude = ["tests*"]
+namespaces = false
+
+# -- SETUPTOOLS-SCM: Generate version info from git-tag(s).
+# GIT-TAG MATCHER: Only use git-tags that start with "v", like: "v6.1.0"
+[tool.setuptools_scm]
+git_describe_command = "git describe --match 'v[0-9]*'"
+root = ".."
+version_file = "cucumber_tag_expressions/_version.py"
+
+
+# =============================================================================
+# OTHER TOOLS
+# =============================================================================
+# -----------------------------------------------------------------------------
+# PYLINT:
+# -----------------------------------------------------------------------------
+[tool.pylint.messages_control]
+disable = "C0330, C0326"
+
+[tool.pylint.format]
+max-line-length = "100"

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Changed
 - [Python] Reuse the action cucumber/action-publish-pypi in release ([#147](https://github.com/cucumber/tag-expressions/pull/147))
+- [Python] Provide "pyproject.toml" file that supersedes "setup.py" ([#172](https://github.com/cucumber/tag-expressions/pull/172)
 - [Ruby] Fixed up remaining simple cops and began to reduce complexity of code ([#158](https://github.com/cucumber/tag-expressions/pull/158))
 
 ## [6.1.0] - 2024-01-10

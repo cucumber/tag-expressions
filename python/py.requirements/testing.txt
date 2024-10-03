@@ -2,6 +2,8 @@
 # PYTHON PACKAGE REQUIREMENTS FOR: For testing only
 # ============================================================================
 
+-r basic.txt
+
 # -- TESTING: Unit tests and behave self-tests.
 pytest <  5.0; python_version <  '3.0' # pytest >= 4.2
 pytest >= 5.0; python_version >= '3.0'
