@@ -4,12 +4,10 @@ Invoke test tasks.
 """
 
 from __future__ import print_function
-import os.path
-import sys
 from invoke import task, Collection
 
 # -- TASK-LIBRARY:
-from .invoke_cleanup import cleanup_tasks, cleanup_dirs, cleanup_files
+from invoke_cleanup import cleanup_tasks, cleanup_dirs, cleanup_files
 
 
 # ---------------------------------------------------------------------------

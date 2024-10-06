@@ -20,13 +20,20 @@ from __future__ import absolute_import
 from . import _setup    # pylint: disable=wrong-import-order
 import os.path
 import sys
-INVOKE_MINVERSION = "1.2.0"
+
+INVOKE_MINVERSION = "1.7.0"
 _setup.setup_path()
 _setup.require_invoke_minversion(INVOKE_MINVERSION)
 
 TOPDIR = os.path.join(os.path.dirname(__file__), "..")
 TOPDIR = os.path.abspath(TOPDIR)
 sys.path.insert(0, TOPDIR)
+
+# -- MONKEYPATCH: path module
+# HINT: path API was changed in a non-backward compatible way.
+from ._path import monkeypatch_path_if_needed
+monkeypatch_path_if_needed()
+
 
 # -----------------------------------------------------------------------------
 # IMPORTS:
@@ -35,9 +42,8 @@ import sys
 from invoke import Collection
 
 # -- TASK-LIBRARY:
-from . import invoke_cleanup as cleanup
+import invoke_cleanup as cleanup
 from . import test
-from . import release
 
 # -----------------------------------------------------------------------------
 # TASKS:
@@ -51,7 +57,6 @@ from . import release
 namespace = Collection()
 namespace.add_collection(Collection.from_module(cleanup), name="cleanup")
 namespace.add_collection(Collection.from_module(test))
-namespace.add_collection(Collection.from_module(release))
 
 cleanup.cleanup_tasks.add_task(cleanup.clean_python)
 
