@@ -3,8 +3,10 @@
 # =============================================================================
 # SEE ALSO:
 #   * https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
-#   * https://setuptools-scm.readthedocs.io/en/latest/usage/
 #   * https://pypi.org/classifiers/
+#
+# PREPARED:
+#   * https://setuptools-scm.readthedocs.io/en/latest/usage/
 # =============================================================================
 # PYTHON3: requires = ["setuptools>=64", "setuptools_scm>=8", "wheel"]
 
@@ -19,7 +21,8 @@ authors = [
     {name = "Jens Engel", email = "jenisys@noreply.github.com"},
 ]
 description = "Provides a tag-expression parser and evaluation logic for cucumber/behave"
-dynamic = ["version"]
+version = "6.1.0"
+# PREPARED: dynamic = ["version"]
 keywords= ["BDD", "testing", "cucumber", "tag-expressions", "behave"]
 license = {text = "MIT"}
 readme = "README.rst"
@@ -103,22 +106,18 @@ universal = true
 platforms = ["any"]
 zip-safe = true
 
-# -- DISABLED:
-# [tool.setuptools.dynamic]
-# version = {attr = "cucumber_tag_expressions._version.version"}
-
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["cucumber_tag_expressions*"]
 exclude = ["tests*"]
 namespaces = false
 
-# -- SETUPTOOLS-SCM: Generate version info from git-tag(s).
+# -- PREPARED: SETUPTOOLS-SCM: Generate version info from git-tag(s).
 # GIT-TAG MATCHER: Only use git-tags that start with "v", like: "v6.1.0"
-[tool.setuptools_scm]
-git_describe_command = "git describe --match 'v[0-9]*'"
-root = ".."
-version_file = "cucumber_tag_expressions/_version.py"
+# [tool.setuptools_scm]
+# git_describe_command = "git describe --match 'v[0-9]*'"
+# root = ".."
+# version_file = "cucumber_tag_expressions/_version.py"
 
 
 # =============================================================================
