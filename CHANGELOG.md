@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [6.1.1] - 2024-10-28
 ### Changed
 - [Python] Use the new action cucumber/action-publish-pypi in release process ([#147](https://github.com/cucumber/tag-expressions/pull/147) [#172](https://github.com/cucumber/tag-expressions/pull/172) [#178](https://github.com/cucumber/tag-expressions/pull/178))
 - [Ruby] Fixed up remaining simple cops and began to reduce complexity of code ([#158](https://github.com/cucumber/tag-expressions/pull/158))
@@ -195,7 +197,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v6.1.0...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v6.1.1...HEAD
+[6.1.1]: https://github.com/cucumber/tag-expressions/compare/v6.1.0...v6.1.1
 [6.1.0]: https://github.com/cucumber/tag-expressions/compare/v6.0.0...v6.1.0
 [6.0.0]: https://github.com/cucumber/tag-expressions/compare/v5.0.6...v6.0.0
 [5.0.6]: https://github.com/cucumber/tag-expressions/compare/v5.0.5...v5.0.6
