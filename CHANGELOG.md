@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [5.0.6] - 2023-08-13
 ### Fixed
 - [Perl] Fixed test failures when running tests out-of-tree by
-resticting testdata based tests to run in development only ([ehuelsmann](https://github.com/ehuelsmann))
+restricting testdata based tests to run in development only ([ehuelsmann](https://github.com/ehuelsmann))
 
 ## [5.0.5] - 2023-08-11
 ### Fixed
