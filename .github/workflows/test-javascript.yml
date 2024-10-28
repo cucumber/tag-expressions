@@ -23,7 +23,6 @@ jobs:
             node-version: '20.x'
           - os: macos-latest
             node-version: '20.x'
-
     steps:
     - name: set git core.autocrlf to 'input'
       run: git config --global core.autocrlf input

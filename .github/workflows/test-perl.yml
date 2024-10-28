@@ -15,21 +15,17 @@ jobs:
     strategy:
       matrix:
         perl: [ "5.14", "5.20", "5.26", "5.32" ]
-
     steps:
     - name: Check out repository
       uses: actions/checkout@v4
-
     - name: Setup Perl environment
       uses: shogo82148/actions-setup-perl@v1
       with:
         perl-version: ${{ matrix.perl }}
         working-directory: perl
-
     - name: Run tests
       working-directory: perl
       run: make test
-
     # Run author tests second so as to not 'contaminate' the environment
     # with dependencies listed as author deps when they should have been
     # listed as general deps
