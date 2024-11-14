@@ -1,7 +1,4 @@
 name: test-python
-defaults:
-  run:
-    working-directory: python
 
 on:
   push:
@@ -21,6 +18,9 @@ jobs:
         os:
           - ubuntu-latest
         python-version: ["3.x","pypy-3.10"]
+    defaults:
+      run:
+        working-directory: python
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
