@@ -10,5 +10,6 @@
 # ============================================================================
 
 -r basic.txt
+-r packaging.txt
 -r develop.txt
 -r ../tasks/py.requirements.txt
