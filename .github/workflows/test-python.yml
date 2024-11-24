@@ -37,7 +37,7 @@ jobs:
           pip install -e .
       - name: Run tests
         run: pytest
-      - name: Check build
+      - name: Build package
         run: |
           python -m build
           twine check --strict dist/*
