@@ -1,14 +1,13 @@
 # -*- coding: UTF-8 -*-
 # pylint: disable=missing-docstring
-"""
-Provides parsing of boolean tag expressions.
+"""Parsing of boolean tag expressions.
 
-.. code-block:: python
-
-    expression = TagExpressionParser.parse("a and (b or not c)")
-    assert True == expression.evaluate(["a", "other"])
-    assert "( a and ( b or not (c) ) )" == str(expression)
-
+Examples:
+    >>> expression = parse("a and (b or not c)")
+    >>> expression({"a", "other"})
+    True
+    >>> "( a and ( b or not ( c ) ) )" == str(expression)
+    True
 """
 
 from __future__ import absolute_import
@@ -36,29 +35,47 @@ from cucumber_tag_expressions.model import Literal, And, Or, Not, True_
 # GRAMMAR DEFINITIONS:
 # -----------------------------------------------------------------------------
 class Associative(Enum):
-    """Describes associativity of boolean operations."""
+    """Associativity of boolean operations.
+
+    How operators of same precedence are grouped in the absence of parentheses.
+
+    * LEFT: Groups `a and b and c` to `(a and b) and c`.
+    * RIGHT: Groups `a or b or c` to `a or (b or c)`.
+    """
     # pylint: disable=too-few-public-methods
     LEFT = 1
     RIGHT = 2
 
 
 class TokenType(Enum):
+    """Types of tag expression tokens."""
     OPERAND = 0
     OPERATOR = 1
 
 
 class Token(Enum):
-    """Describes tokens and their abilities for tag-expression parsing."""
+    """Describes tokens and their abilities for tag expression parsing."""
     # pylint: disable=bad-whitespace
     # MAYBE: _order_ = "OR AND NOT OPEN_PARENTHESIS CLOSE_PARENTHESIS"
     OR  = ("or",  0, Associative.LEFT,  TokenType.OPERATOR)
     AND = ("and", 1, Associative.LEFT,  TokenType.OPERATOR)
     NOT = ("not", 2, Associative.RIGHT, TokenType.OPERATOR)
-    OPEN_PARENTHESIS  = ("(", -2) # Java, Javascript: -2, Ruby: 1
+    OPEN_PARENTHESIS  = ("(", -2) # Java, Javascript: -2; Ruby: 1
     CLOSE_PARENTHESIS = (")", -1)
 
     # pylint: disable=line-too-long
     def __init__(self, keyword, precedence, assoc=None, token_type=TokenType.OPERAND):
+        """Create a new token with keyword, precedence and associativity.
+
+        Args:
+            keyword (str): Keyword for the token.
+            precedence (int): Precedence of the token.
+            assoc (Associative | None): Associativity of the token.
+            token_type (TokenType): Type of the token.
+
+        Returns:
+            None
+        """
         self.keyword = keyword
         self.precedence = precedence
         self.assoc = assoc
@@ -66,18 +83,40 @@ class Token(Enum):
 
     @property
     def is_operation(self):
+        """Check if this token is an operator.
+
+        Returns:
+            bool: Whether this token is an operator.
+        """
         return self.token_type is TokenType.OPERATOR
 
     @property
     def is_binary(self):
+        """Check if this token is a binary operator.
+
+        Returns:
+            bool: Whether this token is a binary operator.
+        """
         return self in (Token.OR, Token.AND)
 
     @property
     def is_unary(self):
+        """Check if this token is a unary operator.
+
+        Returns:
+            bool: Whether this token is a unary operator.
+        """
         return self is Token.NOT
 
     def has_lower_precedence_than(self, other):
-        """Checks if this token has lower precedence than other token."""
+        """Checks if this token has lower precedence than another token.
+
+        Args:
+            other (Token): Token to compare with.
+
+        Returns:
+            bool: Whether this token has lower precedence than other token.
+        """
         # -- pylint: disable=line-too-long
         return (
             ((self.assoc == Associative.LEFT) and (self.precedence <= other.precedence)) or
@@ -85,6 +124,14 @@ class Token(Enum):
         )
 
     def matches(self, text):
+        """Check if the keyword of this token matches provided text.
+
+        Args:
+            text (str): Text to compare against.
+
+        Returns:
+            bool: Whether this token matches the provided text.
+        """
         return self.keyword == text
 
     # def __eq__(self, other):
@@ -99,15 +146,14 @@ class Token(Enum):
 # PARSE ERRORS
 # -----------------------------------------------------------------------------
 class TagExpressionError(Exception):
-    """Raised by parser if an invalid tag-expression is detected."""
+    """Raised by parser if an invalid tag expression is detected."""
 
 
 # -----------------------------------------------------------------------------
 # PARSER
 # -----------------------------------------------------------------------------
 class TagExpressionParser(object):
-    """Parser class to parse boolean tag-expressions.
-    This class uses the `Shunting Yard algorithm`_ to parse the tag-expression.
+    """Parser class to parse boolean tag expressions.
 
     Boolean operations:
 
@@ -115,41 +161,41 @@ class TagExpressionParser(object):
     * or  (as binary operation:  a or b)
     * not (as unary operation:   not a)
 
-    In addition, parenthesis can be used to group expressions, like::
+    In addition, parenthesis can be used to group expressions, like:
 
-        a and (b or c)
-        (a and not b) or (c and d)
+        "a and (b or c)"
+        "(a and not b) or (c and d)"
 
-    EXAMPLES:
+    Uses the `Shunting Yard algorithm`_ to parse the tag expression.
 
-    .. code-block:: python
+    Examples:
+        Unary operations
+        >>> expression = TagExpressionParser.parse("not foo")
+        >>> expression({"foo"})
+        False
+        >>> expression({"other"})
+        True
 
-        # -- UNARY OPTIONS
-        text11 = "not foo" = "(not foo)"
-        expression = TagExpressionParser.parse(text11)
-        assert False == expression.evaluate(["foo"])
-        assert True  == expression.evaluate(["other"])
+        Binary operations - And
+        >>> expression = TagExpressionParser.parse("foo and bar")
+        >>> expression({"foo", "bar"})
+        True
+        >>> expression({"foo"})
+        False
+        >>> expression({})
+        False
 
-        # -- BINARY OPERATIONS:
-        text21 = "foo and bar" = "(foo and bar)"
-        expression = TagExpressionParser.parse(text21)
-        assert True  == expression.evaluate(["foo", "bar"])
-        assert False == expression.evaluate(["foo"])
-        assert False == expression.evaluate([])
+        Binary operations - Or
+        >>> expression = TagExpressionParser.parse("foo or bar")
+        >>> expression({"foo", "bar"})
+        True
+        >>> expression({"foo", "other"})
+        True
+        >>> expression({})
+        False
 
-        text22 = "foo or bar"  = "(foo or bar)"
-        expression = TagExpressionParser.parse(text22)
-        assert True  == expression.evaluate(["foo", "bar"])
-        assert True  == expression.evaluate(["foo", "other"])
-        assert False == expression.evaluate([])
-
-    .. see::
-
-        * `Shunting Yard algorithm`_
-        * http://rosettacode.org/wiki/Parsing/Shunting-yard_algorithm
-
-    # pylint: disable=line-too-long
-    .. _`Shunting Yard algorithm`: https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+    .. _Shunting Yard algorithm:
+        http://rosettacode.org/wiki/Parsing/Shunting-yard_algorithm
     """
     # pylint: disable=too-few-public-methods
     TOKEN_MAP = {token.keyword: token
@@ -157,26 +203,42 @@ class TagExpressionParser(object):
 
     @classmethod
     def select_token(cls, text):
-        """Select the token that matches the text or return None.
+        """Select the token that matches the text.
 
-        :param text: Text to select the matching token.
-        :return: Token object or None, if not found.
+        Args:
+            text (str): Text to select the matching token.
+
+        Returns:
+            Token | None: Token object or None, if not found.
         """
         return cls.TOKEN_MAP.get(text, None)
 
     @classmethod
     def make_operand(cls, text):
-        """Creates operand-object from parsed text."""
-        # -- EXTENSION-POINT: For #406 or similar.
+        """Creates operand object from parsed text.
+
+        Args:
+            text (str): Text to create operand from.
+
+        Returns:
+            Literal: Operand object created from text.
+        """
+        # -- EXTENSION-POINT: For cucumber/common#406 or similar.
         return Literal(text)
 
     @classmethod
     def tokenize(cls, text):
         """Creates a list of tokens from text.
 
-        :param text: Textual tag-expression (as string).
-        :raises: TagExpressionError, if the escape is incorrectly used.
-        :return: list of tokens (strings).
+        Args:
+            text (str): Tag expression as text to parse.
+
+        Returns:
+            list[str]: List of selected tokens.
+
+        Raises:
+            TagExpressionError: If the tag expression is invalid.
+                Such as an illegal escape character.
         """
         tokens = []
         escaped = False
@@ -205,18 +267,28 @@ class TagExpressionParser(object):
 
     @classmethod
     def parse(cls, text):
-        """Parse a textual tag-expression and return the expression (tree).
+        """Parse a tag expression as text and return the expression tree.
 
-        :param text: Textual tag-expression (as string).
-        :return: Tag expression (instance of :class:`Expression`).
-        :raises: TagExpressionError, if the tag-expression is invalid.
+        Args:
+            text (str): Tag expression as text to parse.
+
+        Returns:
+            model.Expression: Parsed expression tree.
+
+        Raises:
+            TagExpressionError: If the tag expression is invalid.
+
+        Examples:
+            >>> expression = TagExpressionParser().parse("foo and bar or not baz")
+            >>> expression({"foo", "bar"})
+            True
         """
         # pylint: disable=too-many-branches
         # -- NOTE: Use whitespace-split to simplify tokenizing.
         #    This makes opening-/closing-parenthesis easier to parse.
         parts = cls.tokenize(text)
         if not parts:
-            #  -- CASE: Empty tag-expression is always true.
+            #  -- CASE: Empty tag expression is always true.
             return True_()
 
         def ensure_expected_token_type(token_type, index):
@@ -279,7 +351,7 @@ class TagExpressionParser(object):
                 raise TagExpressionError(message)
             cls._push_expression(last_operation, expressions)
 
-        # -- FINALLY: Return boolean tag-expression.
+        # -- FINALLY: Return boolean tag expression.
         assert len(expressions) == 1
         expression = expressions.pop()
         return expression
@@ -287,16 +359,35 @@ class TagExpressionParser(object):
 
     @staticmethod
     def _push_expression(token, expressions):
-        """Push a new boolean-expression on the expression-stack.
+        """Push a new boolean expression on the expression stack.
 
-        Retrieves operands for operation from the expression-stack and
+        Retrieves operands for operation from the expression stack and
         pushes the new expression onto it.
 
-        :param token:  Token for new expression (instance of class:`Token`).
-        :param expressions: Expression stack to use (as inout param).
-        :raises: TagExpressionError, if too few args are in expression-stack.
+        Args:
+            token (Token): Token for new expression.
+            expressions (list[model.Expression]): Expression stack to use.
+
+        Returns:
+            None
+
+        Raises:
+            TagExpressionError: If the expression stack contains an unexpected token
+                or too few operands for an operator.
         """
         def require_argcount(number):
+            """Check if enough operands are in the expression stack.
+
+            Args:
+                number (int): Number of operands required.
+
+            Returns:
+                None
+
+            Raises:
+                TagExpressionError: If the expression stack contains an unexpected
+                    token or too few operands for an operator.
+            """
             # -- IMPROVED DIAGNOSTICS: When things go wrong (and where).
             if len(expressions) < number:
                 message = "%s: Too few operands (expressions=%r)"
@@ -322,6 +413,16 @@ class TagExpressionParser(object):
 
     @staticmethod
     def _make_error_description(message, parts, error_index):
+        """Construct a detailed error message for a tag expression error.
+
+        Args:
+            message (str): Error message to display.
+            parts (list[str]): List of parts of the tag expression.
+            error_index (int): Index of the error in the parts list.
+
+        Returns:
+            str: Detailed error message with error-position marked.
+        """
         if error_index > len(parts):
             error_index = len(parts)    # noqa
         good_text_size = len(" ".join(parts[:error_index]))
@@ -337,16 +438,20 @@ class TagExpressionParser(object):
 # CONVENIENCE FUNCTIONS:
 # ----------------------------------------------------------------------------
 def parse(text):
-    """Parse a tag-expression as text and return the expression tree.
+    """Parse a tag expression as text and return the expression tree.
 
-    .. code-block:: python
+    Args:
+        text (str): Tag expression as text to parse.
 
-        tags = ["foo", "bar"]
-        tag_expression = parse("foo and bar or not baz")
-        assert tag_expression.evaluate(tags) == True
+    Returns:
+        model.Expression: Parsed expression tree.
 
-    :param text:    Tag expression as text to parse.
-    :param parser_class:  Optional p
-    :return: Parsed expression
+    Raises:
+        TagExpressionError: If the tag expression is invalid.
+
+    Examples:
+        >>> expression = parse("foo and bar or not baz")
+        >>> expression({"foo", "bar"})
+        True
     """
     return TagExpressionParser.parse(text)

@@ -100,7 +100,7 @@ universal = true
 
 
 # -----------------------------------------------------------------------------
-# PACAKING TOOL SPECIFIC PARTS:
+# PACKAGING TOOL SPECIFIC PARTS:
 # -----------------------------------------------------------------------------
 [tool.setuptools]
 platforms = ["any"]

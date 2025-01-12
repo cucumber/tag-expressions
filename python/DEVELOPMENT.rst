@@ -61,7 +61,7 @@ PROCEDURE: By using "make" (on UNIX platforms, like: Linux, macOS, ...)
     #   * Runs the tests
     $ make
 
-    # -- STEP: Install/Update all Python packages (explicitely).
+    # -- STEP: Install/Update all Python packages (explicitly).
     # ALTERNATIVE: make update-dependencies
     $ make install-packages
 
@@ -129,7 +129,7 @@ Afterwards:
     $ source .venv/bin/activate
     $ pip install -r py.requirements/all.txt
 
-    # -- HINT: Afterwards, to deactivate the virtual-enviroment, use:
+    # -- HINT: Afterwards, to deactivate the virtual-environment, use:
     $ deactivate
 
 SEE ALSO:
