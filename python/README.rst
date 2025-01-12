@@ -43,8 +43,46 @@ SEE ALSO:
 
 * https://cucumber.io/docs/cucumber/api/#tag-expressions
 
+Getting Started
+-----------------------------------------------------------------
 
-EXAMPLE:
+Cucumber Tag Expressions is available as `cucumber-tag-expressions <https://pypi.org/project/cucumber-tag-expressions/>`_ on PyPI.
+
+.. code-block:: console
+
+    pip install cucumber-tag-expressions
+
+Parse tag expressions and evaluate them against a set of tags.
+
+.. code-block:: python
+
+    >>> from cucumber_tag_expressions import parse
+    >>> # Tagged with @fast
+    >>> fast = parse("@fast")
+    >>> fast({"@fast", "@wip"})
+    True
+    >>> fast({"@performance", "@slow"})
+    False
+    >>> # Tagged with @wip and not @slow
+    >>> wip_not_slow = parse("@wip and not @slow")
+    >>> wip_not_slow({"@wip", "@home"})
+    True
+    >>> wip_not_slow({"wet", "warm", "raining"})
+    False
+    >>> # Tagged with both `@fast` and `@integration`
+    >>> fast_integration = parse("@integration and @fast")
+    >>> fast_integration({"@integration", "@fast", "@other"})
+    True
+    >>> fast_integration({"@system", "@fast"})
+    False
+    >>> # Tagged with either @login or @registration
+    >>> auth_pages = parse("@login or @registration")
+    >>> auth_pages({"@account", "@login"})
+    True
+    >>> auth_pages({"@admin", "@account"})
+    False
+
+Test Runner Usage
 -----------------------------------------------------------------
 
 A cucumber test runner selects some scenarios by using tag-expressions and runs them:
