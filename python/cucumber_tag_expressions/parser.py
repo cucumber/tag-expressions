@@ -221,8 +221,10 @@ class TagExpressionParser(object):
 
         def ensure_expected_token_type(token_type, index):
             if expected_token_type != token_type:
-                message = "Syntax error. Expected %s after %s" % \
-                          (expected_token_type.name.lower(), last_part)
+                message = (
+                    'Tag expression "%s" could not be parsed because of syntax '
+                    'error: Expected %s.' % (text, expected_token_type.name.lower())
+                )
                 message = cls._make_error_description(message, parts, index)
                 raise TagExpressionError(message)
 

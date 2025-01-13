@@ -200,34 +200,34 @@ class TestTagExpressionParser(object):
         self.assert_parse_with_error_contains_message(text, error_message)
 
     @pytest.mark.parametrize("text, error_message", [
-        ("a not ( and )", "Syntax error. Expected operator after a"),
+        ("a not ( and )", "syntax error: Expected operator"),
     ])
     def test_parse__fails_with_missing_operation_args(self, text, error_message):
         self.assert_parse_with_error_contains_message(text, error_message)
 
     @pytest.mark.parametrize("text, error_message", [
-        ("or or",  "Syntax error. Expected operand after BEGIN"),
+        ("or or",  "syntax error: Expected operand"),
     ])
     def test_parse__fails_with_only_operations(self, text, error_message):
         self.assert_parse_with_error_contains_message(text, error_message)
 
     @pytest.mark.parametrize("text, error_message", [
-        ("a b", "Syntax error. Expected operator after a"),
+        ("a b", "syntax error: Expected operator"),
     ])
     def test_parse__fails_for_args_without_operation(self, text, error_message):
         self.assert_parse_with_error_contains_message(text, error_message)
 
     @pytest.mark.parametrize("text, error_message", [
-        ("(())",    "Syntax error. Expected operand after ("),
-        ("(() ())", "Syntax error. Expected operand after ("),
+        ("(())",    "syntax error: Expected operand"),
+        ("(() ())", "syntax error: Expected operand"),
     ])
     def test_parse__fails_for_empty_parens_groups(self, text, error_message):
         self.assert_parse_with_error_contains_message(text, error_message)
 
     @pytest.mark.parametrize("text, expected", [
-        ("a b or",        "Syntax error. Expected operator after a"),
-        ("a and (b not)", "Syntax error. Expected operator after b"),
-        ("a and (b c) or", "Syntax error. Expected operator after b"),
+        ("a b or",        "syntax error: Expected operator"),
+        ("a and (b not)", "syntax error: Expected operator"),
+        ("a and (b c) or", "syntax error: Expected operator"),
     ])
     def test_parse__fails_with_rpn_notation(self, text, expected):
         # -- NOTE: RPN parsebility due to Shunting-yard algorithm (stack-based).
@@ -252,14 +252,14 @@ class TestTagExpressionParser(object):
     # -- BAD CASES: Too few operands
     @pytest.mark.parametrize("text, error_message", [
         ("a and ",  "and: Too few operands"),
-        ("  and b", "Syntax error. Expected operand after BEGIN"),
+        ("  and b", "syntax error: Expected operand"),
     ])
     def test_parse__fails_and_operation_with_too_few_args(self, text, error_message):
         self.assert_parse_with_error_contains_message(text, error_message)
 
     @pytest.mark.parametrize("text, error_message", [
         ("a or ",  "or: Too few operands"),
-        ("  or b", "Syntax error. Expected operand after BEGIN"),
+        ("  or b", "syntax error: Expected operand"),
         ("a and b or ", "or: Too few operands"),
     ])
     def test_parse__fails_or_operation_with_too_few_args(self, text, error_message):
@@ -267,9 +267,9 @@ class TestTagExpressionParser(object):
 
     @pytest.mark.parametrize("text, error_message", [
         ("not ",   "not: Too few operands"),
-        ("not ()",       "Syntax error. Expected operand after ("),
-        ("not () and b", "Syntax error. Expected operand after ("),
-        ("not () or b",  "Syntax error. Expected operand after ("),
+        ("not ()",       "syntax error: Expected operand"),
+        ("not () and b", "syntax error: Expected operand"),
+        ("not () or b",  "syntax error: Expected operand"),
     ])
     def test_parse__fails_not_operation_with_too_few_args(self, text, error_message):
         self.assert_parse_with_error_contains_message(text, error_message)
