@@ -275,7 +275,10 @@ class TagExpressionParser(object):
             last_operation = operations.pop()
             if last_operation is Token.OPEN_PARENTHESIS:
                 # -- CASE: TOO MANY OPEN-PARENTHESIS
-                message = "Unclosed '(': Too many open-parens in: %s" % text
+                message = (
+                    'Tag expression "%s" could not be parsed because of syntax error:'
+                    ' Unmatched (.' % text
+                )
                 raise TagExpressionError(message)
             cls._push_expression(last_operation, expressions)
 
