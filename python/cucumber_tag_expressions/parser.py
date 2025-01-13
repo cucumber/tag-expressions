@@ -262,7 +262,10 @@ class TagExpressionParser(object):
 
                 if not operations:
                     # -- CASE: TOO FEW OPEN-PARENTHESIS
-                    message = "Missing '(': Too few open-parens in: %s" % text
+                    message = (
+                        'Tag expression "%s" could not be parsed because of syntax '
+                        'error: Unmatched ).' % text
+                    )
                     message = cls._make_error_description(message, parts, index)
                     raise TagExpressionError(message)
                 elif operations[-1] is Token.OPEN_PARENTHESIS:

@@ -193,7 +193,7 @@ class TestTagExpressionParser(object):
 
     # -- BAD CASES:
     @pytest.mark.parametrize("text, error_message", [
-        ("( a and b ))",    "Missing '(': Too few open-parens"),
+        ("( a and b ))",    "Unmatched )."),
         ("( ( a and b )",   "Unmatched (."),
     ])
     def test_parse__fails_with_unbalanced_parens(self, text, error_message):
