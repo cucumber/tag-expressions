@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- [Ruby] Support the testing in CI on later rubies ([#185](https://github.com/cucumber/tag-expressions/pull/185))
 
 ## [6.1.1] - 2024-10-28
 ### Changed
