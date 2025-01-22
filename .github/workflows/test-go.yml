@@ -5,9 +5,19 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - go/**
+      - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
+      - renovate/**
+    paths:
+      - go/**
+      - testdata/**
+      - .github/**
+  workflow_call:
 
 jobs:
   test-go:
