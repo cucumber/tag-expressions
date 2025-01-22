@@ -69,7 +69,7 @@ develop = [
     "build >= 0.5.1",
     "twine >= 1.13.0",
     "coverage",
-    "pytest <  5.0; python_version <  '3.0'",
+    "pytest <8.4; python_version <  '3.0'",
     "pytest >= 5.0; python_version >= '3.0'",
     "pytest-html >= 1.19.0",
     "tox >=4.24,<4.25",
@@ -87,7 +87,7 @@ develop = [
     "pycmd",
 ]
 testing = [
-    "pytest <  5.0; python_version <  '3.0'", # >= 4.2
+    "pytest <8.4; python_version <  '3.0'", # >= 4.2
     "pytest >= 5.0; python_version >= '3.0'",
     "pytest-html >= 1.19.0",
     "PyYAML >= 5.4.1",
