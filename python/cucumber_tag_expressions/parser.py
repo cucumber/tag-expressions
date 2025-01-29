@@ -223,7 +223,7 @@ class TagExpressionParser(object):
         Returns:
             Literal: Operand object created from text.
         """
-        # -- EXTENSION-POINT: For cucumber/common#406 or similar.
+        # -- EXTENSION-POINT: #TODO: See https://github.com/cucumber/common/issues/406 for a similar extension point.
         return Literal(text)
 
     @classmethod

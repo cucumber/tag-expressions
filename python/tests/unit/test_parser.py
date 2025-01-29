@@ -230,7 +230,7 @@ class TestTagExpressionParser(object):
         ("a and (b c) or", "Syntax error. Expected operator after b"),
     ])
     def test_parse__fails_with_rpn_notation(self, text, expected):
-        # -- NOTE: RPN parsebility due to Shunting-yard algorithm (stack-based).
+        # -- NOTE: RPN parseability due to Shunting-yard algorithm (stack-based).
         self.assert_parse_with_error_contains_message(text, expected)
 
     # -- TODO:
