@@ -5,9 +5,19 @@ on:
     branches:
       - main
       - renovate/**
+    paths:
+      - javascript/**
+      - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
+      - renovate/**
+    paths:
+      - javascript/**
+      - testdata/**
+      - .github/**
+  workflow_call:
 
 jobs:
   test-javascript:
