@@ -1,33 +1,41 @@
 # -*- coding: UTF-8 -*-
 # pylint: disable=missing-docstring
-"""
-Provides model classes to evaluate parsed boolean tag expressions.
+"""Model classes to evaluate parsed boolean tag expressions.
 
-.. code-block:: python
+Examples:
+    >>> expression = And(Literal("a"), Literal("b"))
+    >>> expression({"a", "b"})
+    True
+    >>> expression({"a", "b"})
+    True
+    >>> expression({"a"})
+    False
+    >>> expression({})
+    False
 
-    # -- Expression := a and b
-    expression = And(Literal("a"), Literal("b"))
-    assert True  == expression.evaluate(["a", "b"])
-    assert False == expression.evaluate(["a"])
-    assert False == expression.evaluate([])
+    >>> expression = Or(Literal("a"), Literal("b"))
+    >>> expression({"a", "b"})
+    True
+    >>> expression({"a"})
+    True
+    >>> expression({})
+    False
 
-    # -- Expression := a or b
-    expression = Or(Literal("a"), Literal("b"))
-    assert True  == expression.evaluate(["a", "b"])
-    assert True  == expression.evaluate(["a"])
-    assert False == expression.evaluate([])
+    >>> expression = Not(Literal("a"))
+    >>> expression({"a"})
+    False
+    >>> expression({"other"})
+    True
+    >>> expression({})
+    True
 
-    # -- Expression := not a
-    expression = Not(Literal("a"))
-    assert False == expression.evaluate(["a"])
-    assert True  == expression.evaluate(["other"])
-    assert True  == expression.evaluate([])
-
-    # -- Expression := (a or b) and c
-    expression = And(Or(Literal("a"), Literal("b")), Literal("c"))
-    assert True  == expression.evaluate(["a", "c"])
-    assert False == expression.evaluate(["c", "other"])
-    assert False == expression.evaluate([])
+    >>> expression = And(Or(Literal("a"), Literal("b")), Literal("c"))
+    >>> expression({"a", "c"})
+    True
+    >>> expression({"c", "other"})
+    False
+    >>> expression({})
+    False
 """
 
 import re
@@ -37,23 +45,43 @@ import re
 # TAG-EXPRESSION MODEL CLASSES:
 # -----------------------------------------------------------------------------
 class Expression(object):
-    """Abstract base class for boolean expression terms of a tag-expression
-    (or representing a parsed tag-expression (evaluation-tree)).
+    """Abstract base class for boolean expression terms of a tag expression
+    (or representing a parsed tag expression (evaluation-tree)).
     """
     # pylint: disable=too-few-public-methods
 
     def evaluate(self, values):
+        """Evaluate whether expression matches values.
+
+        Args:
+            values (Iterable[str]): Tag names to evaluate.
+
+        Returns:
+            bool: Whether expression evaluates with values.
+        """
         raise NotImplementedError()
 
     def __call__(self, values):
-        """Call operator to make an expression-object callable."""
+        """Call operator to make an expression object callable.
+        
+        Args:
+            values (Iterable[str]): Tag names to evaluate.
+
+        Returns:
+            bool: True if expression is true, False otherwise
+        """
         return bool(self.evaluate(values))
 
 
 class Literal(Expression):
-    """Used as placeholder for a tag in a boolean tag-expression."""
+    """Used as placeholder for a tag in a boolean tag expression."""
     # pylint: disable=too-few-public-methods
     def __init__(self, name):
+        """Initialise literal with tag name.
+
+        Args:
+            name (str): Tag name to represent as a literal.
+        """
         super(Literal, self).__init__()
         self.name = name
 
@@ -77,6 +105,14 @@ class And(Expression):
     """
     # pylint: disable=too-few-public-methods
     def __init__(self, *terms):
+        """Create Boolean-AND expression.
+
+        Args:
+            terms (Iterable[Expression]): List of boolean expressions to AND.
+
+        Returns:
+            None
+        """
         super(And, self).__init__()
         self.terms = terms
 
@@ -110,6 +146,14 @@ class Or(Expression):
     # pylint: disable=too-few-public-methods
 
     def __init__(self, *terms):
+        """Create Boolean-OR expression.
+
+        Args:
+            terms (Iterable[Expression]): List of boolean expressions to OR.
+
+        Returns:
+            None
+        """
         super(Or, self).__init__()
         self.terms = terms
 
@@ -140,6 +184,14 @@ class Not(Expression):
     # pylint: disable=too-few-public-methods
 
     def __init__(self, term):
+        """Create Boolean-AND expression.
+
+        Args:
+            term (Expression): Boolean expression to negate.
+
+        Returns:
+            None
+        """
         super(Not, self).__init__()
         self.term = term
 
@@ -163,6 +215,14 @@ class True_(Expression):    # pylint: disable=invalid-name
     # pylint: disable=too-few-public-methods
 
     def evaluate(self, values):
+        """Evaluates to True.
+
+        Args:
+            values (Any): Required by API though not used.
+
+        Returns:
+            Literal[True]
+        """
         return True
 
     def __str__(self):

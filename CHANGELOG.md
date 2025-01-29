@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - [All] Run CI testing only for relevant areas of the codebase ([#186](https://github.com/cucumber/tag-expressions/pull/186))
+- [Python] Extended documentation and type hints within docstrings ([#182](https://github.com/cucumber/tag-expressions/pull/182))
 - [Ruby] Support the testing in CI on later rubies ([#185](https://github.com/cucumber/tag-expressions/pull/185))
 
 ## [6.1.1] - 2024-10-28
