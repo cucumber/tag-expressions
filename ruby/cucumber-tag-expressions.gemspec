@@ -23,9 +23,9 @@ Gem::Specification.new do |s|
     'source_code_uri' => 'https://github.com/cucumber/tag-expressions/tree/main/ruby'
   }
 
-  s.add_development_dependency 'rake', '~> 13.1'
-  s.add_development_dependency 'rspec', '~> 3.11'
-  s.add_development_dependency 'rubocop', '~> 0.93.0'
+  s.add_development_dependency 'rake', '~> 13.2'
+  s.add_development_dependency 'rspec', '~> 3.13'
+  s.add_development_dependency 'rubocop', '~> 1.18.4'
 
   s.files = Dir['README.md', 'LICENSE', 'lib/**/*']
   s.rdoc_options     = ['--charset=UTF-8']
