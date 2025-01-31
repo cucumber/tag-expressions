@@ -12,8 +12,8 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://cucumber.io/docs/cucumber/api/#tag-expressions'
   s.platform    = Gem::Platform::RUBY
   s.license     = 'MIT'
-  s.required_ruby_version = '>= 2.3'
-  s.required_rubygems_version = '>= 3.0.8'
+  s.required_ruby_version = '>= 2.6'
+  s.required_rubygems_version = '>= 3.2.3'
 
   s.metadata = {
     'bug_tracker_uri' => 'https://github.com/cucumber/cucumber/issues',

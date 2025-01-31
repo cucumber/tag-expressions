@@ -11,7 +11,7 @@ inherit_mode:
     - Exclude
 
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.6
 # TODO: Re-enable once rubocop > 1.10
 #  NewCops: enable
 
