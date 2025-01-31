@@ -1,8 +1,7 @@
-# TODO: Re-enable once tag-expressions > 7.0
-#require:
-#  - rubocop-performance
-#  - rubocop-rake
-#  - rubocop-rspec
+require:
+  - rubocop-performance
+  - rubocop-rake
+  - rubocop-rspec
 
 inherit_from: .rubocop_todo.yml
 
@@ -30,6 +29,5 @@ Style/RegexpLiteral:
   EnforcedStyle: slashes
   AllowInnerSlashes: true
 
-# TODO: Re-enable once rubocop-rspec > 1.20
-#RSpec/MessageSpies:
-#  EnforcedStyle: receive
+RSpec/MessageSpies:
+  EnforcedStyle: receive
