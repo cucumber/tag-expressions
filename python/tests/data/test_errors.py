@@ -39,7 +39,6 @@ def read_testdata(data_filename):
 # -----------------------------------------------------------------------------
 this_testdata = read_testdata(TESTDATA_FILE)
 
-@pytest.mark.skip(reason="TOO MANY DIFFERENCES: Error message here are more specific (IMHO)")
 @pytest.mark.parametrize("expression, error", this_testdata)
 def test_errors_with_datafile(expression, error):
     with pytest.raises(TagExpressionError) as exc_info:
