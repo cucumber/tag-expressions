@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- [PHP] Add new implementation ([#194](https://github.com/cucumber/tag-expressions/pull/194))
 
 ## [6.1.2] - 2025-01-29
 ### Added
