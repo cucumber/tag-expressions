@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [6.2.0] - 2025-05-25
 ### Added
 - [PHP] Add new implementation ([#194](https://github.com/cucumber/tag-expressions/pull/194))
 
@@ -205,7 +207,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v6.1.2...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v6.2.0...HEAD
+[6.2.0]: https://github.com/cucumber/tag-expressions/compare/v6.1.2...v6.2.0
 [6.1.2]: https://github.com/cucumber/tag-expressions/compare/v6.1.1...v6.1.2
 [6.1.1]: https://github.com/cucumber/tag-expressions/compare/v6.1.0...v6.1.1
 [6.1.0]: https://github.com/cucumber/tag-expressions/compare/v6.0.0...v6.1.0
