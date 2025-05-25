@@ -1,0 +1,35 @@
+{
+    "name": "cucumber/tag-expressions",
+    "description": "Cucumber Tag Expressions parser",
+    "author": "Cucumber Limited <cukes@googlegroups.com>",
+    "license": "MIT",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Cucumber\\TagExpressions\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Cucumber\\TagExpressions\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.1",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.75",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpunit/phpunit": "^10.5.46 || ^11.5",
+        "symfony/yaml": "^6.4 || ^7.2"
+    },
+    "homepage": "https://github.com/cucumber/tag-expressions",
+    "support": {
+        "issues": "https://github.com/cucumber/tag-expressions/issues"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
