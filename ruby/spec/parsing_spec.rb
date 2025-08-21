@@ -3,7 +3,7 @@
 tests = YAML.load_file('../testdata/parsing.yml')
 
 describe 'Parsing' do
-  let(:parser) { Cucumber::TagExpressions::Parser.new }
+  subject(:parser) { Cucumber::TagExpressions::Parser.new }
 
   tests.each do |test|
     it "parses '#{test['expression']}' into '#{test['formatted']}'" do
