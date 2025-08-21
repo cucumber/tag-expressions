@@ -62,7 +62,7 @@ module Cucumber
           elsif char == '\\'
             escaped = true
           elsif char == '(' || char == ')' || whitespace?(char)
-            if token.length.positive?
+            unless token.empty?
               tokens.push(token)
               token = +''
             end
@@ -71,7 +71,7 @@ module Cucumber
             token += char
           end
         end
-        tokens.push(token) if token.length.positive?
+        tokens.push(token) unless token.empty?
         tokens
       end
 
