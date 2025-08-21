@@ -5,7 +5,7 @@ evaluations = YAML.load_file('../testdata/evaluations.yml')
 describe 'Evaluations' do
   evaluations.each do |evaluation|
     context evaluation['expression'] do
-      let(:parser) { Cucumber::TagExpressions::Parser.new }
+      subject(:parser) { Cucumber::TagExpressions::Parser.new }
 
       evaluation['tests'].each do |test|
         it "evaluates [#{test['variables'].join(', ')}] to #{test['result']}" do

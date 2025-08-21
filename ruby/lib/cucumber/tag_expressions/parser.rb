@@ -20,7 +20,7 @@ module Cucumber
         end
 
         while @operators.any?
-          raise %{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Unmatched (.} if @operators.last == '('
+          raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Unmatched (." if @operators.last == '('
 
           push_expression(pop(@operators))
         end
@@ -54,7 +54,7 @@ module Cucumber
         infix_expression.chars.each do |char|
           if escaped
             unless char == '(' || char == ')' || char == '\\' || whitespace?(char)
-              raise %(Tag expression "#{infix_expression}" could not be parsed because of syntax error: Illegal escape before "#{char}".)
+              raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Illegal escape before \"#{char}\"."
             end
 
             token += char
@@ -62,7 +62,7 @@ module Cucumber
           elsif char == '\\'
             escaped = true
           elsif char == '(' || char == ')' || whitespace?(char)
-            if token.length.positive?
+            unless token.empty?
               tokens.push(token)
               token = +''
             end
@@ -71,7 +71,7 @@ module Cucumber
             token += char
           end
         end
-        tokens.push(token) if token.length.positive?
+        tokens.push(token) unless token.empty?
         tokens
       end
 
@@ -114,7 +114,7 @@ module Cucumber
       def handle_close_paren(infix_expression, _token, expected_token_type)
         check(infix_expression, expected_token_type, :operator)
         push_expression(pop(@operators)) while @operators.any? && @operators.last != '('
-        raise %{Tag expression "#{infix_expression}" could not be parsed because of syntax error: Unmatched ).} if @operators.empty?
+        raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Unmatched )." if @operators.empty?
 
         pop(@operators) if @operators.last == '('
         :operator
@@ -129,7 +129,7 @@ module Cucumber
       def check(infix_expression, expected_token_type, token_type)
         return if expected_token_type == token_type
 
-        raise %(Tag expression "#{infix_expression}" could not be parsed because of syntax error: Expected #{expected_token_type}.)
+        raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Expected #{expected_token_type}."
       end
 
       def pop(array, amount = 1)

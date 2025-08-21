@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - [Ruby] Minimum ruby version is now bumped from 2.3 to 2.6 (With minor refactors to the parser) ([#204](https://github.com/cucumber/tag-expressions/pull/204))
 
+## [6.2.0] - 2025-05-25
+### Added
+- [PHP] Add new implementation ([#194](https://github.com/cucumber/tag-expressions/pull/194))
+
 ## [6.1.2] - 2025-01-29
 ### Added
 - [All] Run CI testing only for relevant areas of the codebase ([#186](https://github.com/cucumber/tag-expressions/pull/186))
@@ -204,7 +208,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v6.1.2...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v6.2.0...HEAD
+[6.2.0]: https://github.com/cucumber/tag-expressions/compare/v6.1.2...v6.2.0
 [6.1.2]: https://github.com/cucumber/tag-expressions/compare/v6.1.1...v6.1.2
 [6.1.1]: https://github.com/cucumber/tag-expressions/compare/v6.1.0...v6.1.1
 [6.1.0]: https://github.com/cucumber/tag-expressions/compare/v6.0.0...v6.1.0
