@@ -11,13 +11,10 @@ inherit_mode:
 
 AllCops:
   TargetRubyVersion: 2.6
-# TODO: Re-enable once rubocop compliance is improved
-  NewCops: disable
+  NewCops: enable
 
-# Disabled on our repo's to enable polyglot-release
-# TODO: Re-enable once rubocop > 1.40
-#Gemspec/RequireMFA:
-#  Enabled: false
+Gemspec/RequireMFA:
+  Enabled: false
 
 Layout/LineLength:
   Max: 200

@@ -23,12 +23,12 @@ Gem::Specification.new do |s|
     'source_code_uri' => 'https://github.com/cucumber/tag-expressions/tree/main/ruby'
   }
 
-  s.add_development_dependency 'rake', '~> 13.2'
+  s.add_development_dependency 'rake', '~> 13.3'
   s.add_development_dependency 'rspec', '~> 3.13'
-  s.add_development_dependency 'rubocop', '~> 1.18.4'
-  s.add_development_dependency 'rubocop-performance', '~> 1.17.0'
+  s.add_development_dependency 'rubocop', '~> 1.47.0'
+  s.add_development_dependency 'rubocop-performance', '~> 1.16.0'
   s.add_development_dependency 'rubocop-rake', '~> 0.6.0'
-  s.add_development_dependency 'rubocop-rspec', '~> 2.4.0'
+  s.add_development_dependency 'rubocop-rspec', '~> 2.18.0'
 
   s.files = Dir['README.md', 'LICENSE', 'lib/**/*']
   s.rdoc_options     = ['--charset=UTF-8']
