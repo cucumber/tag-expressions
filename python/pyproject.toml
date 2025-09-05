@@ -72,7 +72,7 @@ develop = [
     "pytest <8.5; python_version <  '3.0'",
     "pytest >= 5.0; python_version >= '3.0'",
     "pytest-html >= 1.19.0",
-    "tox >=4.28,<4.29",
+    "tox >=4.30,<4.31",
     "pylint",
     "ruff",
 
