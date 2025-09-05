@@ -15,28 +15,24 @@ module Cucumber
         tokens = tokenize(infix_expression)
         return True.new if tokens.empty?
 
-        tokens.each do |token|
-          expected_token_type = handle_sequential_tokens(token, infix_expression, expected_token_type)
-        end
-
+        tokens.each { |token| expected_token_type = handle_sequential_tokens(token, infix_expression, expected_token_type) }
         while @operators.any?
           raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Unmatched (." if @operators.last == '('
 
           push_expression(pop(@operators))
         end
-        expression = pop(@expressions)
-        @expressions.empty? ? expression : raise('Not empty')
+        pop(@expressions)
       end
 
       private
 
-      def assoc_of(token, value)
+      def assoc_correct?(token, value)
         operator_types.dig(token, :assoc) == value
       end
 
       def lower_precedence?(operation)
-        (assoc_of(operation, :left) && precedence(operation) <= precedence(@operators.last)) ||
-          (assoc_of(operation, :right) && precedence(operation) < precedence(@operators.last))
+        (assoc_correct?(operation, :left) && precedence(operation) <= precedence(@operators.last)) ||
+          (assoc_correct?(operation, :right) && precedence(operation) < precedence(@operators.last))
       end
 
       def operator?(token)
