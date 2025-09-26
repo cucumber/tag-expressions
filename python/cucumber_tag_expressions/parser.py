@@ -293,8 +293,10 @@ class TagExpressionParser(object):
 
         def ensure_expected_token_type(token_type, index):
             if expected_token_type != token_type:
-                message = "Syntax error. Expected %s after %s" % \
-                          (expected_token_type.name.lower(), last_part)
+                message = (
+                    'Tag expression "%s" could not be parsed because of syntax '
+                    'error: Expected %s.' % (text, expected_token_type.name.lower())
+                )
                 message = cls._make_error_description(message, parts, index)
                 raise TagExpressionError(message)
 
@@ -334,7 +336,10 @@ class TagExpressionParser(object):
 
                 if not operations:
                     # -- CASE: TOO FEW OPEN-PARENTHESIS
-                    message = "Missing '(': Too few open-parens in: %s" % text
+                    message = (
+                        'Tag expression "%s" could not be parsed because of syntax '
+                        'error: Unmatched ).' % text
+                    )
                     message = cls._make_error_description(message, parts, index)
                     raise TagExpressionError(message)
                 elif operations[-1] is Token.OPEN_PARENTHESIS:
@@ -347,7 +352,10 @@ class TagExpressionParser(object):
             last_operation = operations.pop()
             if last_operation is Token.OPEN_PARENTHESIS:
                 # -- CASE: TOO MANY OPEN-PARENTHESIS
-                message = "Unclosed '(': Too many open-parens in: %s" % text
+                message = (
+                    'Tag expression "%s" could not be parsed because of syntax error:'
+                    ' Unmatched (.' % text
+                )
                 raise TagExpressionError(message)
             cls._push_expression(last_operation, expressions)
 
