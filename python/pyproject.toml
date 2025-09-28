@@ -26,7 +26,7 @@ version = "6.2.0"
 keywords= ["BDD", "testing", "cucumber", "tag-expressions", "behave"]
 license = "MIT"
 license-files = [
-     "../LICENSE"
+     "LICENSE"
 ]
 readme = "README.rst"
 requires-python = ">=2.7"
