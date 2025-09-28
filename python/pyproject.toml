@@ -11,7 +11,7 @@
 # PYTHON3: requires = ["setuptools>=64", "setuptools_scm>=8", "wheel"]
 
 [build-system]
-requires = ["setuptools", "setuptools_scm", "wheel"]
+requires = ["setuptools>=77.0.0", "setuptools_scm", "wheel"]
 build-backend = "setuptools.build_meta"
 
 
