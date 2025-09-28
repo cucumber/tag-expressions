@@ -24,7 +24,10 @@ description = "Provides a tag-expression parser and evaluation logic for cucumbe
 version = "6.2.0"
 # PREPARED: dynamic = ["version"]
 keywords= ["BDD", "testing", "cucumber", "tag-expressions", "behave"]
-license = {text = "MIT"}
+license = "MIT"
+license-files = [
+     "../LICENSE"
+]
 readme = "README.rst"
 requires-python = ">=2.7"
 classifiers = [
@@ -47,7 +50,6 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Software Development :: Testing",
     "Topic :: Software Development :: Libraries :: Python Modules",
-    "License :: OSI Approved :: MIT License",
 ]
 dependencies = [
     "enum34; python_version < '3.4'"
