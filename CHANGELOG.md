@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ## [7.0.0] - 2025-10-03
+### Changed
+- [Ruby] Minimum ruby version is now bumped from 2.3 to 2.6 (With minor refactors to the parser) ([#204](https://github.com/cucumber/tag-expressions/pull/204))
+- [Ruby] Speed up Parser#parse by removing redundant `nil` safety check
 
 ## [6.2.0] - 2025-05-25
 ### Added
