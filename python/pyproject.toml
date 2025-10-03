@@ -21,7 +21,7 @@ authors = [
     {name = "Jens Engel", email = "jenisys@noreply.github.com"},
 ]
 description = "Provides a tag-expression parser and evaluation logic for cucumber/behave"
-version = "6.2.0"
+version = "7.0.0"
 # PREPARED: dynamic = ["version"]
 keywords= ["BDD", "testing", "cucumber", "tag-expressions", "behave"]
 license = {text = "MIT"}

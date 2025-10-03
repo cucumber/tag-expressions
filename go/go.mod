@@ -1,4 +1,4 @@
-module github.com/cucumber/tag-expressions/go/v6
+module github.com/cucumber/tag-expressions/go/v7
 
 require (
 	github.com/stretchr/testify v1.11.1

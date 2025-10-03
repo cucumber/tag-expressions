@@ -6,8 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-- [Ruby] Minimum ruby version is now bumped from 2.3 to 2.6 (With minor refactors to the parser) ([#204](https://github.com/cucumber/tag-expressions/pull/204))
-- [Ruby] Speed up Parser#parse by removing redundant `nil` safety check
+
+## [7.0.0] - 2025-10-03
 
 ## [6.2.0] - 2025-05-25
 ### Added
@@ -193,8 +193,7 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 
 ## [1.0.1] - 2017-05-28
 ### Fixed
-- [JavaScript]
-([#76](https://github.com/cucumber/cucumber/pull/76)
+- [JavaScript]([#76](https://github.com/cucumber/cucumber/pull/76)
 [#78](https://github.com/cucumber/cucumber/pull/78)
 [#104](https://github.com/cucumber/cucumber/issues/104)
 by [charlierudolph](https://github.com/charlierudolph))
@@ -209,7 +208,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v6.2.0...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v7.0.0...HEAD
+[7.0.0]: https://github.com/cucumber/tag-expressions/compare/v6.2.0...v7.0.0
 [6.2.0]: https://github.com/cucumber/tag-expressions/compare/v6.1.2...v6.2.0
 [6.1.2]: https://github.com/cucumber/tag-expressions/compare/v6.1.1...v6.1.2
 [6.1.1]: https://github.com/cucumber/tag-expressions/compare/v6.1.0...v6.1.1
@@ -233,4 +233,6 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 [1.1.1]: https://github.com/cucumber/tag-expressions/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/cucumber/tag-expressions/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/cucumber/tag-expressions/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/cucumber/tag-expressions/releases/tag/v1.0.0
+thub.com/cucumber/tag-expressions/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/cucumber/tag-expressions/releases/tag/v1.0.0
