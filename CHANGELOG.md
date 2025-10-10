@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- [Perl] Fix building release artifacts ([#214](https://github.com/cucumber/tag-expressions/pull/214))
 
 ## [7.0.0] - 2025-10-03
 ### Changed
