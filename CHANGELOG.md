@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [Ruby] Minimum ruby version is now bumped from 2.3 to 2.6 (With minor refactors to the parser) ([#204](https://github.com/cucumber/tag-expressions/pull/204))
 - [Ruby] Speed up Parser#parse by removing redundant `nil` safety check
 
+### Changed
+- [Python] PEP 639 licence metadata specification ([#211](https://github.com/cucumber/tag-expressions/pull/211))
+
 ## [6.2.0] - 2025-05-25
 ### Added
 - [PHP] Add new implementation ([#194](https://github.com/cucumber/tag-expressions/pull/194))
