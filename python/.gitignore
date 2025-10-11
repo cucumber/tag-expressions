@@ -14,6 +14,7 @@ __*/
 .hypothesis/
 .idea/
 .pytest_cache/
+.ruff_cache/
 .tox/
 .venv*/
 .DS_Store

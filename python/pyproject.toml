@@ -69,3 +69,56 @@ extend-select = [
 [tool.ruff.lint.per-file-ignores]
 # Allow assert statements in tests
 "tests/**" = ["S101"]
+
+[tool.tox]
+env_list = ["3.13", "3.12", "3.11", "3.10", "3.9", "pypy311", "pypy310"]
+requires = ["tox>=4.22"]
+
+[tool.tox.env_run_base]
+commands = [
+  ["coverage", "run", "--append", "-m", "pytest", "-vvl"],
+  ["coverage", "xml"]
+]
+dependency_groups = [
+  "dev"
+]
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"
+testpaths = [
+    "README.rst",
+    "src",
+    "tests",
+]
+
+[tool.coverage.run]
+source = ["gherkin"]
+branch = true
+parallel = true
+
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_also = [
+  # Don't complain about missing debug-only code:
+  "def __repr__",
+  "if self\\.debug",
+
+  # Don't complain if tests don't hit defensive assertion code:
+  "raise AssertionError",
+  "raise NotImplementedError",
+
+  # Don't complain if non-runnable code isn't run:
+  "if 0:",
+  "if __name__ == .__main__.:",
+
+  # Don't complain about abstract methods, they aren't run:
+  "@(abc\\.)?abstractmethod",
+]
+ignore_errors = true
+show_missing = true
+
+[tool.coverage.html]
+directory = "build/coverage.html"
+
+[tool.coverage.xml]
+output = "build/coverage.xml"
