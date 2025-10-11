@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [Perl] Fix building release artifacts ([#214](https://github.com/cucumber/tag-expressions/pull/214))
 
 ### Removed
-- [Python] Dropped end-of-life Python 2
+- [Python] Dropped support for end-of-life Python versions from 2 to 3.9 ([#215](https://github.com/cucumber/tag-expressions/pull/215))
 
 ## [7.0.0] - 2025-10-03
 ### Changed

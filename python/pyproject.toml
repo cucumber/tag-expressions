@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=77.0.0", "setuptools_scm", "wheel"]
-build-backend = "setuptools.build_meta"
+build-backend = "uv_build"
+requires = ["uv_build>=0.9.0,<0.10.0"]
 
 [project]
 name = "cucumber-tag-expressions"
@@ -15,21 +15,17 @@ license-files = [
     "LICENSE"
 ]
 readme = "README.rst"
-requires-python = ">=3.6"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.5",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Software Development :: Testing",
@@ -41,35 +37,29 @@ Homepage = "https://github.com/cucumber/tag-expressions"
 Download = "https://pypi.org/project/cucumber-tag-expressions"
 Repository = "https://github.com/cucumber/tag-expressions"
 Issues = "https://github.com/cucumber/tag-expressions/issues/"
+Changelog = "https://github.com/cucumber/tag-expressions/releases"
 
-[project.optional-dependencies]
-develop = [
-    "tox <= 4.31",
-    "pylint",
-    "ruff",
+[dependency-groups]
+dev = [
+    "pylint>=3.3.9",
+    "ruff>=0.14.0",
+    "tox>=4.31.0",
 ]
-testing = [
-    "coverage",
-    "pytest <= 5.0",
-    "pytest-html >= 1.19.0",
-    "PyYAML >= 5.4.1",
+test = [
+    "coverage>=7.10.7",
+    "pytest>=4.4.2",
+    "pytest-html>=1.22.1",
+    "pyyaml>=6.0.3",
 ]
 
-[tool.distutils.bdist_wheel]
-universal = true
-
-[tool.setuptools]
-platforms = ["any"]
-zip-safe = true
-
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["cucumber_tag_expressions*"]
-exclude = ["tests*"]
-namespaces = false
+[tool.uv.build-backend]
+module-root = ""
 
 [tool.pylint.messages_control]
 disable = "C0330, C0326"
 
 [tool.pylint.format]
 max-line-length = "100"
+
+[tool.ruff]
+line-length = 100

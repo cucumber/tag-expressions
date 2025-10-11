@@ -1,17 +1,6 @@
 Development of This Package
 ===============================================================================
 
-ASSUMPTIONS:
-
-* Python >= 3.6 is installed
-* pip is installed (should be bundled with python nowadays)
-
-Check if ``python`` and ``pip`` is installed::
-
-    python --version
-    pip --version
-
-
 Developer Workflow
 -------------------------------------------------------------------------------
 
@@ -35,7 +24,7 @@ PROCEDURE: Basics without a virtual-environment
 ::
 
     $ cd ${THIS_DIR}
-    $ pip install -r py.requirements/all.txt
+    $ pip install --extras -e .
     # -- HINT: Python packages are installed under the $HOME directory of the user.
 
     # -- STEP: Run the tests with "pytest" either in terse or verbose mode.
@@ -78,36 +67,6 @@ PROCEDURE: By using "make" (on UNIX platforms, like: Linux, macOS, ...)
     $ make clean
 
 
-PROCEDURE: By using "invoke" build system (on all platforms)
--------------------------------------------------------------------------------
-
-:Supports: ALL PLATFORMS (Python based)
-
-.. code-block:: bash
-
-    # -- PREPARE: Ensure that all required Python packages are installed.
-    $ pip install -r py.requirements/all.txt
-
-    # -- LIST ALL TASKS:
-    $ invoke --list
-
-    # -- STEP: Run the tests with "pytest".
-    # OUTPUTS: build/testing/report.html, build/testing/report.xml
-    $ invoke test
-
-    # -- STEP: Determine the test.coverage and generate test reports.
-    # OUTPUT: build/coverage.html/index.html
-    $ invoke test.coverage
-
-    # -- OPTIONAL: Cleanup afterwards
-    # HINT: cleanup.all cleans up everything (even virtual-environments, etc.)
-    $ invoke cleanup
-    $ invoke cleanup.all
-
-    # -- KNOWN PROBLEM: On Python 3.10, using "invoke" runs into a problem.
-    # SEE ISSUE: #820 (on: https://github.com/pyinvoke/invoke/issues/ )
-
-
 USE CASE: Create a virtual-environment with "virtualenv" on UNIX
 -------------------------------------------------------------------------------
 
@@ -127,7 +86,7 @@ Afterwards:
 
     $ virtualenv .venv
     $ source .venv/bin/activate
-    $ pip install -r py.requirements/all.txt
+    $ pip install --extras -e .
 
     # -- HINT: Afterwards, to deactivate the virtual-environment, use:
     $ deactivate
@@ -154,7 +113,7 @@ Afterwards:
 
     cmd> virtualenv .venv
     cmd> call .venv/Scripts/activate
-    cmd> pip install -r py.requirements/all.txt
+    cmd> pip install --extras -e .
 
 SEE ALSO:
 
@@ -166,7 +125,7 @@ USE CASE: Without virtual-environment
 
 Ensure that all required Python packages are installed::
 
-    $ pip install -r py.requirements/all.txt
+    $ pip install --extras -e .
 
 HINT: The Python packages are installed under the HOME directory of the user.
 
@@ -204,7 +163,7 @@ virtual environments, one for each version.
 
 To run the tests, use::
 
-    $ tox -e py39     # Run tests in a virtual environment with python3.9
+    $ tox -e py310     # Run tests in a virtual environment with python3.10
 
 SEE ALSO:
 
