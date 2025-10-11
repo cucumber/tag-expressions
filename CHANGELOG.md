@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - [Perl] Fix building release artifacts ([#214](https://github.com/cucumber/tag-expressions/pull/214))
 
+### Removed
+- [Python] Dropped end-of-life Python 2
+
 ## [7.0.0] - 2025-10-03
 ### Changed
 - [Ruby] Minimum ruby version is now bumped from 2.3 to 2.6 (With minor refactors to the parser) ([#204](https://github.com/cucumber/tag-expressions/pull/204))

@@ -3,7 +3,7 @@ Development of This Package
 
 ASSUMPTIONS:
 
-* Python >= 2.7 or Python >= 3.6 is installed
+* Python >= 3.6 is installed
 * pip is installed (should be bundled with python nowadays)
 
 Check if ``python`` and ``pip`` is installed::
@@ -205,7 +205,6 @@ virtual environments, one for each version.
 To run the tests, use::
 
     $ tox -e py39     # Run tests in a virtual environment with python3.9
-    $ tox -e py27     # Run tests in a virtual environment with python2.7
 
 SEE ALSO:
 
