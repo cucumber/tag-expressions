@@ -41,7 +41,6 @@ Changelog = "https://github.com/cucumber/tag-expressions/releases"
 
 [dependency-groups]
 dev = [
-    "pylint>=3.3.9",
     "ruff>=0.14.0",
     "tox>=4.31.0",
 ]
@@ -52,11 +51,21 @@ test = [
     "pyyaml>=6.0.3",
 ]
 
-[tool.pylint.messages_control]
-disable = "C0330, C0326"
-
-[tool.pylint.format]
-max-line-length = "100"
-
-[tool.ruff]
-line-length = 100
+[tool.ruff.lint]
+extend-select = [
+  "B",
+  "C4",
+  "FURB",
+  "I",
+  "ISC",
+  "N",
+  "PERF",
+  "PIE",
+  "RET",
+  "S",
+  "TID",
+  "UP"
+]
+[tool.ruff.lint.per-file-ignores]
+# Allow assert statements in tests
+"tests/**" = ["S101"]
