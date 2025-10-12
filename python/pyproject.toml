@@ -14,7 +14,7 @@ license = "MIT"
 license-files = [
     "LICENSE"
 ]
-readme = "README.rst"
+readme = "README.md"
 requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -68,9 +68,9 @@ extend-select = [
 "tests/**" = ["S101"]
 
 [tool.pytest.ini_options]
-addopts = "--doctest-modules"
+addopts = "--doctest-glob=README.md"
 testpaths = [
-    "README.rst",
+    "README.md",
     "src",
     "tests",
 ]

@@ -10,11 +10,15 @@
 Tag Expressions is a simple query language for tags. The simplest tag expression is
 simply a single tag, for example:
 
-    @smoke
+```gherkin
+@smoke
+```
 
 A slightly more elaborate expression may combine tags, for example:
 
-    @smoke and not @ui
+```gherkin
+@smoke and not @ui
+```
 
 Tag Expressions are used for two purposes:
 
@@ -26,7 +30,9 @@ of tags with the logical operators `and`, `or` and `not`.
 
 For more complex Tag Expressions you can use parenthesis for clarity, or to change operator precedence:
 
-    (@smoke or @ui) and (not @slow)
+```gherkin
+(@smoke or @ui) and (not @slow)
+```
 
 ## Escaping
 
