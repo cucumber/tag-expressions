@@ -1,19 +1,6 @@
-# =============================================================================
-# PACKAGING: cucumber-tag-expressions
-# =============================================================================
-# SEE ALSO:
-#   * https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
-#   * https://pypi.org/classifiers/
-#
-# PREPARED:
-#   * https://setuptools-scm.readthedocs.io/en/latest/usage/
-# =============================================================================
-# PYTHON3: requires = ["setuptools>=64", "setuptools_scm>=8", "wheel"]
-
 [build-system]
-requires = ["setuptools>=77.0.0", "setuptools_scm", "wheel"]
-build-backend = "setuptools.build_meta"
-
+build-backend = "uv_build"
+requires = ["uv_build>=0.9.0,<0.10.0"]
 
 [project]
 name = "cucumber-tag-expressions"
@@ -22,114 +9,99 @@ authors = [
 ]
 description = "Provides a tag-expression parser and evaluation logic for cucumber/behave"
 version = "7.0.0"
-# PREPARED: dynamic = ["version"]
 keywords= ["BDD", "testing", "cucumber", "tag-expressions", "behave"]
 license = "MIT"
 license-files = [
-     "LICENSE"
+    "LICENSE"
 ]
-readme = "README.rst"
-requires-python = ">=2.7"
+readme = "README.md"
+requires-python = ">=3.10"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Operating System :: OS Independent",
-    "Programming Language :: Python :: 2",
-    "Programming Language :: Python :: 2.7",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.5",
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Software Development :: Testing",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-dependencies = [
-    "enum34; python_version < '3.4'"
-]
-
 
 [project.urls]
 Homepage = "https://github.com/cucumber/tag-expressions"
 Download = "https://pypi.org/project/cucumber-tag-expressions"
 Repository = "https://github.com/cucumber/tag-expressions"
 Issues = "https://github.com/cucumber/tag-expressions/issues/"
+Changelog = "https://github.com/cucumber/tag-expressions/releases"
 
-
-[project.optional-dependencies]
-develop = [
-    "setuptools",
-    "setuptools-scm",
-    "wheel",
-    "build >= 0.5.1",
-    "twine >= 1.13.0",
-    "coverage",
-    "pytest <8.5; python_version <  '3.0'",
-    "pytest >= 5.0; python_version >= '3.0'",
-    "pytest-html >= 1.19.0",
-    "tox >=4.31,<4.32",
-    "pylint",
-    "ruff",
-
-     # -- INVOKE SUPPORT:
-    "invoke >= 1.7.3",
-    "six >= 1.16.0",
-    "path >= 13.1.0;    python_version >= '3.5'",
-    "path.py >= 11.5.0; python_version <  '3.5'",
-    # -- PYTHON2 BACKPORTS:
-    "pathlib;    python_version <= '3.4'",
-    "backports.shutil_which; python_version <= '3.3'",
-    "pycmd",
-]
-testing = [
-    "pytest <8.5; python_version <  '3.0'", # >= 4.2
-    "pytest >= 5.0; python_version >= '3.0'",
-    "pytest-html >= 1.19.0",
-    "PyYAML >= 5.4.1",
-    "pathlib; python_version <= '3.4'",
+[dependency-groups]
+dev = [
+    "ruff>=0.14.0",
+    "coverage>=7.10.7",
+    "pytest>=6.0.1",
+    "pyyaml>=6.0.3",
 ]
 
+[tool.ruff.lint]
+extend-select = [
+  "B",
+  "C4",
+  "FURB",
+  "I",
+  "ISC",
+  "N",
+  "PERF",
+  "PIE",
+  "RET",
+  "S",
+  "TID",
+  "UP"
+]
 
-[tool.distutils.bdist_wheel]
-universal = true
+[tool.ruff.lint.per-file-ignores]
+# Allow assert statements in tests
+"tests/**" = ["S101"]
 
+[tool.pytest.ini_options]
+addopts = "--doctest-glob=README.md"
+testpaths = [
+    "README.md",
+    "src",
+    "tests",
+]
 
-# -----------------------------------------------------------------------------
-# PACKAGING TOOL SPECIFIC PARTS:
-# -----------------------------------------------------------------------------
-[tool.setuptools]
-platforms = ["any"]
-zip-safe = true
+[tool.coverage.run]
+source = ["cucumber_tag_expressions"]
+branch = true
 
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["cucumber_tag_expressions*"]
-exclude = ["tests*"]
-namespaces = false
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_also = [
+  # Don't complain about missing debug-only code:
+  "def __repr__",
+  "if self\\.debug",
 
-# -- PREPARED: SETUPTOOLS-SCM: Generate version info from git-tag(s).
-# GIT-TAG MATCHER: Only use git-tags that start with "v", like: "v6.1.0"
-# [tool.setuptools_scm]
-# git_describe_command = "git describe --match 'v[0-9]*'"
-# root = ".."
-# version_file = "cucumber_tag_expressions/_version.py"
+  # Don't complain if tests don't hit defensive assertion code:
+  "raise AssertionError",
+  "raise NotImplementedError",
 
+  # Don't complain if non-runnable code isn't run:
+  "if 0:",
+  "if __name__ == .__main__.:",
 
-# =============================================================================
-# OTHER TOOLS
-# =============================================================================
-# -----------------------------------------------------------------------------
-# PYLINT:
-# -----------------------------------------------------------------------------
-[tool.pylint.messages_control]
-disable = "C0330, C0326"
+  # Don't complain about abstract methods, they aren't run:
+  "@(abc\\.)?abstractmethod",
+]
+ignore_errors = true
+show_missing = true
 
-[tool.pylint.format]
-max-line-length = "100"
+[tool.coverage.html]
+directory = "build/coverage.html"
+
+[tool.coverage.xml]
+output = "build/coverage.xml"

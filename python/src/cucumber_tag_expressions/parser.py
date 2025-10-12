@@ -1,5 +1,3 @@
-# -*- coding: UTF-8 -*-
-# pylint: disable=missing-docstring
 """Parsing of boolean tag expressions.
 
 Examples:
@@ -10,10 +8,9 @@ Examples:
     True
 """
 
-from __future__ import absolute_import
 from enum import Enum
-from cucumber_tag_expressions.model import Literal, And, Or, Not, True_
 
+from cucumber_tag_expressions.model import And, Literal, Not, Or, True_
 
 # -----------------------------------------------------------------------------
 # OPTIMIZER
@@ -42,28 +39,28 @@ class Associative(Enum):
     * LEFT: Groups `a and b and c` to `(a and b) and c`.
     * RIGHT: Groups `a or b or c` to `a or (b or c)`.
     """
-    # pylint: disable=too-few-public-methods
+
     LEFT = 1
     RIGHT = 2
 
 
 class TokenType(Enum):
     """Types of tag expression tokens."""
+
     OPERAND = 0
     OPERATOR = 1
 
 
 class Token(Enum):
     """Describes tokens and their abilities for tag expression parsing."""
-    # pylint: disable=bad-whitespace
+
     # MAYBE: _order_ = "OR AND NOT OPEN_PARENTHESIS CLOSE_PARENTHESIS"
-    OR  = ("or",  0, Associative.LEFT,  TokenType.OPERATOR)
-    AND = ("and", 1, Associative.LEFT,  TokenType.OPERATOR)
+    OR = ("or", 0, Associative.LEFT, TokenType.OPERATOR)
+    AND = ("and", 1, Associative.LEFT, TokenType.OPERATOR)
     NOT = ("not", 2, Associative.RIGHT, TokenType.OPERATOR)
-    OPEN_PARENTHESIS  = ("(", -2) # Java, Javascript: -2; Ruby: 1
+    OPEN_PARENTHESIS = ("(", -2)  # Java, Javascript: -2; Ruby: 1
     CLOSE_PARENTHESIS = (")", -1)
 
-    # pylint: disable=line-too-long
     def __init__(self, keyword, precedence, assoc=None, token_type=TokenType.OPERAND):
         """Create a new token with keyword, precedence and associativity.
 
@@ -117,10 +114,10 @@ class Token(Enum):
         Returns:
             bool: Whether this token has lower precedence than other token.
         """
-        # -- pylint: disable=line-too-long
         return (
-            ((self.assoc == Associative.LEFT) and (self.precedence <= other.precedence)) or
-            ((self.assoc == Associative.RIGHT) and (self.precedence < other.precedence))
+            (self.assoc == Associative.LEFT) and (self.precedence <= other.precedence)
+        ) or (
+            (self.assoc == Associative.RIGHT) and (self.precedence < other.precedence)
         )
 
     def matches(self, text):
@@ -152,7 +149,7 @@ class TagExpressionError(Exception):
 # -----------------------------------------------------------------------------
 # PARSER
 # -----------------------------------------------------------------------------
-class TagExpressionParser(object):
+class TagExpressionParser:
     """Parser class to parse boolean tag expressions.
 
     Boolean operations:
@@ -197,9 +194,8 @@ class TagExpressionParser(object):
     .. _Shunting Yard algorithm:
         http://rosettacode.org/wiki/Parsing/Shunting-yard_algorithm
     """
-    # pylint: disable=too-few-public-methods
-    TOKEN_MAP = {token.keyword: token
-                 for token in Token.__members__.values()}
+
+    TOKEN_MAP = {token.keyword: token for token in Token.__members__.values()}
 
     @classmethod
     def select_token(cls, text):
@@ -242,22 +238,24 @@ class TagExpressionParser(object):
         """
         tokens = []
         escaped = False
-        token = ''
+        token = ""
         for char in text:
             if escaped:
-                if char not in ['(', ')', '\\'] and not char.isspace():
-                    message = ('Tag expression "%s" could not be parsed because '
-                               'of syntax error: Illegal escape before "%s".')
+                if char not in ["(", ")", "\\"] and not char.isspace():
+                    message = (
+                        'Tag expression "%s" could not be parsed because '
+                        'of syntax error: Illegal escape before "%s".'
+                    )
                     raise TagExpressionError(message % (text, char))
                 token += char
                 escaped = False
-            elif char == '\\':
+            elif char == "\\":
                 escaped = True
-            elif char == '(' or char == ')' or char.isspace():
+            elif char == "(" or char == ")" or char.isspace():
                 if token:
                     tokens.append(token)
-                    token = ''
-                if char != ' ':
+                    token = ""
+                if char != " ":
                     tokens.append(char)
             else:
                 token += char
@@ -283,7 +281,6 @@ class TagExpressionParser(object):
             >>> expression({"foo", "bar"})
             True
         """
-        # pylint: disable=too-many-branches
         # -- NOTE: Use whitespace-split to simplify tokenizing.
         #    This makes opening-/closing-parenthesis easier to parse.
         parts = cls.tokenize(text)
@@ -293,13 +290,12 @@ class TagExpressionParser(object):
 
         def ensure_expected_token_type(token_type, index):
             if expected_token_type != token_type:
-                message = "Syntax error. Expected %s after %s" % \
-                          (expected_token_type.name.lower(), last_part)
+                message = f"Syntax error. Expected {expected_token_type.name.lower()} after {last_part}"
                 message = cls._make_error_description(message, parts, index)
                 raise TagExpressionError(message)
 
-        operations = []     # TOKENS: AND, OR, NOT, OPEN_PAREN, CLOSE_PAREN
-        expressions = []    # Finished expressions (And, Or, Not) and Literals
+        operations = []  # TOKENS: AND, OR, NOT, OPEN_PAREN, CLOSE_PAREN
+        expressions = []  # Finished expressions (And, Or, Not) and Literals
         last_part = "BEGIN"
         expected_token_type = TokenType.OPERAND
 
@@ -316,8 +312,11 @@ class TagExpressionParser(object):
                 expected_token_type = TokenType.OPERAND
             elif token.is_operation:
                 ensure_expected_token_type(TokenType.OPERATOR, index)
-                while (operations and operations[-1].is_operation and
-                       token.has_lower_precedence_than(operations[-1])):
+                while (
+                    operations
+                    and operations[-1].is_operation
+                    and token.has_lower_precedence_than(operations[-1])
+                ):
                     last_operation = operations.pop()
                     cls._push_expression(last_operation, expressions)
                 operations.append(token)
@@ -334,28 +333,26 @@ class TagExpressionParser(object):
 
                 if not operations:
                     # -- CASE: TOO FEW OPEN-PARENTHESIS
-                    message = "Missing '(': Too few open-parens in: %s" % text
+                    message = f"Missing '(': Too few open-parens in: {text}"
                     message = cls._make_error_description(message, parts, index)
                     raise TagExpressionError(message)
-                elif operations[-1] is Token.OPEN_PARENTHESIS:
+                if operations[-1] is Token.OPEN_PARENTHESIS:
                     operations.pop()
                     expected_token_type = TokenType.OPERATOR
-            last_part = part    # BETTER DIAGNOSTICS: Remember last part.
+            last_part = part  # BETTER DIAGNOSTICS: Remember last part.
 
         # -- PROCESS REMAINING OPERATIONS:
         while operations:
             last_operation = operations.pop()
             if last_operation is Token.OPEN_PARENTHESIS:
                 # -- CASE: TOO MANY OPEN-PARENTHESIS
-                message = "Unclosed '(': Too many open-parens in: %s" % text
+                message = f"Unclosed '(': Too many open-parens in: {text}"
                 raise TagExpressionError(message)
             cls._push_expression(last_operation, expressions)
 
         # -- FINALLY: Return boolean tag expression.
-        assert len(expressions) == 1
-        expression = expressions.pop()
-        return expression
-
+        assert len(expressions) == 1  # noqa: S101
+        return expressions.pop()
 
     @staticmethod
     def _push_expression(token, expressions):
@@ -375,6 +372,7 @@ class TagExpressionParser(object):
             TagExpressionError: If the expression stack contains an unexpected token
                 or too few operands for an operator.
         """
+
         def require_argcount(number):
             """Check if enough operands are in the expression stack.
 
@@ -408,7 +406,7 @@ class TagExpressionParser(object):
             term = expressions.pop()
             expressions.append(Not(term))
         else:
-            raise TagExpressionError("Unexpected token: %r" % token)    # noqa
+            raise TagExpressionError("Unexpected token: %r" % token)  # noqa
             # expressions.append(Literal(token))
 
     @staticmethod
@@ -424,11 +422,11 @@ class TagExpressionParser(object):
             str: Detailed error message with error-position marked.
         """
         if error_index > len(parts):
-            error_index = len(parts)    # noqa
+            error_index = len(parts)  # noqa
         good_text_size = len(" ".join(parts[:error_index]))
         error_pos = len("Expression: ") + good_text_size + 1
         template = "Expression: {expression}\n%s^ (HERE)" % ("_" * error_pos)
-        if message:                     # noqa
+        if message:  # noqa
             template = "{message}\n" + template
         expression = " ".join(parts)
         return template.format(message=message, expression=expression)

@@ -1,5 +1,3 @@
-# -*- coding: UTF-8 -*-
-# pylint: disable=missing-docstring
 """Model classes to evaluate parsed boolean tag expressions.
 
 Examples:
@@ -44,11 +42,10 @@ import re
 # -----------------------------------------------------------------------------
 # TAG-EXPRESSION MODEL CLASSES:
 # -----------------------------------------------------------------------------
-class Expression(object):
+class Expression:
     """Abstract base class for boolean expression terms of a tag expression
     (or representing a parsed tag expression (evaluation-tree)).
     """
-    # pylint: disable=too-few-public-methods
 
     def evaluate(self, values):
         """Evaluate whether expression matches values.
@@ -63,7 +60,7 @@ class Expression(object):
 
     def __call__(self, values):
         """Call operator to make an expression object callable.
-        
+
         Args:
             values (Iterable[str]): Tag names to evaluate.
 
@@ -75,14 +72,14 @@ class Expression(object):
 
 class Literal(Expression):
     """Used as placeholder for a tag in a boolean tag expression."""
-    # pylint: disable=too-few-public-methods
+
     def __init__(self, name):
         """Initialise literal with tag name.
 
         Args:
             name (str): Tag name to represent as a literal.
         """
-        super(Literal, self).__init__()
+        super().__init__()
         self.name = name
 
     def evaluate(self, values):
@@ -90,12 +87,14 @@ class Literal(Expression):
         return bool(truth_value)
 
     def __str__(self):
-        return re.sub(r'(\s)', r'\\\1',
-                      self.name.replace('\\', '\\\\').
-                      replace('(', '\\(').replace(')', '\\)'))
+        return re.sub(
+            r"(\s)",
+            r"\\\1",
+            self.name.replace("\\", "\\\\").replace("(", "\\(").replace(")", "\\)"),
+        )
 
     def __repr__(self):
-        return "Literal('%s')" % self.name
+        return f"Literal('{self.name}')"
 
 
 class And(Expression):
@@ -103,7 +102,7 @@ class And(Expression):
 
     NOTE: Class supports more than two arguments.
     """
-    # pylint: disable=too-few-public-methods
+
     def __init__(self, *terms):
         """Create Boolean-AND expression.
 
@@ -113,7 +112,7 @@ class And(Expression):
         Returns:
             None
         """
-        super(And, self).__init__()
+        super().__init__()
         self.terms = terms
 
     def evaluate(self, values):
@@ -130,12 +129,12 @@ class And(Expression):
 
     def __str__(self):
         if not self.terms:
-            return ""       # noqa
+            return ""  # noqa
         expression_text = " and ".join([str(term) for term in self.terms])
-        return "( %s )" % expression_text
+        return f"( {expression_text} )"
 
     def __repr__(self):
-        return "And(%s)" % ", ".join([repr(term) for term in self.terms])
+        return f"And({', '.join([repr(term) for term in self.terms])})"
 
 
 class Or(Expression):
@@ -143,7 +142,6 @@ class Or(Expression):
 
     NOTE: Class supports more than two arguments.
     """
-    # pylint: disable=too-few-public-methods
 
     def __init__(self, *terms):
         """Create Boolean-OR expression.
@@ -154,7 +152,7 @@ class Or(Expression):
         Returns:
             None
         """
-        super(Or, self).__init__()
+        super().__init__()
         self.terms = terms
 
     def evaluate(self, values):
@@ -171,17 +169,16 @@ class Or(Expression):
 
     def __str__(self):
         if not self.terms:
-            return ""       # noqa
+            return ""  # noqa
         expression_text = " or ".join([str(term) for term in self.terms])
-        return "( %s )" % expression_text
+        return f"( {expression_text} )"
 
     def __repr__(self):
-        return "Or(%s)" % ", ".join([repr(term) for term in self.terms])
+        return f"Or({', '.join([repr(term) for term in self.terms])})"
 
 
 class Not(Expression):
     """Boolean-not operation (as unary operation)."""
-    # pylint: disable=too-few-public-methods
 
     def __init__(self, term):
         """Create Boolean-AND expression.
@@ -192,7 +189,7 @@ class Not(Expression):
         Returns:
             None
         """
-        super(Not, self).__init__()
+        super().__init__()
         self.term = term
 
     def evaluate(self, values):
@@ -207,12 +204,11 @@ class Not(Expression):
         return schema.format(self.term)
 
     def __repr__(self):
-        return "Not(%r)" % self.term
+        return f"Not({self.term!r})"
 
 
-class True_(Expression):    # pylint: disable=invalid-name
+class True_(Expression):  # noqa: N801
     """Boolean expression that is always true."""
-    # pylint: disable=too-few-public-methods
 
     def evaluate(self, values):
         """Evaluates to True.

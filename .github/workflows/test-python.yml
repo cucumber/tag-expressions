@@ -20,6 +20,29 @@ on:
   workflow_call:
 
 jobs:
+  test-python-linting:
+    runs-on: "ubuntu-latest"
+    strategy:
+      fail-fast: false
+    defaults:
+      run:
+        working-directory: python
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Install uv and set the python version
+      uses: astral-sh/setup-uv@v7
+      with:
+        enable-cache: true
+        python-version: "3.14"
+        version: "0.9.1"
+
+    - name: Linting
+      run: uvx ruff check
+
+    - name: Formatting
+      run: uvx ruff format
+
   test-python:
     runs-on: ${{ matrix.os }}
     strategy:
@@ -27,27 +50,27 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-        python-version: ["3.x","pypy-3.10"]
+        python-version: ["pypy-3.10", "3.10", "3.11", "3.12", "3.13", "3.14"]
+        include:
+          - os: windows-latest
+            python-version: "3.10"
+          - os : macos-latest
+            python-version: "3.10"
     defaults:
       run:
         working-directory: python
     steps:
       - uses: actions/checkout@v5
-      - name: Set up Python
-        uses: actions/setup-python@v6
+
+      - name: Install uv and set the python version
+        uses: astral-sh/setup-uv@v7
         with:
+          enable-cache: true
           python-version: ${{ matrix.python-version }}
-          architecture: x64
-      - name: Show Python version
-        run: python --version
-      - name: Install Python package dependencies
-        run: |
-          python -m pip install pip setuptools wheel build twine
-          pip install -U -r py.requirements/ci.github.testing.txt
-          pip install -e .
+          version: "0.9.1"
+
       - name: Run tests
-        run: pytest
+        run: uv run pytest
+
       - name: Build package
-        run: |
-          python -m build
-          twine check --strict dist/*
+        run: uv build

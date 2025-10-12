@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Python implementation of `Cucumber Tag Expressions`_.
 
 Tag expressions are used in cucumber, behave and other BDD frameworks
@@ -12,5 +11,10 @@ These selected items are normally included in a test run.
     https://cucumber.io/docs/gherkin/reference/
 """
 
-from __future__ import absolute_import
-from .parser import parse, TagExpressionParser, TagExpressionError
+from .parser import TagExpressionError, TagExpressionParser, parse
+
+__all__ = [
+    "parse",
+    "TagExpressionParser",
+    "TagExpressionError",
+]
