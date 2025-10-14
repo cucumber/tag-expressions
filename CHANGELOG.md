@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [8.0.0] - 2025-10-14
 ### Fixed
 - [Perl] Fix building release artifacts ([#214](https://github.com/cucumber/tag-expressions/pull/214))
 
@@ -16,8 +18,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - [Ruby] Minimum ruby version is now bumped from `2.3` to `2.6` (With minor refactors to the parser) ([#204](https://github.com/cucumber/tag-expressions/pull/204))
 - [Ruby] Speed up `Parser#parse` by removing redundant `nil` safety check
-
-### Changed
 - [Python] PEP 639 licence metadata specification ([#211](https://github.com/cucumber/tag-expressions/pull/211))
 
 ## [6.2.0] - 2025-05-25
@@ -219,7 +219,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v7.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v8.0.0...HEAD
+[8.0.0]: https://github.com/cucumber/tag-expressions/compare/v7.0.0...v8.0.0
 [7.0.0]: https://github.com/cucumber/tag-expressions/compare/v6.2.0...v7.0.0
 [6.2.0]: https://github.com/cucumber/tag-expressions/compare/v6.1.2...v6.2.0
 [6.1.2]: https://github.com/cucumber/tag-expressions/compare/v6.1.1...v6.1.2
@@ -245,5 +246,4 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 [1.1.0]: https://github.com/cucumber/tag-expressions/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/cucumber/tag-expressions/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/cucumber/tag-expressions/releases/tag/v1.0.0
-thub.com/cucumber/tag-expressions/compare/v1.0.0...v1.0.1
-[1.0.0]: https://github.com/cucumber/tag-expressions/releases/tag/v1.0.0
+umber/tag-expressions/releases/tag/v1.0.0
