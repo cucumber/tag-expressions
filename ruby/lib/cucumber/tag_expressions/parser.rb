@@ -26,13 +26,9 @@ module Cucumber
 
       private
 
-      def assoc_correct?(token, value)
-        operator_types.dig(token, :assoc) == value
-      end
-
       def lower_precedence?(operation)
-        (assoc_correct?(operation, :left) && precedence(operation) <= precedence(@operators.last)) ||
-          (assoc_correct?(operation, :right) && precedence(operation) < precedence(@operators.last))
+        (operator_types.dig(operation, :assoc) == :left && precedence(operation) <= precedence(@operators.last)) ||
+          (operator_types.dig(operation, :assoc) == :right && precedence(operation) < precedence(@operators.last))
       end
 
       def operator?(token)
