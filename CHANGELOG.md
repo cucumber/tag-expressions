@@ -10,12 +10,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - [Perl] Fix building release artifacts ([#214](https://github.com/cucumber/tag-expressions/pull/214))
 
 ### Removed
-- [Python] Dropped support for end-of-life Python versions from 2 to 3.9 ([#215](https://github.com/cucumber/tag-expressions/pull/215))
+- [Python] Dropped support for end-of-life Python versions from `2` to `3.9` ([#215](https://github.com/cucumber/tag-expressions/pull/215))
 
 ## [7.0.0] - 2025-10-03
 ### Changed
-- [Ruby] Minimum ruby version is now bumped from 2.3 to 2.6 (With minor refactors to the parser) ([#204](https://github.com/cucumber/tag-expressions/pull/204))
-- [Ruby] Speed up Parser#parse by removing redundant `nil` safety check
+- [Ruby] Minimum ruby version is now bumped from `2.3` to `2.6` (With minor refactors to the parser) ([#204](https://github.com/cucumber/tag-expressions/pull/204))
+- [Ruby] Speed up `Parser#parse` by removing redundant `nil` safety check
 
 ### Changed
 - [Python] PEP 639 licence metadata specification ([#211](https://github.com/cucumber/tag-expressions/pull/211))
