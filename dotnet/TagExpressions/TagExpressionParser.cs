@@ -2,7 +2,9 @@ using System.Text;
 
 namespace TagExpressions;
 
-// Recursive descent parser for logical expressions
+/// <summary>
+/// Provides a recursive descent parser for logical tag expressions.
+/// </summary>
 public class TagExpressionParser : ITagExpressionParser
 {
     private string _text;
@@ -10,6 +12,12 @@ public class TagExpressionParser : ITagExpressionParser
     private TagToken _current;
     private int _openParens;
 
+    /// <summary>
+    /// Parses the specified tag expression string into an <see cref="ITagExpression"/>.
+    /// </summary>
+    /// <param name="text">The tag expression string to parse.</param>
+    /// <returns>An <see cref="ITagExpression"/> representing the parsed expression.</returns>
+    /// <exception cref="Exception">Thrown when a syntax error is encountered in the tag expression.</exception>
     public ITagExpression Parse(string text)
     {
         _text = text;
@@ -30,6 +38,9 @@ public class TagExpressionParser : ITagExpressionParser
         return expr;
     }
 
+    /// <summary>
+    /// Advances to the next token in the input stream.
+    /// </summary>
     private void Next()
     {
         _current = _lexer.NextToken();
@@ -43,12 +54,20 @@ public class TagExpressionParser : ITagExpressionParser
         }
     }
 
+    /// <summary>
+    /// Throws a syntax error exception with the specified message.
+    /// </summary>
+    /// <param name="message">The error message.</param>
+    /// <exception cref="Exception">Always thrown to indicate a syntax error.</exception>
     private void ThrowSyntaxError(string message)
     {
         throw new Exception($"Tag expression \"{_text}\" could not be parsed because of syntax error: {message}.");
     }
 
-    // Expression := Term { OR Term }
+    /// <summary>
+    /// Parses an expression consisting of terms separated by the OR operator.
+    /// </summary>
+    /// <returns>The parsed <see cref="ITagExpression"/>.</returns>
     private ITagExpression ParseExpression()
     {
         var left = ParseTerm();
@@ -69,8 +88,10 @@ public class TagExpressionParser : ITagExpressionParser
         return left;
     }
 
-
-    // Term := Factor { AND Factor }
+    /// <summary>
+    /// Parses a term consisting of factors separated by the AND operator.
+    /// </summary>
+    /// <returns>The parsed <see cref="ITagExpression"/>.</returns>
     private ITagExpression ParseTerm()
     {
         var left = ParseFactor();
@@ -92,7 +113,10 @@ public class TagExpressionParser : ITagExpressionParser
         return left;
     }
 
-    // Factor := NOT Factor | (Expression) | Identifier
+    /// <summary>
+    /// Parses a factor, which can be a NOT operation, a parenthesized expression, or an identifier.
+    /// </summary>
+    /// <returns>The parsed <see cref="ITagExpression"/>.</returns>
     private ITagExpression ParseFactor()
     {
         switch (_current.Type)

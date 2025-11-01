@@ -7,15 +7,30 @@ namespace TagExpressionsTest
     [TestClass]
     public class TagLexerTests
     {
-        [DataTestMethod]
-        [DataRow("AND", TagTokenType.And)]
-        [DataRow("OR", TagTokenType.Or)]
-        [DataRow("NOT", TagTokenType.Not)]
-        public void TokenizesOperators(string input, TagTokenType expectedType)
+        [TestMethod]
+        public void TokenizesOperators_And()
         {
-            var lexer = new TagLexer(input);
+            var lexer = new TagLexer("AND");
             var token = lexer.NextToken();
-            Assert.AreEqual(expectedType, token.Type);
+            Assert.AreEqual(TagTokenType.And, token.Type);
+            Assert.AreEqual(TagTokenType.End, lexer.NextToken().Type);
+        }
+
+        [TestMethod]
+        public void TokenizesOperators_Or()
+        {
+            var lexer = new TagLexer("OR");
+            var token = lexer.NextToken();
+            Assert.AreEqual(TagTokenType.Or, token.Type);
+            Assert.AreEqual(TagTokenType.End, lexer.NextToken().Type);
+        }
+
+        [TestMethod]
+        public void TokenizesOperators_Not()
+        {
+            var lexer = new TagLexer("NOT");
+            var token = lexer.NextToken();
+            Assert.AreEqual(TagTokenType.Not, token.Type);
             Assert.AreEqual(TagTokenType.End, lexer.NextToken().Type);
         }
 

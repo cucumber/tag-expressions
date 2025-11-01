@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-public class TagLexer
+internal class TagLexer
 {
     private readonly string _text;
     private int _pos;

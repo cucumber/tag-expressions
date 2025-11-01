@@ -1,4 +1,4 @@
-public enum TagTokenType
+internal enum TagTokenType
 {
     Identifier,
     And,
@@ -9,7 +9,7 @@ public enum TagTokenType
     End
 }
 
-public class TagToken
+internal class TagToken
 {
     public TagTokenType Type { get; }
     public string Value { get; }
