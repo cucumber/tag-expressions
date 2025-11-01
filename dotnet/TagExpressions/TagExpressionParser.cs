@@ -95,40 +95,36 @@ public class TagExpressionParser : ITagExpressionParser
     // Factor := NOT Factor | (Expression) | Identifier
     private ITagExpression ParseFactor()
     {
-        if (_current.Type == TagTokenType.Not)
+        switch (_current.Type)
         {
-            Next();
-            var validTokensAfterNOT = new HashSet<TagTokenType>
-            {
-                TagTokenType.Not,
-                TagTokenType.LParen,
-                TagTokenType.Identifier
-            };
-            if (!validTokensAfterNOT.Contains(_current.Type))
-                ThrowSyntaxError("Expected operand");
+            case TagTokenType.Not:
+                Next();
+                // Only NOT, (, or Identifier are valid after NOT
+                if (_current.Type != TagTokenType.Not &&
+                    _current.Type != TagTokenType.LParen &&
+                    _current.Type != TagTokenType.Identifier)
+                {
+                    ThrowSyntaxError("Expected operand");
+                }
+                var operand = ParseFactor();
+                return new NotNode(operand);
 
-            var operand = ParseFactor();
-            return new NotNode(operand);
-        }
-        else if (_current.Type == TagTokenType.LParen)
-        {
-            Next();
-            var expr = ParseExpression();
-            if (_current.Type != TagTokenType.RParen)
-                ThrowSyntaxError("Unmatched (");
-            Next();
-            return expr;
-        }
-        else if (_current.Type == TagTokenType.Identifier)
-        {
-            var ident = _current.Value;
-            Next();
-            return new LiteralNode(ident);
-        }
-        else
-        {
-            ThrowSyntaxError("Expected operand");
-            return null; //unreachable
+            case TagTokenType.LParen:
+                Next();
+                var expr = ParseExpression();
+                if (_current.Type != TagTokenType.RParen)
+                    ThrowSyntaxError("Unmatched (");
+                Next();
+                return expr;
+
+            case TagTokenType.Identifier:
+                var ident = _current.Value;
+                Next();
+                return new LiteralNode(ident);
+
+            default:
+                ThrowSyntaxError("Expected operand");
+                return null; // unreachable
         }
     }
 }

@@ -20,7 +20,12 @@ public abstract class TagExpression : ITagExpression
     internal abstract bool EvaluateInternal(HashSet<string> inputs);
 }
 
-public  class NullExpression : TagExpression
+/// <summary>
+/// Represents an expression that always evaluates to <see langword="true"/>.
+/// </summary>
+/// <remarks>This expression is used as a fallback condition when the expression input is empty.
+/// By convention, an empty tag expression is considered equivalent to <see langword="true"/> regardless of input.</remarks>
+public class NullExpression : TagExpression
 {
     public override string ToString() => "true";
     internal override bool EvaluateInternal(HashSet<string> inputs) => true;
