@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- [dotNET] Add a .NET implementation
+
 ## [8.0.0] - 2025-10-14
 ### Fixed
 - [Perl] Fix building release artifacts ([#214](https://github.com/cucumber/tag-expressions/pull/214))
