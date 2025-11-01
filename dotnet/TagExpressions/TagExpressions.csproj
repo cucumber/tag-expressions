@@ -2,6 +2,40 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <NoWarn>1591</NoWarn>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\TagExpressions.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  
+  <PropertyGroup Label="Version">
+    <VersionNumber>8.0.0</VersionNumber>
+    <Version Condition="'$(SnapshotSuffix)' != ''">$(VersionNumber)-$(SnapshotSuffix)</Version>
+    <Version Condition="'$(SnapshotSuffix)' == ''">$(VersionNumber)</Version>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)\Resources\cucumber-mark-green-128.png">
+      <Pack>True</Pack>
+      <PackagePath>.</PackagePath>
+      <Visible>true</Visible>
+    </None>
+  </ItemGroup>
+  
+  <PropertyGroup Label="Package Properties">
+    <Product>TagExpressions</Product>
+    <PackageId>TagExpressions</PackageId>
+    <Authors>Cucumber Ltd, Chris Rudolphi</Authors>
+    <Copyright>Copyright &#xA9; Cucumber Ltd, Chris Rudolphi</Copyright>
+    <Description>Tag Expressions is a simple query language for Cucumber tags.</Description>
+    <PackageTags>reqnroll gherkin cucumber</PackageTags>
+    <PackageProjectUrl>https://github.com/cucumber/tag-expressions</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/cucumber/tag-expressions</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>cucumber-mark-green-128.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageOutputPath>bin/$(Configuration)/NuGet</PackageOutputPath>
   </PropertyGroup>
 
 </Project>
