@@ -72,6 +72,14 @@ namespace TagExpressionsTest
         }
 
         [TestMethod]
+        public void HandlesNullInput()
+        {
+            var lexer = new TagLexer(null);
+            var token = lexer.NextToken();
+            Assert.AreEqual(TagTokenType.End, token.Type);
+        }
+
+        [TestMethod]
         public void ThrowsOnIllegalEscape()
         {
             var lexer = new TagLexer("foo\\x");

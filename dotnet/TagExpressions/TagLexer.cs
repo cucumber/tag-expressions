@@ -12,7 +12,7 @@ internal class TagLexer
 
     public TagLexer(string text)
     {
-        _text = text;
+        _text = String.IsNullOrEmpty(text) ? "" : text;
         _pos = 0;
     }
 
