@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Text;
 
+namespace Cucumber.TagExpressions;
 internal class TagLexer
 {
     private readonly string _text;
     private int _pos;
     private int _peekPos = -1;
-    private TagToken _peekedToken = null;
+    private TagToken? _peekedToken = null;
     private static readonly HashSet<string> Operators = new() { "AND", "OR", "NOT" };
     private static readonly char[] Escapable = new[] { '\\', ' ', '(', ')' };
 
@@ -16,9 +17,9 @@ internal class TagLexer
         _pos = 0;
     }
 
-    private void ThrowSyntaxError(string message)
+    private void ThrowSyntaxError(string message, TagToken? tagToken)
     {
-        throw new Exception($"Tag expression \"{_text}\" could not be parsed because of syntax error: {message}.");
+        throw new TagExpressionException($"Tag expression \"{_text}\" could not be parsed because of syntax error: {message}.", tagToken);
     }
 
     public TagToken NextToken()
@@ -51,7 +52,7 @@ internal class TagLexer
     {
         SkipWhitespace(ref pos);
         if (pos >= _text.Length)
-            return new TagToken(TagTokenType.End);
+            return new TagToken(TagTokenType.End, null, pos);
 
         char c = _text[pos];
 
@@ -59,12 +60,12 @@ internal class TagLexer
         if (c == '(')
         {
             pos++;
-            return new TagToken(TagTokenType.LParen);
+            return new TagToken(TagTokenType.LParen, c.ToString(), pos - 1);
         }
         if (c == ')')
         {
             pos++;
-            return new TagToken(TagTokenType.RParen);
+            return new TagToken(TagTokenType.RParen, c.ToString(), pos - 1);
         }
 
         // Operators
@@ -72,19 +73,23 @@ internal class TagLexer
         {
             if (_text.Substring(pos).StartsWith(op, StringComparison.OrdinalIgnoreCase))
             {
+                var location = pos;
                 pos += op.Length;
                 return new TagToken(op switch
-                {
-                    "AND" => TagTokenType.And,
-                    "OR" => TagTokenType.Or,
-                    "NOT" => TagTokenType.Not,
-                    _ => throw new Exception("Unknown operator")
-                });
+                    {
+                        "AND" => TagTokenType.And,
+                        "OR" => TagTokenType.Or,
+                        "NOT" => TagTokenType.Not,
+                        _ => throw new Exception("Unknown operator") // can't happen, here for the compiler
+                    },
+                    op,
+                    location);
             }
         }
 
         // Identifier (with escapes)
         var sb = new StringBuilder();
+        var startPos = pos;
         while (pos < _text.Length)
         {
             c = _text[pos];
@@ -102,7 +107,7 @@ internal class TagLexer
                 }
                 else
                 {
-                    ThrowSyntaxError($"Illegal escape before \"{_text[pos + 1]}\"");
+                    ThrowSyntaxError($"Illegal escape before \"{_text[pos + 1]}\"", new TagToken(TagTokenType.Identifier, sb.ToString(), startPos));
                 }
             }
 
@@ -110,9 +115,9 @@ internal class TagLexer
             pos++;
         }
         if (sb.Length > 0)
-            return new TagToken(TagTokenType.Identifier, sb.ToString());
+            return new TagToken(TagTokenType.Identifier, sb.ToString(), startPos);
 
-        throw new Exception($"Unexpected character '{c}' at position {pos}");
+        throw new TagExpressionException($"Unexpected character '{c}' at position {pos}");
     }
 
     private void SkipWhitespace(ref int pos)

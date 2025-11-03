@@ -1,15 +1,15 @@
 using System.Text;
 
-namespace TagExpressions;
+namespace Cucumber.TagExpressions;
 
 /// <summary>
 /// Provides a recursive descent parser for logical tag expressions.
 /// </summary>
 public class TagExpressionParser : ITagExpressionParser
 {
-    private string _text;
-    private TagLexer _lexer;
-    private TagToken _current;
+    private string? _text;
+    private TagLexer? _lexer;
+    private TagToken? _current;
     private int _openParens;
 
     /// <summary>
@@ -24,7 +24,7 @@ public class TagExpressionParser : ITagExpressionParser
         _openParens = 0;
         _lexer = new TagLexer(text);
         Next();
-        if (_current.Type == TagTokenType.End)
+        if (_current!.Type == TagTokenType.End)
             return new NullExpression();
 
         var expr = ParseExpression();
@@ -34,7 +34,7 @@ public class TagExpressionParser : ITagExpressionParser
             Next();
         }
         if (_openParens != 0)
-            ThrowSyntaxError("Unmatched (");
+            ThrowSyntaxError("Unmatched (", _current);
         return expr;
     }
 
@@ -43,14 +43,14 @@ public class TagExpressionParser : ITagExpressionParser
     /// </summary>
     private void Next()
     {
-        _current = _lexer.NextToken();
+        _current = _lexer!.NextToken();
         if (_current.Type == TagTokenType.LParen)
             _openParens++;
         else if (_current.Type == TagTokenType.RParen)
         {
             _openParens--;
             if (_openParens < 0)
-                ThrowSyntaxError("Unmatched )");
+                ThrowSyntaxError("Unmatched )", _current);
         }
     }
 
@@ -59,9 +59,9 @@ public class TagExpressionParser : ITagExpressionParser
     /// </summary>
     /// <param name="message">The error message.</param>
     /// <exception cref="Exception">Always thrown to indicate a syntax error.</exception>
-    private void ThrowSyntaxError(string message)
+    private void ThrowSyntaxError(string message, TagToken? tagToken)
     {
-        throw new Exception($"Tag expression \"{_text}\" could not be parsed because of syntax error: {message}.");
+        throw new TagExpressionException($"Tag expression \"{_text}\" could not be parsed because of syntax error: {message}.", tagToken);
     }
 
     /// <summary>
@@ -72,11 +72,11 @@ public class TagExpressionParser : ITagExpressionParser
     {
         var left = ParseTerm();
 
-        if (_current.Type != TagTokenType.Or &&
+        if (_current!.Type != TagTokenType.Or &&
             _current.Type != TagTokenType.RParen &&
             _current.Type != TagTokenType.End)
         {
-            ThrowSyntaxError("Expected operator");
+            ThrowSyntaxError("Expected operator", _current);
         }
 
         while (_current.Type == TagTokenType.Or)
@@ -96,30 +96,30 @@ public class TagExpressionParser : ITagExpressionParser
     {
         var left = ParseFactor();
 
-        if (_current.Type != TagTokenType.Or &&
+        if (_current!.Type != TagTokenType.Or &&
             _current.Type != TagTokenType.And &&
             _current.Type != TagTokenType.RParen &&
             _current.Type != TagTokenType.End)
         {
-            ThrowSyntaxError("Expected operator");
+            ThrowSyntaxError("Expected operator", _current);
         }
 
         while (_current.Type == TagTokenType.And)
         {
             Next();
             var right = ParseFactor();
-            left = new BinaryOpNode("and", left, right);
+            left = new BinaryOpNode("and", left!, right!);
         }
-        return left;
+        return left!;
     }
 
     /// <summary>
     /// Parses a factor, which can be a NOT operation, a parenthesized expression, or an identifier.
     /// </summary>
     /// <returns>The parsed <see cref="ITagExpression"/>.</returns>
-    private ITagExpression ParseFactor()
+    private ITagExpression? ParseFactor()
     {
-        switch (_current.Type)
+        switch (_current!.Type)
         {
             case TagTokenType.Not:
                 Next();
@@ -128,26 +128,26 @@ public class TagExpressionParser : ITagExpressionParser
                     _current.Type != TagTokenType.LParen &&
                     _current.Type != TagTokenType.Identifier)
                 {
-                    ThrowSyntaxError("Expected operand");
+                    ThrowSyntaxError("Expected operand", _current);
                 }
                 var operand = ParseFactor();
-                return new NotNode(operand);
+                return new NotNode(operand!);
 
             case TagTokenType.LParen:
                 Next();
                 var expr = ParseExpression();
                 if (_current.Type != TagTokenType.RParen)
-                    ThrowSyntaxError("Unmatched (");
+                    ThrowSyntaxError("Unmatched (", _current);
                 Next();
                 return expr;
 
             case TagTokenType.Identifier:
                 var ident = _current.Value;
                 Next();
-                return new LiteralNode(ident);
+                return new LiteralNode(ident!);
 
             default:
-                ThrowSyntaxError("Expected operand");
+                ThrowSyntaxError("Expected operand", _current);
                 return null; // unreachable
         }
     }

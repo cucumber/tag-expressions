@@ -1,12 +1,11 @@
-using QueryTest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TagExpressions;
+using Cucumber.TagExpressions;
 
-namespace TagExpressionsTest;
+namespace Cucumber.TagExpressionsTest;
 
 [TestClass]
 public class ErrorsTest
@@ -31,7 +30,7 @@ public class ErrorsTest
         var expression = expectation["expression"];
         var error = expectation["error"];
         var parser = new TagExpressionParser();
-        var ex = Assert.ThrowsException<Exception>(() => parser.Parse(expression));
+        var ex = Assert.ThrowsException<TagExpressionException>(() => parser.Parse(expression));
         Assert.AreEqual(error, ex.Message);
     }
 

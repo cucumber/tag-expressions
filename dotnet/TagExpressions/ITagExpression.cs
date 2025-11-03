@@ -1,4 +1,4 @@
-namespace TagExpressions;
+namespace Cucumber.TagExpressions;
 
 /// <summary>
 /// Represents a tag expression that can be evaluated against a set of input tags.

@@ -1,4 +1,6 @@
-internal enum TagTokenType
+namespace Cucumber.TagExpressions;
+
+public enum TagTokenType
 {
     Identifier,
     And,
@@ -9,14 +11,17 @@ internal enum TagTokenType
     End
 }
 
-internal class TagToken
+public class TagToken
 {
     public TagTokenType Type { get; }
-    public string Value { get; }
+    public string? Value { get; }
 
-    public TagToken(TagTokenType type, string value = null)
+    public int Position { get; set; }
+
+    public TagToken(TagTokenType type, string? value = null, int position = 0)
     {
         Type = type;
         Value = value;
+        Position = position;
     }
 }  

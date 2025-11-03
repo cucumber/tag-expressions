@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -14,7 +14,7 @@
       -->
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>TagExpressionsTest.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../TagExpressions.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TagExpressions\TagExpressions.csproj" />
+    <ProjectReference Include="..\TagExpressions\Cucumber.TagExpressions.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,4 +1,4 @@
-namespace TagExpressions
+namespace Cucumber.TagExpressions
 {
     /// <summary>
     /// Defines a parser for tag expressions.

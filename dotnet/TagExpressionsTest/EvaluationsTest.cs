@@ -1,4 +1,3 @@
-using QueryTest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-namespace TagExpressionsTest;
+namespace Cucumber.TagExpressionsTest;
 
 [TestClass]
 public class EvaluationsTest

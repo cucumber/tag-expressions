@@ -22,8 +22,8 @@
   </ItemGroup>
   
   <PropertyGroup Label="Package Properties">
-    <Product>TagExpressions</Product>
-    <PackageId>TagExpressions</PackageId>
+    <Product>Cucumber.TagExpressions</Product>
+    <PackageId>Cucumber.TagExpressions</PackageId>
     <Authors>Cucumber Ltd, Chris Rudolphi</Authors>
     <Copyright>Copyright &#xA9; Cucumber Ltd, Chris Rudolphi</Copyright>
     <Description>Tag Expressions is a simple query language for Cucumber tags.</Description>

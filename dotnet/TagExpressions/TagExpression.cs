@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TagExpressions;
+namespace Cucumber.TagExpressions;
 
 /// <summary>
 /// Provides an abstract base for tag expressions that can be evaluated against a set of input tags.

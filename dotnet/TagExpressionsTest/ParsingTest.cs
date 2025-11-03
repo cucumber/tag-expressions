@@ -1,9 +1,7 @@
-using QueryTest;
-using TagExpressions;
+using Cucumber.TagExpressions;
 using YamlDotNet.Serialization;
 
-
-namespace TagExpressionsTest;
+namespace Cucumber.TagExpressionsTest;
 
 [TestClass]
 public sealed class ParsingTest

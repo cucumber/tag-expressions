@@ -1,4 +1,4 @@
-[![Maven Central](https://img.shields.io/maven-central/v/io.cucumber/tag-expressions.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.cucumber%22%20AND%20a:%22tag-expressions%22)
+[![NuGet Version](https://img.shields.io/nuget/v/Cucumber.TagExpressions)](https://www.nuget.org/packages/Cucumber.TagExpressions)
 
 # Cucumber Tag Expressions for .NET
 
