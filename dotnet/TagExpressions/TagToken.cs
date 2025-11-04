@@ -24,4 +24,4 @@ public class TagToken
         Value = value;
         Position = position;
     }
-}  
+}

@@ -1,9 +1,3 @@
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -25,7 +19,7 @@ public class EvaluationsTest
         {
             foreach (var test in item.Tests)
             {
-                yield return new object?[] { new Expectation { Expression = item.Expression, Result = test.Result, Variables = test.Variables} };
+                yield return new object?[] { new Expectation { Expression = item.Expression, Result = test.Result, Variables = test.Variables } };
             }
         }
     }
@@ -39,18 +33,20 @@ public class EvaluationsTest
         var result = expression.Evaluate(expectation.Variables);
         Assert.AreEqual(expectation.Result, result, $"Expression: {expectation.Expression}");
     }
-
 }
+
 public class TestCase
 {
     public string Expression { get; set; } = string.Empty;
     public List<Test> Tests { get; set; } = new List<Test>();
 }
+
 public class Test
 {
     public List<string> Variables { get; set; } = new List<string>();
     public bool Result { get; set; }
 }
+
 public class Expectation
 {
     public string Expression { get; set; } = string.Empty;

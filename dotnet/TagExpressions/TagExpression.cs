@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Cucumber.TagExpressions;
@@ -45,6 +43,7 @@ public class NullExpression : TagExpression
 {
     /// <inheritdoc/>
     public override string ToString() => "true";
+
     /// <inheritdoc/>
     internal override bool EvaluateInternal(HashSet<string> inputs) => true;
 }
@@ -118,10 +117,12 @@ public class BinaryOpNode : TagExpression
     /// Gets the left operand of the binary operation.
     /// </summary>
     public ITagExpression Left { get; }
+
     /// <summary>
     /// Gets the right operand of the binary operation.
     /// </summary>
     public ITagExpression Right { get; }
+
     /// <summary>
     /// Gets the operator for the binary operation ("AND" or "OR").
     /// </summary>

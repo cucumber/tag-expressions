@@ -1,5 +1,3 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using Cucumber.TagExpressions;
 
 namespace Cucumber.TagExpressionsTest;

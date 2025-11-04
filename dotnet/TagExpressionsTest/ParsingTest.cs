@@ -1,5 +1,4 @@
 using Cucumber.TagExpressions;
-using YamlDotNet.Serialization;
 
 namespace Cucumber.TagExpressionsTest;
 

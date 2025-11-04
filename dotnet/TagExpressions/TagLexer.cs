@@ -1,7 +1,7 @@
-using System.Collections.Generic;
 using System.Text;
 
 namespace Cucumber.TagExpressions;
+
 internal class TagLexer
 {
     private readonly string _text;
@@ -68,7 +68,7 @@ internal class TagLexer
             return new TagToken(TagTokenType.RParen, c.ToString(), pos - 1);
         }
 
-        // Operators 
+        // Operators
         var location = pos;
         var op = Operators
             .FirstOrDefault(o => _text.Substring(location).StartsWith(o, StringComparison.OrdinalIgnoreCase));
@@ -76,12 +76,12 @@ internal class TagLexer
         {
             pos += op.Length;
             return new TagToken(op switch
-                {
-                    "AND" => TagTokenType.And,
-                    "OR" => TagTokenType.Or,
-                    "NOT" => TagTokenType.Not,
-                    _ => throw new Exception("Unknown operator")
-                },
+            {
+                "AND" => TagTokenType.And,
+                "OR" => TagTokenType.Or,
+                "NOT" => TagTokenType.Not,
+                _ => throw new Exception("Unknown operator")
+            },
                 op,
                 location);
         }

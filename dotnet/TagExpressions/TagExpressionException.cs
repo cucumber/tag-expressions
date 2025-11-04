@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Cucumber.TagExpressions;
 
 public class TagExpressionException : ApplicationException

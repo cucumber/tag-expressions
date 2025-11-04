@@ -1,9 +1,3 @@
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cucumber.TagExpressions;
 
 namespace Cucumber.TagExpressionsTest;
@@ -34,5 +28,4 @@ public class ErrorsTest
         var ex = Assert.ThrowsException<TagExpressionException>(() => parser.Parse(expression));
         Assert.AreEqual(error, ex.Message);
     }
-
 }
