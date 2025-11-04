@@ -10,20 +10,22 @@ import java.util.List;
 import java.util.Map;
 
 import static java.nio.file.Files.newInputStream;
+import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ErrorsTest {
 
-    private static List<Map<String, String>> acceptance_tests_pass() throws IOException {
+    static List<Map<String, String>> acceptance_tests_pass() throws IOException {
         return new Yaml().loadAs(newInputStream(Paths.get("..", "testdata", "errors.yml")), List.class);
     }
 
     @ParameterizedTest
     @MethodSource
     void acceptance_tests_pass(Map<String, String> expectation) {
+        String expression = requireNonNull(expectation.get("expression"));
         TagExpressionException e = assertThrows(TagExpressionException.class,
-                () -> TagExpressionParser.parse(expectation.get("expression")));
+                () -> TagExpressionParser.parse(expression));
 
         assertEquals(expectation.get("error"), e.getMessage());
     }
