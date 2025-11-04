@@ -68,23 +68,22 @@ internal class TagLexer
             return new TagToken(TagTokenType.RParen, c.ToString(), pos - 1);
         }
 
-        // Operators
-        foreach (var op in Operators)
+        // Operators 
+        var location = pos;
+        var op = Operators
+            .FirstOrDefault(o => _text.Substring(location).StartsWith(o, StringComparison.OrdinalIgnoreCase));
+        if (op != null)
         {
-            if (_text.Substring(pos).StartsWith(op, StringComparison.OrdinalIgnoreCase))
-            {
-                var location = pos;
-                pos += op.Length;
-                return new TagToken(op switch
-                    {
-                        "AND" => TagTokenType.And,
-                        "OR" => TagTokenType.Or,
-                        "NOT" => TagTokenType.Not,
-                        _ => throw new Exception("Unknown operator") // can't happen, here for the compiler
-                    },
-                    op,
-                    location);
-            }
+            pos += op.Length;
+            return new TagToken(op switch
+                {
+                    "AND" => TagTokenType.And,
+                    "OR" => TagTokenType.Or,
+                    "NOT" => TagTokenType.Not,
+                    _ => throw new Exception("Unknown operator")
+                },
+                op,
+                location);
         }
 
         // Identifier (with escapes)

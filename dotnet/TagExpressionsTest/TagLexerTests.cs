@@ -88,7 +88,7 @@ public class TagLexerTests
             lexer.NextToken();
             Assert.Fail("Expected exception for illegal escape");
         }
-        catch (Exception ex)
+        catch (TagExpressionException ex)
         {
             StringAssert.Contains(ex.Message, "Illegal escape");
         }
