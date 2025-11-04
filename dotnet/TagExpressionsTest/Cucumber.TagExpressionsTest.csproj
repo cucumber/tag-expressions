@@ -14,7 +14,7 @@
       -->
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
     <SignAssembly>True</SignAssembly>
-    <AssemblyOriginatorKeyFile>../TagExpressions.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../Cucumber.TagExpressions.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

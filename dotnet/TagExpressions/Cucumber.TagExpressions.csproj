@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <NoWarn>1591</NoWarn>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\TagExpressions.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\Cucumber.TagExpressions.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   
   <PropertyGroup Label="Version">
