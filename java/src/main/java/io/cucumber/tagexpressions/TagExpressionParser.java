@@ -130,7 +130,7 @@ public final class TagExpressionParser {
 
     private <T> T pop(Deque<T> stack) {
         if (stack.isEmpty())
-            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of an empty stack", infix);
+            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Expected operand.", infix);
         return stack.pop();
     }
 
@@ -138,14 +138,17 @@ public final class TagExpressionParser {
         switch (token) {
             case "and":
                 Expression rightAndExpr = pop(stack);
-                stack.push(new And(pop(stack), rightAndExpr));
+                Expression leftAndExpr = pop(stack);
+                stack.push(new And(leftAndExpr, rightAndExpr));
                 break;
             case "or":
                 Expression rightOrExpr = pop(stack);
-                stack.push(new Or(pop(stack), rightOrExpr));
+                Expression leftOrExpr = pop(stack);
+                stack.push(new Or(leftOrExpr, rightOrExpr));
                 break;
             case "not":
-                stack.push(new Not(pop(stack)));
+                Expression expression = pop(stack);
+                stack.push(new Not(expression));
                 break;
             default:
                 stack.push(new Literal(token));
