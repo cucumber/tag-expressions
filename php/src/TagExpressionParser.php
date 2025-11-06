@@ -87,7 +87,7 @@ final class TagExpressionParser
                 throw new TagExpressionException(\sprintf('Tag expression "%s" could not be parsed because of syntax error: Unmatched (.', $this->infix));
             }
 
-            $this->pushExpr($this->popOperand($operators), $expressions);
+            $this->pushExpr(array_pop($operators), $expressions);
         }
 
         return array_pop($expressions);
