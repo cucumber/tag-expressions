@@ -105,7 +105,7 @@ my %bad_syntax = (
     '@a not'     => q{Expected operator.},
     '@a or'      => q{Expression is incomplete.},
     '@a not @b'  => q{Expected operator.},
-    '@a or ('    => 'Unexpected end of input parsing tag expression',
+    '@a or ('    => q{Expression is incomplete.},
     '@a and @b)' => q{Unmatched ).},
     "\@a\\"      => q{Illegal escape before "<end-of-input>"},
     );
