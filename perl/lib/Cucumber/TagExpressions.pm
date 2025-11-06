@@ -104,7 +104,7 @@ sub _term_expr {
 
     my $token = _get_token( $state );
 
-    die 'Unexpected end of input parsing tag expression'
+    die qq{Tag expression "$state->{text}" could not be parsed because of syntax error: Expression is incomplete.}
         if not defined $token;
 
     if ( $token eq '(' ) {

@@ -103,7 +103,7 @@ for my $ex (@good) {
 my %bad_syntax = (
     '@a @b'      => q{Expected operator.},
     '@a not'     => q{Expected operator.},
-    '@a or'      => 'Unexpected end of input parsing tag expression',
+    '@a or'      => q{Expression is incomplete.},
     '@a not @b'  => q{Expected operator.},
     '@a or ('    => 'Unexpected end of input parsing tag expression',
     '@a and @b)' => q{Unmatched ).},
