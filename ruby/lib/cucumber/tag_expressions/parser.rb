@@ -126,7 +126,7 @@ module Cucumber
 
       def pop(array, amount = 1)
         result = array.pop(amount)
-        raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Expected operand." if result.length != amount
+        raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Expression is incomplete." if result.length != amount
 
         amount == 1 ? result.first : result
       end
