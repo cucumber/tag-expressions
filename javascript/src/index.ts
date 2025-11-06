@@ -41,7 +41,7 @@ export default function parse(infix: string): Node {
         ((ASSOC[token] === 'left' && PREC[token] <= PREC[peek(operators)]) ||
           (ASSOC[token] === 'right' && PREC[token] < PREC[peek(operators)]))
       ) {
-        pushExpr(pop(operators), expressions)
+        pushExpr(operators.pop() as string, expressions)
       }
       operators.push(token)
       expectedTokenType = OPERAND
@@ -52,7 +52,7 @@ export default function parse(infix: string): Node {
     } else if (')' === token) {
       check(expectedTokenType, OPERATOR)
       while (operators.length > 0 && peek(operators) !== '(') {
-        pushExpr(pop(operators), expressions)
+        pushExpr(operators.pop() as string, expressions)
       }
       if (operators.length === 0) {
         throw new Error(
@@ -60,7 +60,7 @@ export default function parse(infix: string): Node {
         )
       }
       if (peek(operators) === '(') {
-        pop(operators)
+        operators.pop()
       }
       expectedTokenType = OPERATOR
     } else {
@@ -76,10 +76,10 @@ export default function parse(infix: string): Node {
         `Tag expression "${infix}" could not be parsed because of syntax error: Unmatched (.`
       )
     }
-    pushExpr(pop(operators), expressions)
+    pushExpr(operators.pop() as string, expressions)
   }
 
-  return pop(expressions)
+  return expressions.pop() as Node
 
   function check(expectedTokenType: string, tokenType: string) {
     if (expectedTokenType !== tokenType) {
@@ -87,6 +87,29 @@ export default function parse(infix: string): Node {
         `Tag expression "${infix}" could not be parsed because of syntax error: Expected ${expectedTokenType}.`
       )
     }
+  }
+
+  function pushExpr(token: string, stack: Node[]) {
+    if (token === 'and') {
+      const rightAndExpr = popOperand(stack)
+      stack.push(new And(popOperand(stack), rightAndExpr))
+    } else if (token === 'or') {
+      const rightOrExpr = popOperand(stack)
+      stack.push(new Or(popOperand(stack), rightOrExpr))
+    } else if (token === 'not') {
+      stack.push(new Not(popOperand(stack)))
+    } else {
+      stack.push(new Literal(token))
+    }
+  }
+
+  function popOperand<T>(stack: T[]): T {
+    if (stack.length === 0) {
+      throw new Error(
+        `Tag expression "${infix}" could not be parsed because of syntax error: Expression is incomplete.`
+      )
+    }
+    return stack.pop() as T
   }
 }
 
@@ -139,27 +162,6 @@ function isOp(token: string) {
 
 function peek(stack: string[]) {
   return stack[stack.length - 1]
-}
-
-function pop<T>(stack: T[]): T {
-  if (stack.length === 0) {
-    throw new Error('empty stack')
-  }
-  return stack.pop() as T
-}
-
-function pushExpr(token: string, stack: Node[]) {
-  if (token === 'and') {
-    const rightAndExpr = pop(stack)
-    stack.push(new And(pop(stack), rightAndExpr))
-  } else if (token === 'or') {
-    const rightOrExpr = pop(stack)
-    stack.push(new Or(pop(stack), rightOrExpr))
-  } else if (token === 'not') {
-    stack.push(new Not(pop(stack)))
-  } else {
-    stack.push(new Literal(token))
-  }
 }
 
 interface Node {
