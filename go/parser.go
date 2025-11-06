@@ -42,7 +42,9 @@ func Parse(infix string) (Evaluatable, error) {
 				isOp(operators.Peek()) &&
 				((ASSOC[token] == "left" && PREC[token] <= PREC[operators.Peek()]) ||
 					(ASSOC[token] == "right" && PREC[token] < PREC[operators.Peek()])) {
-				pushExpr(operators.Pop(), expressions)
+				if err := pushExpr(infix, operators.Pop(), expressions); err != nil {
+					return nil, err
+				}
 			}
 			operators.Push(token)
 			expectedTokenType = OPERAND
@@ -57,7 +59,9 @@ func Parse(infix string) (Evaluatable, error) {
 				return nil, err
 			}
 			for operators.Len() > 0 && operators.Peek() != "(" {
-				pushExpr(operators.Pop(), expressions)
+				if err := pushExpr(infix, operators.Pop(), expressions); err != nil {
+					return nil, err
+				}
 			}
 			if operators.Len() == 0 {
 				return nil, fmt.Errorf("Tag expression \"%s\" could not be parsed because of syntax error: Unmatched ).", infix)
@@ -70,7 +74,9 @@ func Parse(infix string) (Evaluatable, error) {
 			if err := check(infix, expectedTokenType, OPERAND); err != nil {
 				return nil, err
 			}
-			pushExpr(token, expressions)
+			if err := pushExpr(infix, token, expressions); err != nil {
+				return nil, err
+			}
 			expectedTokenType = OPERATOR
 		}
 	}
@@ -79,7 +85,9 @@ func Parse(infix string) (Evaluatable, error) {
 		if operators.Peek() == "(" {
 			return nil, fmt.Errorf("Tag expression \"%s\" could not be parsed because of syntax error: Unmatched (.", infix)
 		}
-		pushExpr(operators.Pop(), expressions)
+		if err := pushExpr(infix, operators.Pop(), expressions); err != nil {
+			return nil, err
+		}
 	}
 
 	return expressions.Pop(), nil
@@ -153,24 +161,51 @@ func check(infix, expectedTokenType, tokenType string) error {
 	return nil
 }
 
-func pushExpr(token string, stack *EvaluatableStack) {
+func pushExpr(infix string, token string, stack *EvaluatableStack) error {
 	if token == "and" {
-		rightAndExpr := stack.Pop()
+		rightAndExpr, err := popOperand(infix, stack)
+		if err != nil {
+			return err
+		}
+		leftAndExpr, err := popOperand(infix, stack)
+		if err != nil {
+			return err
+		}
 		stack.Push(&andExpr{
-			leftExpr:  stack.Pop(),
+			leftExpr:  leftAndExpr,
 			rightExpr: rightAndExpr,
 		})
 	} else if token == "or" {
-		rightOrExpr := stack.Pop()
+		rightOrExpr, err := popOperand(infix, stack)
+		if err != nil {
+			return err
+		}
+		leftOrExpr, err := popOperand(infix, stack)
+		if err != nil {
+			return err
+		}
 		stack.Push(&orExpr{
-			leftExpr:  stack.Pop(),
+			leftExpr:  leftOrExpr,
 			rightExpr: rightOrExpr,
 		})
 	} else if token == "not" {
-		stack.Push(&notExpr{expr: stack.Pop()})
+		expr, err := popOperand(infix, stack)
+		if err != nil {
+			return err
+		}
+		stack.Push(&notExpr{expr: expr})
 	} else {
 		stack.Push(&literalExpr{value: token})
 	}
+
+	return nil
+}
+
+func popOperand(infix string, stack *EvaluatableStack) (Evaluatable, error) {
+	if stack.Len() > 0 {
+		return stack.Pop(), nil
+	}
+	return nil, fmt.Errorf("Tag expression \"%s\" could not be parsed because of syntax error: Expression is incomplete.", infix)
 }
 
 type literalExpr struct {
