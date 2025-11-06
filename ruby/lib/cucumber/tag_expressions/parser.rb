@@ -18,10 +18,9 @@ module Cucumber
         tokens.each { |token| expected_token_type = handle_sequential_tokens(token, infix_expression, expected_token_type) }
         while @operators.any?
           raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Unmatched (." if @operators.last == '('
-
-          push_expression(pop(@operators))
+          push_expression(infix_expression, @operators.pop)
         end
-        pop(@expressions)
+        @expressions.pop
       end
 
       private
@@ -67,11 +66,11 @@ module Cucumber
         tokens
       end
 
-      def push_expression(token)
+      def push_expression(infix_expression, token)
         case token
-        when 'and' then @expressions.push(And.new(*pop(@expressions, 2)))
-        when 'or'  then @expressions.push(Or.new(*pop(@expressions, 2)))
-        when 'not' then @expressions.push(Not.new(pop(@expressions)))
+        when 'and' then @expressions.push(And.new(*pop(infix_expression, @expressions, 2)))
+        when 'or'  then @expressions.push(Or.new(*pop(infix_expression, @expressions, 2)))
+        when 'not' then @expressions.push(Not.new(pop(infix_expression, @expressions)))
         else            @expressions.push(Literal.new(token))
         end
       end
@@ -92,7 +91,7 @@ module Cucumber
 
       def handle_binary_operator(infix_expression, token, expected_token_type)
         check(infix_expression, expected_token_type, :operator)
-        push_expression(pop(@operators)) while @operators.any? && operator?(@operators.last) && lower_precedence?(token)
+        push_expression(infix_expression, @operators.pop) while @operators.any? && operator?(@operators.last) && lower_precedence?(token)
         @operators.push(token)
         :operand
       end
@@ -105,16 +104,16 @@ module Cucumber
 
       def handle_close_paren(infix_expression, _token, expected_token_type)
         check(infix_expression, expected_token_type, :operator)
-        push_expression(pop(@operators)) while @operators.any? && @operators.last != '('
+        push_expression(infix_expression, @operators.pop) while @operators.any? && @operators.last != '('
         raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Unmatched )." if @operators.empty?
 
-        pop(@operators) if @operators.last == '('
+        @operators.pop if @operators.last == '('
         :operator
       end
 
       def handle_literal(infix_expression, token, expected_token_type)
         check(infix_expression, expected_token_type, :operand)
-        push_expression(token)
+        push_expression(infix_expression, token)
         :operator
       end
 
@@ -124,7 +123,7 @@ module Cucumber
         raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Expected #{expected_token_type}."
       end
 
-      def pop(array, amount = 1)
+      def pop(infix_expression, array, amount = 1)
         result = array.pop(amount)
         raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Expression is incomplete." if result.length != amount
 
