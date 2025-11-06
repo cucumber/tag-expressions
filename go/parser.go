@@ -249,5 +249,5 @@ func (t *trueExpr) Evaluate(variables []string) bool {
 }
 
 func (t *trueExpr) ToString() string {
-	return "true"
+	return ""
 }

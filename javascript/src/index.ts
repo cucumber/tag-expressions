@@ -236,6 +236,6 @@ class True implements Node {
   }
 
   public toString() {
-    return 'true'
+    return ''
   }
 }
