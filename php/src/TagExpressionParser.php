@@ -90,7 +90,7 @@ final class TagExpressionParser
             $this->pushExpr(array_pop($operators), $expressions);
         }
 
-        return $this->popOperand($expressions);
+        return $expressions[0];
     }
 
     /**
