@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Render the empty tag expression as an empty string ([#222](https://github.com/cucumber/tag-expressions/pull/222))
 
 ## [8.0.0] - 2025-10-14
 ### Fixed
