@@ -51,7 +51,7 @@ final class TagExpressionParser
                     (Associativity::forOperator($token) === Associativity::LEFT && self::PREC[$token] <= self::PREC[self::peek($operators)])
                     || (Associativity::forOperator($token) === Associativity::RIGHT && self::PREC[$token] < self::PREC[self::peek($operators)])
                 )) {
-                    $this->pushExpr($this->pop($operators), $expressions);
+                    $this->pushExpr(array_pop($operators), $expressions);
                 }
                 // TODO check associativity
                 $operators[] = $token;
@@ -63,7 +63,7 @@ final class TagExpressionParser
             } elseif ($token === ')') {
                 $this->check($expectedTokenType, TokenType::Operator);
                 while (\count($operators) > 0 && self::peek($operators) !== '(') {
-                    $this->pushExpr($this->pop($operators), $expressions);
+                    $this->pushExpr(array_pop($operators), $expressions);
                 }
 
                 if (\count($operators) === 0) {
@@ -71,7 +71,7 @@ final class TagExpressionParser
                 }
 
                 if (self::peek($operators) === '(') {
-                    $this->pop($operators);
+                    array_pop($operators);
                 }
 
                 $expectedTokenType = TokenType::Operator;
@@ -87,10 +87,10 @@ final class TagExpressionParser
                 throw new TagExpressionException(\sprintf('Tag expression "%s" could not be parsed because of syntax error: Unmatched (.', $this->infix));
             }
 
-            $this->pushExpr($this->pop($operators), $expressions);
+            $this->pushExpr(array_pop($operators), $expressions);
         }
 
-        return $this->pop($expressions);
+        return $expressions[0];
     }
 
     /**
@@ -156,12 +156,12 @@ final class TagExpressionParser
      *
      * @return T
      */
-    private function pop(array &$stack): mixed
+    private function popOperand(array &$stack): mixed
     {
         $value = array_pop($stack);
 
         if ($value === null) {
-            throw new TagExpressionException(\sprintf('Tag expression "%s" could not be parsed because of an empty stack.', $this->infix));
+            throw new TagExpressionException(\sprintf('Tag expression "%s" could not be parsed because of syntax error: Expected operand.', $this->infix));
         }
 
         return $value;
@@ -174,17 +174,19 @@ final class TagExpressionParser
     {
         switch ($token) {
             case 'and':
-                $rightAndExpr = $this->pop($stack);
-                $stack[] = new AndExpression($this->pop($stack), $rightAndExpr);
+                $rightAndExpr = $this->popOperand($stack);
+                $lefAndExpr = $this->popOperand($stack);
+                $stack[] = new AndExpression($lefAndExpr, $rightAndExpr);
                 break;
 
             case 'or':
-                $rightOrExpr = $this->pop($stack);
-                $stack[] = new OrExpression($this->pop($stack), $rightOrExpr);
+                $rightOrExpr = $this->popOperand($stack);
+                $leftOrExpr = $this->popOperand($stack);
+                $stack[] = new OrExpression($leftOrExpr, $rightOrExpr);
                 break;
 
             case 'not':
-                $stack[] = new NotExpression($this->pop($stack));
+                $stack[] = new NotExpression($this->popOperand($stack));
                 break;
 
             default:
