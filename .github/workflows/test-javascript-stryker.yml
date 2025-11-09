@@ -1,12 +1,20 @@
-name: stryker-javascript
+name: test-javascript-stryker
 
 on:
   push:
-    branches-ignore:
-      - renovate/**
+    branches:
+      - main
+    paths:
+      - javascript/**
+      - testdata/**
+      - .github/**
   pull_request:
     branches:
       - main
+    paths:
+      - javascript/**
+      - testdata/**
+      - .github/**
 
 jobs:
   stryker-javascript:
@@ -22,7 +30,7 @@ jobs:
       working-directory: javascript
     - run: npm run stryker
       working-directory: javascript
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v5
       with:
         name: stryker-report
         path: |

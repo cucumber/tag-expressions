@@ -16,6 +16,6 @@ final class TrueExpression implements Expression
 
     public function __toString(): string
     {
-        return 'true';
+        return '';
     }
 }

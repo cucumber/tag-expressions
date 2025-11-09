@@ -1,5 +1,5 @@
 - expression: ''
-  formatted: 'true'
+  formatted: ''
 - expression: 'a and b'
   formatted: '( a and b )'
 - expression: 'a or b'
