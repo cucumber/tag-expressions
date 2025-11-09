@@ -270,7 +270,7 @@ public final class TagExpressionParser {
 
         @Override
         public String toString() {
-            return "true";
+            return "";
         }
     }
 }

@@ -249,7 +249,7 @@ An instance of one of the other node class types.
     sub stringify {
         my ( $self ) = @_;
 
-        return 'true' if not defined $self->sub_expression;
+        return '' if not defined $self->sub_expression;
         return $self->sub_expression->stringify;
     }
 }
