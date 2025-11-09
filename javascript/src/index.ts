@@ -106,7 +106,7 @@ export default function parse(infix: string): Node {
   function popOperand<T>(stack: T[]): T {
     if (stack.length === 0) {
       throw new Error(
-        `Tag expression "${infix}" could not be parsed because of syntax error: Expression is incomplete.`
+        `Tag expression "${infix}" could not be parsed because of syntax error: Expected operand.`
       )
     }
     return stack.pop() as T

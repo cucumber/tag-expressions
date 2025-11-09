@@ -205,7 +205,7 @@ func popOperand(infix string, stack *EvaluatableStack) (Evaluatable, error) {
 	if stack.Len() > 0 {
 		return stack.Pop(), nil
 	}
-	return nil, fmt.Errorf("Tag expression \"%s\" could not be parsed because of syntax error: Expression is incomplete.", infix)
+	return nil, fmt.Errorf("Tag expression \"%s\" could not be parsed because of syntax error: Expected operand.", infix)
 }
 
 type literalExpr struct {

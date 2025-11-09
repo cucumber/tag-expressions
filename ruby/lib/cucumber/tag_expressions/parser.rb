@@ -68,9 +68,9 @@ module Cucumber
 
       def push_expression(infix_expression, token)
         case token
-        when 'and' then @expressions.push(And.new(*pop(infix_expression, @expressions, 2)))
-        when 'or'  then @expressions.push(Or.new(*pop(infix_expression, @expressions, 2)))
-        when 'not' then @expressions.push(Not.new(pop(infix_expression, @expressions)))
+        when 'and' then @expressions.push(And.new(*popOperand(infix_expression, @expressions, 2)))
+        when 'or'  then @expressions.push(Or.new(*popOperand(infix_expression, @expressions, 2)))
+        when 'not' then @expressions.push(Not.new(popOperand(infix_expression, @expressions)))
         else            @expressions.push(Literal.new(token))
         end
       end
@@ -123,9 +123,9 @@ module Cucumber
         raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Expected #{expected_token_type}."
       end
 
-      def pop(infix_expression, array, amount = 1)
+      def popOperand(infix_expression, array, amount = 1)
         result = array.pop(amount)
-        raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Expression is incomplete." if result.length != amount
+        raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Expected operand." if result.length != amount
 
         amount == 1 ? result.first : result
       end

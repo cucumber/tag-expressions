@@ -152,7 +152,7 @@ public final class TagExpressionParser {
 
     private <T> T popOperand(Deque<T> stack) {
         if (stack.isEmpty())
-            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Expression is incomplete.", infix);
+            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Expected operand.", infix);
         return stack.pop();
     }
     

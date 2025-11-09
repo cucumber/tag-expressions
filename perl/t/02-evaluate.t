@@ -103,9 +103,9 @@ for my $ex (@good) {
 my %bad_syntax = (
     '@a @b'      => q{Expected operator.},
     '@a not'     => q{Expected operator.},
-    '@a or'      => q{Expression is incomplete.},
+    '@a or'      => q{Expected operand.},
     '@a not @b'  => q{Expected operator.},
-    '@a or ('    => q{Expression is incomplete.},
+    '@a or ('    => q{Expected operand.},
     '@a and @b)' => q{Unmatched ).},
     "\@a\\"      => q{Illegal escape before "<end-of-input>"},
     );

@@ -161,7 +161,7 @@ final class TagExpressionParser
         $value = array_pop($stack);
 
         if ($value === null) {
-            throw new TagExpressionException(\sprintf('Tag expression "%s" could not be parsed because of syntax error: Expression is incomplete.', $this->infix));
+            throw new TagExpressionException(\sprintf('Tag expression "%s" could not be parsed because of syntax error: Expected operand.', $this->infix));
         }
 
         return $value;
