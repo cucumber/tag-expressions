@@ -52,4 +52,9 @@ public class Expectation
     public string Expression { get; set; } = string.Empty;
     public List<string> Variables { get; set; } = new List<string>();
     public bool Result { get; set; }
+
+    public override string ToString()
+    {
+        return $"\"{Expression}\" with \"{String.Join(",", Variables)}\"";
+    }
 }

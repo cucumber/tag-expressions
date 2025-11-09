@@ -5,13 +5,21 @@ namespace Cucumber.TagExpressionsTest;
 [TestClass]
 public class ErrorsTest
 {
+    public class Expectation : Dictionary<string, string>
+    {
+        public override string ToString()
+        {
+            return $"{this["expression"]}: {this["error"]}";
+        }
+    }
+
     public static IEnumerable<object?[]> Expectations()
     {
         var folder = TestFolderHelper.TestFolder;
         var filePath = Path.Combine(folder, "errors.yml");
         var fileContent = File.ReadAllText(filePath);
         var deserializer = new YamlDotNet.Serialization.Deserializer();
-        var items = deserializer.Deserialize<List<Dictionary<string, string>>>(fileContent);
+        var items = deserializer.Deserialize<List<Expectation>>(fileContent);
         foreach (var item in items)
         {
             yield return new object?[] { item };
@@ -20,7 +28,7 @@ public class ErrorsTest
 
     [TestMethod]
     [DynamicData(nameof(Expectations), DynamicDataSourceType.Method)]
-    public void ParsedExpression_ShouldThrow(Dictionary<string, string> expectation)
+    public void ParsedExpression_ShouldThrow(Expectation expectation)
     {
         var expression = expectation["expression"];
         var error = expectation["error"];
