@@ -42,7 +42,7 @@ public abstract class TagExpression : ITagExpression
 public class NullExpression : TagExpression
 {
     /// <inheritdoc/>
-    public override string ToString() => "true";
+    public override string ToString() => "";
 
     /// <inheritdoc/>
     internal override bool EvaluateInternal(HashSet<string> inputs) => true;
