@@ -1,0 +1,32 @@
+name: test-dotnet
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+    paths:
+      - dotnet/**
+      - testdata/**
+      - .github/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - dotnet/**
+      - testdata/**
+      - .github/**
+  workflow_call:
+
+jobs:
+  test-dotnet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+      - run: dotnet test
+        working-directory: dotnet
