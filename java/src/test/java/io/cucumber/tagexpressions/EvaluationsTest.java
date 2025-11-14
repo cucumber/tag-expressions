@@ -15,17 +15,6 @@ import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EvaluationsTest {
-    static class Expectation {
-        final String expression;
-        final List<String> variables;
-        final boolean result;
-
-        public Expectation(String expression, List<String> variables, boolean result) {
-            this.expression = expression;
-            this.variables = variables;
-            this.result = result;
-        }
-    }
 
     @SuppressWarnings("unchecked")
     static List<Expectation> acceptance_tests_pass() throws IOException {
@@ -47,5 +36,17 @@ class EvaluationsTest {
         Expression expr = TagExpressionParser.parse(expectation.expression);
         expr.evaluate(expectation.variables);
         assertEquals(expectation.result, expr.evaluate(expectation.variables));
+    }
+
+    static class Expectation {
+        final String expression;
+        final List<String> variables;
+        final boolean result;
+
+        Expectation(String expression, List<String> variables, boolean result) {
+            this.expression = expression;
+            this.variables = variables;
+            this.result = result;
+        }
     }
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -95,6 +94,7 @@ public final class TagExpressionParser {
         return expressions.pop();
     }
 
+    @SuppressWarnings("UnnecessaryParentheses")
     private boolean isTokenForOperator(String token, String operator) {
         if (!isOperator(operator)) {
             return false;
@@ -272,7 +272,7 @@ public final class TagExpressionParser {
         }
     }
 
-    private static class True implements Expression {
+    private static final class True implements Expression {
         @Override
         public boolean evaluate(List<String> variables) {
             return true;
