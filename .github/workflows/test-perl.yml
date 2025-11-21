@@ -27,7 +27,7 @@ jobs:
         perl: [ "5.14", "5.20", "5.26", "5.32" ]
     steps:
     - name: Check out repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
     - name: Setup Perl environment
       uses: shogo82148/actions-setup-perl@v1
       with:
