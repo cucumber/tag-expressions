@@ -23,6 +23,7 @@ jobs:
   test-perl:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: true
       matrix:
         perl: [ "5.14", "5.20", "5.26", "5.32" ]
     steps:
