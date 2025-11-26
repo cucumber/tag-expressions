@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TagExpressions\Cucumber.TagExpressions.csproj" />
+    <ProjectReference Include="..\Cucumber.TagExpressions\Cucumber.TagExpressions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
