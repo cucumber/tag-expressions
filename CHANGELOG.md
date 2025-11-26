@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Render the empty tag expression as an empty string ([#222](https://github.com/cucumber/tag-expressions/pull/222))
 - Improve error message for missing operands ([#221](https://github.com/cucumber/tag-expressions/pull/221))
 
+- [.NET] Add a .NET implementation
+
 ## [8.0.0] - 2025-10-14
 ### Fixed
 - [Perl] Fix building release artifacts ([#214](https://github.com/cucumber/tag-expressions/pull/214))
