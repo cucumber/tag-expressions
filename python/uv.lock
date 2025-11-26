@@ -1,5 +1,5 @@
 version = 1
-revision = 4
+revision = 5
 requires-python = ">=3.10"
 
 [[package]]
@@ -112,7 +112,7 @@ wheels = [
 
 [[package]]
 name = "cucumber-tag-expressions"
-version = "8.0.0"
+version = "8.1.0"
 source = { editable = "." }
 
 [package.dev-dependencies]
