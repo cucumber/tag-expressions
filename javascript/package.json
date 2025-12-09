@@ -50,7 +50,7 @@
     "@stryker-mutator/typescript-checker": "9.4.0",
     "@types/js-yaml": "^4.0.3",
     "@types/mocha": "10.0.10",
-    "@types/node": "22.19.1",
+    "@types/node": "22.19.2",
     "@typescript-eslint/eslint-plugin": "^8.46.0",
     "@typescript-eslint/parser": "^8.46.0",
     "eslint": "^9.21.0",
