@@ -138,7 +138,7 @@ public final class TagExpressionParser {
 
     private void check(TokenType expectedTokenType, TokenType tokenType) {
         if (expectedTokenType != tokenType) {
-            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Expected %s.".formatted(infix, expectedTokenType.toString().toLowerCase(Locale.US)));
+            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Expected %s.".formatted(infix, expectedTokenType.toString().toLowerCase(Locale.ROOT)));
         }
     }
 
