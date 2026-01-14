@@ -15,6 +15,7 @@ int main() {
     auto fast = parse("@fast");
     std::cout << "  Expression: " << fast->to_string() << "\n";
     std::cout << "  {@fast, @wip}: " << (fast->evaluate({"@fast", "@wip"}) ? "true" : "false") << "\n";
+    std::cout << "  {@Fast}: " << (fast->evaluate({"@Fast"}) ? "true" : "false") << "\n";
     std::cout << "  {@performance, @slow}: " << (fast->evaluate({"@performance", "@slow"}) ? "true" : "false") << "\n\n";
 
     // Example 2: Tagged with @wip and not @slow
@@ -22,6 +23,7 @@ int main() {
     auto wip_not_slow = parse("@wip and not @slow");
     std::cout << "  Expression: " << wip_not_slow->to_string() << "\n";
     std::cout << "  {@wip, @home}: " << (wip_not_slow->evaluate({"@wip", "@home"}) ? "true" : "false") << "\n";
+    std::cout << "  {@wip, @slow}: " << (wip_not_slow->evaluate({"@wip", "@slow"}) ? "true" : "false") << "\n";
     std::cout << "  {wet, warm, raining}: " << (wip_not_slow->evaluate({"wet", "warm", "raining"}) ? "true" : "false") << "\n\n";
 
     // Example 3: Tagged with both @fast and @integration

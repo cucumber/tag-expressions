@@ -93,6 +93,7 @@ int main() {
 ```cpp
 auto fast = parse("@fast");
 fast->evaluate({"@fast", "@wip"});           // true
+fast->evaluate({"@Fast"});                   // false
 fast->evaluate({"@performance", "@slow"});   // false
 ```
 
@@ -100,8 +101,9 @@ fast->evaluate({"@performance", "@slow"});   // false
 
 ```cpp
 auto wip_not_slow = parse("@wip and not @slow");
-wip_not_slow->evaluate({"@wip", "@home"});   // true
-wip_not_slow->evaluate({"wet", "warm"});     // false
+wip_not_slow->evaluate({"@wip", "@home"});              // true
+wip_not_slow->evaluate({"@wip", "@slow"});              // false
+wip_not_slow->evaluate({"wet", "warm", "raining"});     // false
 ```
 
 #### Tagged with both @fast and @integration
