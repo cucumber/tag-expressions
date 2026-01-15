@@ -65,7 +65,7 @@ cmake --build build --target install
 ### Basic Example
 
 ```cpp
-#include <cucumber-tag-expressions/parser.hpp>
+#include <cucumber/tag-expressions/parser.hpp>
 #include <iostream>
 #include <set>
 
@@ -160,7 +160,7 @@ std::string str = expr->to_string();
 find_package(Cucumber-Tag-Expressions REQUIRED)
 
 add_executable(my_app main.cpp)
-target_link_libraries(my_app PRIVATE cucumber::cucumber-tag-expressions)
+target_link_libraries(my_app PRIVATE cucumber-tag-expressions)
 ```
 
 #### Manual Integration

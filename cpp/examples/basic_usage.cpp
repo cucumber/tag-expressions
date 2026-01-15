@@ -2,7 +2,7 @@
 #include <set>
 #include <string>
 
-#include "cucumber-tag-expressions/parser.hpp"
+#include "cucumber/tag-expressions/parser.hpp"
 
 int main() {
     using namespace cucumber::tag_expressions;
