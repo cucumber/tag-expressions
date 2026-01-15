@@ -2,10 +2,10 @@
 #include <set>
 #include <string>
 
-#include "cucumber_tag_expressions/parser.hpp"
+#include "cucumber-tag-expressions/parser.hpp"
 
 int main() {
-    using namespace cucumber_tag_expressions;
+    using namespace cucumber::tag_expressions;
 
     std::cout << "Cucumber Tag Expressions - C++ Examples\n";
     std::cout << "========================================\n\n";

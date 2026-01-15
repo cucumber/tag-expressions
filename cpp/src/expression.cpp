@@ -1,30 +1,31 @@
-#include "cucumber_tag_expressions/expression.hpp"
+#include "cucumber-tag-expressions/expression.hpp"
 
 #include <algorithm>
 #include <sstream>
 
-namespace cucumber_tag_expressions {
+namespace cucumber {
+namespace tag_expressions {
 
 namespace {
 
-// Escape special characters in tag names for string representation
-std::string escape_string(const std::string& str) {
-    std::ostringstream oss;
-    for (char c : str) {
-        if (c == '\\') {
-            oss << "\\\\";
-        } else if (c == '(') {
-            oss << "\\(";
-        } else if (c == ')') {
-            oss << "\\)";
-        } else if (std::isspace(static_cast<unsigned char>(c))) {
-            oss << '\\' << c;
-        } else {
-            oss << c;
+    // Escape special characters in tag names for string representation
+    std::string escape_string(const std::string& str) {
+        std::ostringstream oss;
+        for (char c : str) {
+            if (c == '\\') {
+                oss << "\\\\";
+            } else if (c == '(') {
+                oss << "\\(";
+            } else if (c == ')') {
+                oss << "\\)";
+            } else if (std::isspace(static_cast<unsigned char>(c))) {
+                oss << '\\' << c;
+            } else {
+                oss << c;
+            }
         }
+        return oss.str();
     }
-    return oss.str();
-}
 
 }  // namespace
 
@@ -74,4 +75,6 @@ std::string Not::to_string() const {
     return "not ( " + term_->to_string() + " )";
 }
 
-}  // namespace cucumber_tag_expressions
+}  // namespace tag_expressions
+}  // namespace cucumber
+    

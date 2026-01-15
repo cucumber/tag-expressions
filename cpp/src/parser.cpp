@@ -1,24 +1,26 @@
-#include "cucumber_tag_expressions/parser.hpp"
+#include "cucumber-tag-expressions/parser.hpp"
 
 #include <algorithm>
 #include <map>
 #include <sstream>
 
-namespace cucumber_tag_expressions {
+namespace cucumber {
+namespace tag_expressions {
 
 namespace {
 
-// Token information map
-const std::map<Token, TokenInfo>& get_token_map() {
-    static const std::map<Token, TokenInfo> map = {
-        {Token::OR, TokenInfo("or", 0, Associative::LEFT, TokenType::OPERATOR)},
-        {Token::AND, TokenInfo("and", 1, Associative::LEFT, TokenType::OPERATOR)},
-        {Token::NOT, TokenInfo("not", 2, Associative::RIGHT, TokenType::OPERATOR)},
-        {Token::OPEN_PARENTHESIS, TokenInfo("(", -2, Associative::LEFT, TokenType::OPERAND)},
-        {Token::CLOSE_PARENTHESIS, TokenInfo(")", -1, Associative::LEFT, TokenType::OPERAND)}
-    };
-    return map;
-}
+    // Token information map
+    const std::map<cucumber::tag_expressions::Token, cucumber::tag_expressions::TokenInfo>& get_token_map() {
+        using namespace cucumber::tag_expressions;
+        static const std::map<Token, TokenInfo> map = {
+            {Token::OR, TokenInfo("or", 0, Associative::LEFT, TokenType::OPERATOR)},
+            {Token::AND, TokenInfo("and", 1, Associative::LEFT, TokenType::OPERATOR)},
+            {Token::NOT, TokenInfo("not", 2, Associative::RIGHT, TokenType::OPERATOR)},
+            {Token::OPEN_PARENTHESIS, TokenInfo("(", -2, Associative::LEFT, TokenType::OPERAND)},
+            {Token::CLOSE_PARENTHESIS, TokenInfo(")", -1, Associative::LEFT, TokenType::OPERAND)}
+        };
+        return map;
+    }
 
 }  // namespace
 
@@ -284,4 +286,5 @@ std::shared_ptr<Expression> TagExpressionParser::parse(const std::string& text) 
     return expressions.back();
 }
 
-}  // namespace cucumber_tag_expressions
+}  // namespace tag_expressions
+}  // namespace cucumber

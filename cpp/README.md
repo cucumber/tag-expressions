@@ -65,11 +65,11 @@ cmake --build build --target install
 ### Basic Example
 
 ```cpp
-#include <cucumber_tag_expressions/parser.hpp>
+#include <cucumber-tag-expressions/parser.hpp>
 #include <iostream>
 #include <set>
 
-using namespace cucumber_tag_expressions;
+using namespace cucumber::tag-expressions;
 
 int main() {
     // Parse a tag expression
@@ -157,10 +157,10 @@ std::string str = expr->to_string();
 #### CMake Integration
 
 ```cmake
-find_package(cucumber-tag-expressions REQUIRED)
+find_package(Cucumber-Tag-Expressions REQUIRED)
 
 add_executable(my_app main.cpp)
-target_link_libraries(my_app PRIVATE cucumber::cucumber_tag_expressions)
+target_link_libraries(my_app PRIVATE cucumber::cucumber-tag-expressions)
 ```
 
 #### Manual Integration
@@ -169,7 +169,7 @@ If you prefer not to install the library, you can add it as a subdirectory:
 
 ```cmake
 add_subdirectory(path/to/cucumber-tag-expressions)
-target_link_libraries(my_app PRIVATE cucumber_tag_expressions)
+target_link_libraries(my_app PRIVATE cucumber-tag-expressions)
 ```
 
 ## API Reference
@@ -320,7 +320,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Related Projects
 
-- [cucumber-tag-expressions (Python)](https://github.com/cucumber/tag-expressions)
+- [Cucumber-Tag-Expressions (Python)](https://github.com/cucumber/tag-expressions)
 - [Cucumber](https://cucumber.io/)
 - [Behave](https://behave.readthedocs.io/)
 

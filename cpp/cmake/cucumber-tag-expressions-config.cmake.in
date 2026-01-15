@@ -2,4 +2,4 @@
 
 include("${CMAKE_CURRENT_LIST_DIR}/cucumber-tag-expressions-targets.cmake")
 
-check_required_components(cucumber-tag-expressions)
+check_required_components(Cucumber-Tag-Expressions)

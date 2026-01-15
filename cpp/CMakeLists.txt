@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(cucumber-tag-expressions VERSION 8.1.0 LANGUAGES CXX)
+project(Cucumber-Tag-Expressions VERSION 8.1.0 LANGUAGES CXX)
 
 # Set C++ standard
 set(CMAKE_CXX_STANDARD 17)
@@ -14,12 +14,15 @@ else()
 endif()
 
 # Library target
-add_library(cucumber_tag_expressions
-    src/expression.cpp
-    src/parser.cpp
+add_library(cucumber-tag-expressions)
+add_library(cucumber::tag-expressions ALIAS cucumber-tag-expressions)
+target_sources(cucumber-tag-expressions
+    PRIVATE
+        src/expression.cpp
+        src/parser.cpp
 )
 
-target_include_directories(cucumber_tag_expressions
+target_include_directories(cucumber-tag-expressions
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
@@ -27,7 +30,7 @@ target_include_directories(cucumber_tag_expressions
 
 # Example executable
 add_executable(example examples/basic_usage.cpp)
-target_link_libraries(example PRIVATE cucumber_tag_expressions)
+target_link_libraries(example PRIVATE cucumber::tag-expressions)
 
 # Enable testing
 enable_testing()
@@ -36,12 +39,13 @@ enable_testing()
 find_package(GTest QUIET)
 if(GTest_FOUND)
     add_executable(tag_expressions_test
-        tests/test_expression.cpp
-        tests/test_parser.cpp
+        tests/test_errors.cpp
+        tests/test_evaluations.cpp
+        tests/test_parsing.cpp
     )
     target_link_libraries(tag_expressions_test
         PRIVATE
-            cucumber_tag_expressions
+            cucumber::tag-expressions
             GTest::gtest
             GTest::gtest_main
     )
@@ -50,7 +54,7 @@ if(GTest_FOUND)
 endif()
 
 # Installation rules
-install(TARGETS cucumber_tag_expressions
+install(TARGETS cucumber-tag-expressions
     EXPORT cucumber-tag-expressions-targets
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
