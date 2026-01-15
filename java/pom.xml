@@ -18,7 +18,6 @@
 
     <properties>
         <project.build.outputTimestamp>1760461269</project.build.outputTimestamp>
-        <osgi.bundle-symbolic-name>io.cucumber.tagexpressions</osgi.bundle-symbolic-name>
     </properties>
 
     <scm>
