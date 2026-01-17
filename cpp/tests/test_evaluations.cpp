@@ -7,7 +7,7 @@ using namespace cucumber::tag_expressions;
 class EvaluationsTest : public ::testing::Test {
 protected:
     std::string empty_string = "";
-    std::set<std::string> empty_set{};
+    std::unordered_set<std::string> empty_set{};
 };
 
 TEST_F(EvaluationsTest, EmptyTag) {
@@ -18,8 +18,30 @@ TEST_F(EvaluationsTest, EmptyTag) {
     EXPECT_TRUE(expr->evaluate({"z"}));
 }
 
+TEST_F(EvaluationsTest, TagSpaces) {
+    auto expr = parse("   ");
+    EXPECT_TRUE(expr->evaluate(empty_set));
+    EXPECT_TRUE(expr->evaluate({"x"}));
+    EXPECT_TRUE(expr->evaluate({"y"}));
+    EXPECT_TRUE(expr->evaluate({"z"}));
+}
+
 TEST_F(EvaluationsTest, TagNotX) {
     auto expr = parse("not x");
+    EXPECT_TRUE(expr->evaluate(empty_set));
+    EXPECT_FALSE(expr->evaluate({"x"}));
+    EXPECT_TRUE(expr->evaluate({"y"}));
+}
+
+TEST_F(EvaluationsTest, TagNotNotX) {
+    auto expr = parse("not not x");
+    EXPECT_FALSE(expr->evaluate(empty_set));
+    EXPECT_TRUE(expr->evaluate({"x"}));
+    EXPECT_FALSE(expr->evaluate({"y"}));
+}
+
+TEST_F(EvaluationsTest, TagNotNotNotX) {
+    auto expr = parse("not not not x");
     EXPECT_TRUE(expr->evaluate(empty_set));
     EXPECT_FALSE(expr->evaluate({"x"}));
     EXPECT_TRUE(expr->evaluate({"y"}));

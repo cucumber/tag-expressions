@@ -3,8 +3,7 @@
 #include <algorithm>
 #include <sstream>
 
-namespace cucumber {
-namespace tag_expressions {
+namespace cucumber::tag_expressions {
 
 namespace {
 
@@ -29,42 +28,78 @@ namespace {
 
 }  // namespace
 
+bool Expression::operator()(const std::unordered_set<std::string>& values) const {
+    return evaluate(values);
+}
+
+Literal::Literal(std::string name) :
+    name_{std::move(name)} {
+}
+
+bool Literal::evaluate(const std::unordered_set<std::string>& values) const {
+    return values.find(name_) != values.end();
+}
+
 std::string Literal::to_string() const {
     return escape_string(name_);
 }
 
+std::string_view Literal::name() const {
+    return name_;
+}
+
+And::And(std::unique_ptr<Expression> left, std::unique_ptr<Expression> right) :
+    left_{std::move(left)},
+    right_{std::move(right)} {
+}
+
+bool And::evaluate(const std::unordered_set<std::string>& values) const {
+    return left_->evaluate(values) && right_->evaluate(values);
+}
+
 std::string And::to_string() const {
-    if (terms_.empty()) {
-        return "";
-    }
-    
     std::ostringstream oss;
-    oss << "( ";
-    for (size_t i = 0; i < terms_.size(); ++i) {
-        if (i > 0) {
-            oss << " and ";
-        }
-        oss << terms_[i]->to_string();
-    }
-    oss << " )";
+    oss << "( " << left_->to_string() << " and " << right_->to_string() << " )";
     return oss.str();
 }
 
+const std::unique_ptr<Expression>& And::left() const {
+    return left_;
+}
+
+const std::unique_ptr<Expression>& And::right() const {
+    return right_;
+}
+
+Or::Or(std::unique_ptr<Expression> left, std::unique_ptr<Expression> right) :
+    left_{std::move(left)},
+    right_{std::move(right)} {
+}
+
+bool Or::evaluate(const std::unordered_set<std::string>& values) const {
+    return left_->evaluate(values) || right_->evaluate(values);
+}
+
 std::string Or::to_string() const {
-    if (terms_.empty()) {
-        return "";
-    }
-    
     std::ostringstream oss;
-    oss << "( ";
-    for (size_t i = 0; i < terms_.size(); ++i) {
-        if (i > 0) {
-            oss << " or ";
-        }
-        oss << terms_[i]->to_string();
-    }
-    oss << " )";
+    oss << "( " << left_->to_string() << " or " << right_->to_string() << " )";
     return oss.str();
+}
+
+const std::unique_ptr<Expression>& Or::left() const {
+    return left_;
+}
+
+const std::unique_ptr<Expression>& Or::right() const {
+    return right_;
+}
+
+Not::Not(std::unique_ptr<Expression> term) :
+    term_{std::move(term)} {
+}
+
+bool Not::evaluate(const std::unordered_set<std::string>& values) const {
+    return !term_->evaluate(values);
 }
 
 std::string Not::to_string() const {
@@ -75,6 +110,16 @@ std::string Not::to_string() const {
     return "not ( " + term_->to_string() + " )";
 }
 
-}  // namespace tag_expressions
-}  // namespace cucumber
-    
+const std::unique_ptr<Expression>& Not::term() const {
+    return term_;
+}
+
+bool True::evaluate([[maybe_unused]] const std::unordered_set<std::string>& values) const {
+    return true;
+}
+
+std::string True::to_string() const {
+    return "";
+}
+
+}  // namespace cucumber::tag_expressions

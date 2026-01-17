@@ -6,13 +6,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Add compiler warnings
-if(MSVC)
-    add_compile_options(/W4 /WX)
-else()
-    add_compile_options(-Wall -Wextra -Wpedantic -Werror)
-endif()
-
 # Library target
 add_library(cucumber-tag-expressions)
 add_library(cucumber::tag-expressions ALIAS cucumber-tag-expressions)
@@ -32,25 +25,61 @@ target_include_directories(cucumber-tag-expressions
 add_executable(example examples/basic_usage.cpp)
 target_link_libraries(example PRIVATE cucumber::tag-expressions)
 
-# Enable testing
-enable_testing()
+# Main project check
+set(CUCUMBER_TAG_EXPRESSIONS_MAIN_PROJECT OFF)
+if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(CUCUMBER_TAG_EXPRESSIONS_MAIN_PROJECT ON)
+endif()
 
-# Find Google Test (if available)
-find_package(GTest QUIET)
-if(GTest_FOUND)
-    add_executable(tag_expressions_test
-        tests/test_errors.cpp
-        tests/test_evaluations.cpp
-        tests/test_parsing.cpp
-    )
-    target_link_libraries(tag_expressions_test
-        PRIVATE
-            cucumber::tag-expressions
-            GTest::gtest
-            GTest::gtest_main
-    )
-    
-    add_test(NAME tag_expressions_test COMMAND tag_expressions_test)
+# Options
+if(${CUCUMBER_TAG_EXPRESSIONS_MAIN_PROJECT})
+    set(CUCUMBER_TAG_EXPRESSIONS_BUILD_TESTS_INIT ON)
+    set(CUCUMBER_TAG_EXPRESSIONS_ENABLE_COVERAGE_INIT ON)
+else()
+    set(CUCUMBER_TAG_EXPRESSIONS_BUILD_TESTS_INIT OFF)
+    set(CUCUMBER_TAG_EXPRESSIONS_ENABLE_COVERAGE_INIT OFF)
+endif()
+
+option(
+    CUCUMBER_TAG_EXPRESSIONS_BUILD_TESTS
+    "Enable build of the tests"
+    ${CUCUMBER_TAG_EXPRESSIONS_BUILD_TESTS_INIT}
+)
+
+option(
+    CUCUMBER_TAG_EXPRESSIONS_ENABLE_COVERAGE
+    "Enable compiler flags for code coverage measurements"
+    ${CUCUMBER_TAG_EXPRESSIONS_ENABLE_COVERAGE_INIT}
+)
+
+if(CUCUMBER_TAG_EXPRESSIONS_BUILD_TESTS)
+    if(CUCUMBER_TAG_EXPRESSIONS_ENABLE_COVERAGE)
+        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+            target_compile_options(cucumber-tag-expressions PRIVATE --coverage -O0 -g)
+            target_link_libraries(cucumber-tag-expressions PRIVATE --coverage)
+        endif()
+    endif()
+
+    enable_testing()
+
+    # Find Google Test (if available)
+    find_package(GTest QUIET)
+    if(GTest_FOUND)
+        add_executable(tag_expressions_test
+            tests/test_errors.cpp
+            tests/test_evaluations.cpp
+            tests/test_parsing.cpp
+            tests/test_precedence.cpp
+        )
+        target_link_libraries(tag_expressions_test
+            PRIVATE
+                cucumber::tag-expressions
+                GTest::gtest
+                GTest::gtest_main
+        )
+        
+        add_test(NAME tag_expressions_test COMMAND tag_expressions_test)
+    endif()
 endif()
 
 # Installation rules

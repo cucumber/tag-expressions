@@ -76,6 +76,16 @@ TEST_F(ErrorsTest, ThrowsOnNotMissingRightOperand1) {
     EXPECT_THROW(parse("not"), TagExpressionError);
 }
 
+TEST_F(ErrorsTest, ThrowsOnAndMissingBothOperands) {
+    // error: 'Tag expression "and" could not be parsed because of syntax error: Expected operand.'
+    EXPECT_THROW(parse("and"), TagExpressionError);
+}
+
+TEST_F(ErrorsTest, ThrowsOnOrMissingBothOperands) {
+    // error: 'Tag expression "or" could not be parsed because of syntax error: Expected operand.'
+    EXPECT_THROW(parse("or"), TagExpressionError);
+}
+
 TEST_F(ErrorsTest, ThrowsOnNotMissingRightOperand2) {
     // error: 'Tag expression "a and not" could not be parsed because of syntax error: Expected operand.'
     EXPECT_THROW(parse("a and not"), TagExpressionError);
@@ -89,4 +99,29 @@ TEST_F(ErrorsTest, ThrowsOnAndMissingLeftOperand) {
 TEST_F(ErrorsTest, ThrowsOnOrMissingLeftOperand) {
     // error: 'Tag expression "or a" could not be parsed because of syntax error: Expected operand.'
     EXPECT_THROW(parse("or a"), TagExpressionError);
+}
+
+TEST_F(ErrorsTest, ThrowsOnOnlyOpenParenthesis) {
+    // error: 'Tag expression "or a" could not be parsed because of syntax error: Expected operand.'
+    EXPECT_THROW(parse("("), TagExpressionError);
+}
+
+TEST_F(ErrorsTest, ThrowsOnOnlyClosingParenthesis) {
+    // error: 'Tag expression "or a" could not be parsed because of syntax error: Expected operand.'
+    EXPECT_THROW(parse(")"), TagExpressionError);
+}
+
+TEST_F(ErrorsTest, ThrowsOnEmptyParentheses) {
+    // error: 'Tag expression "a and ()" could not be parsed because of syntax error: Expected operand.'
+    EXPECT_THROW(parse("a and ()"), TagExpressionError);
+}
+
+TEST_F(ErrorsTest, ThrowsOnNestedEmptyParentheses) {
+    // error: 'Tag expression "a and (())" could not be parsed because of syntax error: Expected operand.'
+    EXPECT_THROW(parse("a and (())"), TagExpressionError);
+}
+
+TEST_F(ErrorsTest, ThrowsOnSpacesBetweenOperators) {
+    // error: 'Tag expression "and   or" could not be parsed because of syntax error: Expected operand.'
+    EXPECT_THROW(parse("and   or"), TagExpressionError);
 }

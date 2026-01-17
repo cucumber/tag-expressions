@@ -6,7 +6,6 @@ using namespace cucumber::tag_expressions;
 class ParsingTest : public ::testing::Test {
 protected:
     std::string empty_string = "";
-    std::set<std::string> empty_set{};
 };
 
 TEST_F(ParsingTest, EmptyTag) {
@@ -120,4 +119,14 @@ TEST_F(ParsingTest, TagXEscapeorYEscapeEscapeorZEscape) {
 TEST_F(ParsingTest, TagXEscapeorY) {
     auto expr = parse("x\\  or y");
     EXPECT_EQ(expr->to_string(), "( x\\  or y )");
+}
+
+TEST_F(ParsingTest, TagNotNotA) {
+    auto expr = parse("not not a");
+    EXPECT_EQ(expr->to_string(), "not ( not ( a ) )");
+}
+
+TEST_F(ParsingTest, TagNotNotNotA) {
+    auto expr = parse("not not not a");
+    EXPECT_EQ(expr->to_string(), "not ( not ( not ( a ) ) )");
 }

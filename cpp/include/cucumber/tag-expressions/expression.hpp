@@ -1,176 +1,186 @@
-#pragma once
+#ifndef CUCUMBER_TAG_EXPRESSIONS_EXPRESSION_HPP_
+#define CUCUMBER_TAG_EXPRESSIONS_EXPRESSION_HPP_
 
 #include <memory>
-#include <set>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
-namespace cucumber {
-    namespace tag_expressions {
+namespace cucumber::tag_expressions {
+
+    /**
+     * @brief Abstract base class for boolean expression terms of a tag expression
+     * (or representing a parsed tag expression evaluation tree).
+     */
+    class Expression {
+    public:
+        virtual ~Expression() = default;
 
         /**
-         * @brief Abstract base class for boolean expression terms of a tag expression
-         * (or representing a parsed tag expression evaluation tree).
-         */
-        class Expression {
-        public:
-            virtual ~Expression() = default;
-
-            /**
-             * @brief Evaluate whether expression matches values.
-             * 
-             * @param values Tag names to evaluate
-             * @return true if expression evaluates to true with values
-             * @return false otherwise
-             */
-            virtual bool evaluate(const std::set<std::string>& values) const = 0;
-
-            /**
-             * @brief Call operator to make an expression object callable.
-             * 
-             * @param values Tag names to evaluate
-             * @return true if expression is true
-             * @return false otherwise
-             */
-            bool operator()(const std::set<std::string>& values) const {
-                return evaluate(values);
-            }
-
-            /**
-             * @brief Convert expression to string representation.
-             * 
-             * @return std::string String representation of the expression
-             */
-            virtual std::string to_string() const = 0;
-        };
-
-        /**
-         * @brief Used as placeholder for a tag in a boolean tag expression.
-         */
-        class Literal : public Expression {
-        public:
-            /**
-             * @brief Construct a new Literal object.
-             * 
-             * @param name Tag name to represent as a literal
-             */
-            explicit Literal(std::string name) : name_(std::move(name)) {}
-
-            bool evaluate(const std::set<std::string>& values) const override {
-                return values.find(name_) != values.end();
-            }
-
-            std::string to_string() const override;
-
-            const std::string& name() const { return name_; }
-
-        private:
-            std::string name_;
-        };
-
-        /**
-         * @brief Boolean-AND operation (as binary operation).
+         * @brief Evaluate whether expression matches values.
          * 
-         * NOTE: Class supports more than two arguments.
+         * @param values Tag names to evaluate
+         * @return true if expression evaluates to true with values
+         * @return false otherwise
          */
-        class And : public Expression {
-        public:
-            /**
-             * @brief Construct a Boolean-AND expression.
-             * 
-             * @param terms List of boolean expressions to AND
-             */
-            explicit And(std::vector<std::shared_ptr<Expression>> terms)
-                : terms_(std::move(terms)) {}
-
-            bool evaluate(const std::set<std::string>& values) const override {
-                for (const auto& term : terms_) {
-                    if (!term->evaluate(values)) {
-                        return false;  // SHORTCUT: Any false makes the expression false
-                    }
-                }
-                return true;  // OTHERWISE: All terms are true
-            }
-
-            std::string to_string() const override;
-
-            const std::vector<std::shared_ptr<Expression>>& terms() const { return terms_; }
-
-        private:
-            std::vector<std::shared_ptr<Expression>> terms_;
-        };
+        virtual bool evaluate(const std::unordered_set<std::string>& values) const = 0;
 
         /**
-         * @brief Boolean-OR operation (as binary operation).
+         * @brief Call operator to make an expression object callable.
          * 
-         * NOTE: Class supports more than two arguments.
+         * @param values Tag names to evaluate
+         * @return true if expression is true
+         * @return false otherwise
          */
-        class Or : public Expression {
-        public:
-            /**
-             * @brief Construct a Boolean-OR expression.
-             * 
-             * @param terms List of boolean expressions to OR
-             */
-            explicit Or(std::vector<std::shared_ptr<Expression>> terms)
-                : terms_(std::move(terms)) {}
+        bool operator()(const std::unordered_set<std::string>& values) const;
+        /**
+         * @brief Convert expression to string representation.
+         * 
+         * @return std::string String representation of the expression
+         */
+        virtual std::string to_string() const = 0;
+    };
 
-            bool evaluate(const std::set<std::string>& values) const override {
-                for (const auto& term : terms_) {
-                    if (term->evaluate(values)) {
-                        return true;  // SHORTCUT: Any true makes the expression true
-                    }
-                }
-                return false;  // OTHERWISE: All terms are false
-            }
+    /**
+     * @brief Used as placeholder for a tag in a boolean tag expression.
+     */
+    class Literal : public Expression {
+    public:
+        /**
+         * @brief Construct a new Literal object.
+         * 
+         * @param name Tag name to represent as a literal
+         */
+        explicit Literal(std::string name);
 
-            std::string to_string() const override;
+        bool evaluate(const std::unordered_set<std::string>& values) const override;
 
-            const std::vector<std::shared_ptr<Expression>>& terms() const { return terms_; }
-
-        private:
-            std::vector<std::shared_ptr<Expression>> terms_;
-        };
+        std::string to_string() const override;
 
         /**
-         * @brief Boolean-NOT operation (as unary operation).
+         * @brief Get the name of the literal.
+         * 
+         * @return std::string_view Name of the literal
          */
-        class Not : public Expression {
-        public:
-            /**
-             * @brief Construct a Boolean-NOT expression.
-             * 
-             * @param term Boolean expression to negate
-             */
-            explicit Not(std::shared_ptr<Expression> term) : term_(std::move(term)) {}
+        std::string_view name() const;
 
-            bool evaluate(const std::set<std::string>& values) const override {
-                return !term_->evaluate(values);
-            }
+    private:
+        std::string name_;
+    };
 
-            std::string to_string() const override;
+    /**
+     * @brief Boolean-AND operation (as binary operation).
+     * 
+     * NOTE: Class supports more than two arguments.
+     */
+    class And : public Expression {
+    public:
+        /**
+         * @brief Construct a Boolean-AND expression.
+         * 
+         * @param left Left boolean expression of the AND operation
+         * @param right Right boolean expression of the AND operation
+         */
+        explicit And(std::unique_ptr<Expression> left, std::unique_ptr<Expression> right);
 
-            const std::shared_ptr<Expression>& term() const { return term_; }
+        bool evaluate(const std::unordered_set<std::string>& values) const override;
 
-        private:
-            std::shared_ptr<Expression> term_;
-        };
+        std::string to_string() const override;
 
         /**
-         * @brief Boolean expression that is always true.
+         * @brief Get the left boolean expression of the AND operation.
+         * 
+         * @return const std::unique_ptr<Expression>& Left boolean expression
          */
-        class True : public Expression {
-        public:
-            bool evaluate(const std::set<std::string>& values) const override {
-                (void)values;  // Unused parameter
-                return true;
-            }
+        const std::unique_ptr<Expression>& left() const;
 
-            std::string to_string() const override {
-                return "";
-            }
-        };
+        /**
+         * @brief Get the right boolean expression of the AND operation.
+         * 
+         * @return const std::unique_ptr<Expression>& Right boolean expression
+         */
+        const std::unique_ptr<Expression>& right() const;
 
-    } // namespace tag_expressions
+    private:
+        std::unique_ptr<Expression> left_;
+        std::unique_ptr<Expression> right_;
+    };
 
-}  // namespace cucumber
+    /**
+     * @brief Boolean-OR operation (as binary operation).
+     * 
+     * NOTE: Class supports more than two arguments.
+     */
+    class Or : public Expression {
+    public:
+        /**
+         * @brief Construct a Boolean-OR expression.
+         * 
+         * @param left Left boolean expression of the OR operation
+         * @param right Right boolean expression of the OR operation
+         */
+        explicit Or(std::unique_ptr<Expression> left, std::unique_ptr<Expression> right);
+
+        bool evaluate(const std::unordered_set<std::string>& values) const override;
+
+        std::string to_string() const override;
+
+        /**
+         * @brief Get the left boolean expression of the OR operation.
+         * 
+         * @return const std::unique_ptr<Expression>& Left boolean expression
+         */
+        const std::unique_ptr<Expression>& left() const;
+
+        /**
+         * @brief Get the right boolean expression of the OR operation.
+         * 
+         * @return const std::unique_ptr<Expression>& Right boolean expression
+         */
+        const std::unique_ptr<Expression>& right() const;
+
+    private:
+        std::unique_ptr<Expression> left_;
+        std::unique_ptr<Expression> right_;
+    };
+
+    /**
+     * @brief Boolean-NOT operation (as unary operation).
+     */
+    class Not : public Expression {
+    public:
+        /**
+         * @brief Construct a Boolean-NOT expression.
+         * 
+         * @param term Boolean expression to negate
+         */
+        explicit Not(std::unique_ptr<Expression> term);
+
+        bool evaluate(const std::unordered_set<std::string>& values) const override;
+
+        std::string to_string() const override;
+
+        /**
+         * @brief Get the term in the NOT expression.
+         * 
+         * @return const std::unique_ptr<Expression>& Term being negated
+         */
+        const std::unique_ptr<Expression>& term() const;
+
+    private:
+        std::unique_ptr<Expression> term_;
+    };
+
+    /**
+     * @brief Boolean expression that is always true.
+     */
+    class True : public Expression {
+    public:
+        bool evaluate([[maybe_unused]] const std::unordered_set<std::string>& values) const override;
+
+        std::string to_string() const override;
+    };
+
+}  // namespace cucumber::tag_expressions
+
+#endif // CUCUMBER_TAG_EXPRESSIONS_EXPRESSION_HPP_

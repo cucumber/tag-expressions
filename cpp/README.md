@@ -26,7 +26,7 @@ Tag expressions are used to select features, scenarios, etc. in Gherkin files ba
 - **Boolean Operations**: `and`, `or`, `not`
 - **Parentheses Support**: Group expressions with `(` and `)`
 - **Escaped Characters**: Support for tags with spaces and special characters
-- **STL-based**: Uses standard C++ containers (`std::set`, `std::string`, `std::shared_ptr`)
+- **STL-based**: Uses standard C++ containers (`std::unordered_set<std::string>`, `std::string`, `std::unique_ptr`)
 - **Exception Safety**: Provides detailed error messages for invalid expressions
 - **Header-only Option**: Can be used as a library or included directly
 
@@ -67,7 +67,7 @@ cmake --build build --target install
 ```cpp
 #include <cucumber/tag-expressions/parser.hpp>
 #include <iostream>
-#include <set>
+#include <unordered_set>
 
 using namespace cucumber::tag-expressions;
 
@@ -76,7 +76,7 @@ int main() {
     auto expression = parse("@fast and not @slow");
     
     // Evaluate against a set of tags
-    std::set<std::string> tags = {"@fast", "@unit"};
+    std::unordered_set<std::string> tags = {"@fast", "@unit"};
     bool matches = expression->evaluate(tags);
     
     std::cout << "Matches: " << (matches ? "yes" : "no") << "\n";
@@ -181,15 +181,15 @@ target_link_libraries(my_app PRIVATE cucumber-tag-expressions)
 Parses a tag expression string and returns an expression tree.
 
 - **Parameters**: `text` - Tag expression as a string
-- **Returns**: `std::shared_ptr<Expression>` - Parsed expression tree
+- **Returns**: `std::unique_ptr<Expression>` - Parsed expression tree
 - **Throws**: `TagExpressionError` - If the expression is invalid
 
 ### Expression Classes
 
 #### `Expression` (Abstract Base)
 
-- `bool evaluate(const std::set<std::string>& values) const` - Evaluate expression against tags
-- `bool operator()(const std::set<std::string>& values) const` - Callable operator
+- `bool evaluate(const std::unordered_set<std::string>& values) const` - Evaluate expression against tags
+- `bool operator()(const std::unordered_set<std::string>& values) const` - Callable operator
 - `std::string to_string() const` - Convert to string representation
 
 #### `Literal`
@@ -206,9 +206,9 @@ lit.evaluate({"@fast"});  // true
 Boolean AND operation.
 
 ```cpp
-std::vector<std::shared_ptr<Expression>> terms = {
-    std::make_shared<Literal>("@a"),
-    std::make_shared<Literal>("@b")
+std::vector<std::unique_ptr<Expression>> terms = {
+    std::make_unique<Literal>("@a"),
+    std::make_unique<Literal>("@b")
 };
 And and_expr(std::move(terms));
 and_expr.evaluate({"@a", "@b"});  // true
@@ -219,9 +219,9 @@ and_expr.evaluate({"@a", "@b"});  // true
 Boolean OR operation.
 
 ```cpp
-std::vector<std::shared_ptr<Expression>> terms = {
-    std::make_shared<Literal>("@a"),
-    std::make_shared<Literal>("@b")
+std::vector<std::unique_ptr<Expression>> terms = {
+    std::make_unique<Literal>("@a"),
+    std::make_unique<Literal>("@b")
 };
 Or or_expr(std::move(terms));
 or_expr.evaluate({"@a"});  // true
@@ -232,7 +232,7 @@ or_expr.evaluate({"@a"});  // true
 Boolean NOT operation.
 
 ```cpp
-auto term = std::make_shared<Literal>("@slow");
+auto term = std::make_unique<Literal>("@slow");
 Not not_expr(term);
 not_expr.evaluate({"@fast"});  // true
 ```

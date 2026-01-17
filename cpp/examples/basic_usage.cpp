@@ -1,6 +1,6 @@
 #include <iostream>
-#include <set>
 #include <string>
+#include <unordered_set>
 
 #include "cucumber/tag-expressions/parser.hpp"
 
