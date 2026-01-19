@@ -5,7 +5,7 @@ using namespace cucumber::tag_expressions;
 
 class ParsingTest : public ::testing::Test {
 protected:
-    std::string empty_string = "";
+    const std::string empty_string = "";
 };
 
 TEST_F(ParsingTest, EmptyTag) {
@@ -44,8 +44,8 @@ TEST_F(ParsingTest, TagNotAorBandNotCorNotDorEandF) {
 }
 
 TEST_F(ParsingTest, TagNotAorBandNotCorNotDorEandFWithEscapes) {
-    auto expr = parse("not a\\(\\) or b and not c or not d or e and f");
-    EXPECT_EQ(expr->to_string(), "( ( ( not ( a\\(\\) ) or ( b and not ( c ) ) ) or not ( d ) ) or ( e and f ) )");
+    auto expr = parse(R"(not a\(\) or b and not c or not d or e and f)");
+    EXPECT_EQ(expr->to_string(), R"(( ( ( not ( a\(\) ) or ( b and not ( c ) ) ) or not ( d ) ) or ( e and f ) ))");
 }
 
 
@@ -67,33 +67,33 @@ TEST_F(ParsingTest, TagNotAandBandCorNotDorF) {
 
 
 TEST_F(ParsingTest, TagAEscapeandB) {
-    auto expr = parse("a\\\\ and b");
-    EXPECT_EQ(expr->to_string(), "( a\\\\ and b )");
+    auto expr = parse(R"(a\\ and b)");
+    EXPECT_EQ(expr->to_string(), R"(( a\\ and b ))");
 }
 
 TEST_F(ParsingTest, TagEscapeAandB) {
-    auto expr = parse("\\\\a and b");
-    EXPECT_EQ(expr->to_string(), "( \\\\a and b )");
+    auto expr = parse(R"(\\a and b)");
+    EXPECT_EQ(expr->to_string(), R"(( \\a and b ))");
 }
 
 TEST_F(ParsingTest, TagAandBEscape) {
-    auto expr = parse("a and b\\\\");
-    EXPECT_EQ(expr->to_string(), "( a and b\\\\ )");
+    auto expr = parse(R"(a and b\\)");
+    EXPECT_EQ(expr->to_string(), R"(( a and b\\ ))");
 }
 
 TEST_F(ParsingTest, TagAandBEscapeEscape) {
-    auto expr = parse("a and b\\\\\\\\");
-    EXPECT_EQ(expr->to_string(), "( a and b\\\\\\\\ )");
+    auto expr = parse(R"(a and b\\\\)");
+    EXPECT_EQ(expr->to_string(), R"(( a and b\\\\ ))");
 }
 
 TEST_F(ParsingTest, TagAEscapeEscapeandBEscapeEscape) {
-    auto expr = parse("a\\\\\\( and b\\\\\\)");
-    EXPECT_EQ(expr->to_string(), "( a\\\\\\( and b\\\\\\) )");
+    auto expr = parse(R"(a\\\( and b\\\))");
+    EXPECT_EQ(expr->to_string(), R"(( a\\\( and b\\\) ))");
 }
 
 TEST_F(ParsingTest, TagAandEscapeB) {
-    auto expr = parse("a and \\\\b");
-    EXPECT_EQ(expr->to_string(), "( a and \\\\b )");
+    auto expr = parse(R"(a and \\b)");
+    EXPECT_EQ(expr->to_string(), R"(( a and \\b ))");
 }
 
 TEST_F(ParsingTest, TagXorParenthesesY) {
@@ -102,23 +102,23 @@ TEST_F(ParsingTest, TagXorParenthesesY) {
 }
 
 TEST_F(ParsingTest, TagXEscapeEscapeorYEscapeEscape) {
-    auto expr = parse("x\\(1\\) or(y\\(2\\))");
-    EXPECT_EQ(expr->to_string(), "( x\\(1\\) or y\\(2\\) )");
+    auto expr = parse(R"(x\(1\) or(y\(2\)))");
+    EXPECT_EQ(expr->to_string(), R"(( x\(1\) or y\(2\) ))");
 }
 
 TEST_F(ParsingTest, TagEscapeXorYEscapeorZEscape) {
-    auto expr = parse("\\\\x or y\\\\ or z\\\\");
-    EXPECT_EQ(expr->to_string(), "( ( \\\\x or y\\\\ ) or z\\\\ )");
+    auto expr = parse(R"(\\x or y\\ or z\\)");
+    EXPECT_EQ(expr->to_string(), R"(( ( \\x or y\\ ) or z\\ ))");
 }
 
 TEST_F(ParsingTest, TagXEscapeorYEscapeEscapeorZEscape) {
-    auto expr = parse("x\\\\ or(y\\\\\\)) or(z\\\\)");
-    EXPECT_EQ(expr->to_string(), "( ( x\\\\ or y\\\\\\) ) or z\\\\ )");
+    auto expr = parse(R"(x\\ or(y\\\)) or(z\\))");
+    EXPECT_EQ(expr->to_string(), R"(( ( x\\ or y\\\) ) or z\\ ))");
 }
 
 TEST_F(ParsingTest, TagXEscapeorY) {
-    auto expr = parse("x\\  or y");
-    EXPECT_EQ(expr->to_string(), "( x\\  or y )");
+    auto expr = parse(R"(x\  or y)");
+    EXPECT_EQ(expr->to_string(), R"(( x\  or y ))");
 }
 
 TEST_F(ParsingTest, TagNotNotA) {

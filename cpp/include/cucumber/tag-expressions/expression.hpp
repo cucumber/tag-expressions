@@ -3,7 +3,6 @@
 
 #include <memory>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 namespace cucumber::tag_expressions {
@@ -23,7 +22,7 @@ namespace cucumber::tag_expressions {
          * @return true if expression evaluates to true with values
          * @return false otherwise
          */
-        virtual bool evaluate(const std::unordered_set<std::string>& values) const = 0;
+        virtual bool evaluate(const std::vector<std::string>& values) const = 0;
 
         /**
          * @brief Call operator to make an expression object callable.
@@ -32,7 +31,7 @@ namespace cucumber::tag_expressions {
          * @return true if expression is true
          * @return false otherwise
          */
-        bool operator()(const std::unordered_set<std::string>& values) const;
+        bool operator()(const std::vector<std::string>& values) const;
         /**
          * @brief Convert expression to string representation.
          * 
@@ -53,7 +52,7 @@ namespace cucumber::tag_expressions {
          */
         explicit Literal(std::string name);
 
-        bool evaluate(const std::unordered_set<std::string>& values) const override;
+        bool evaluate(const std::vector<std::string>& values) const override;
 
         std::string to_string() const override;
 
@@ -83,7 +82,7 @@ namespace cucumber::tag_expressions {
          */
         explicit And(std::unique_ptr<Expression> left, std::unique_ptr<Expression> right);
 
-        bool evaluate(const std::unordered_set<std::string>& values) const override;
+        bool evaluate(const std::vector<std::string>& values) const override;
 
         std::string to_string() const override;
 
@@ -121,7 +120,7 @@ namespace cucumber::tag_expressions {
          */
         explicit Or(std::unique_ptr<Expression> left, std::unique_ptr<Expression> right);
 
-        bool evaluate(const std::unordered_set<std::string>& values) const override;
+        bool evaluate(const std::vector<std::string>& values) const override;
 
         std::string to_string() const override;
 
@@ -156,7 +155,7 @@ namespace cucumber::tag_expressions {
          */
         explicit Not(std::unique_ptr<Expression> term);
 
-        bool evaluate(const std::unordered_set<std::string>& values) const override;
+        bool evaluate(const std::vector<std::string>& values) const override;
 
         std::string to_string() const override;
 
@@ -176,7 +175,7 @@ namespace cucumber::tag_expressions {
      */
     class True : public Expression {
     public:
-        bool evaluate([[maybe_unused]] const std::unordered_set<std::string>& values) const override;
+        bool evaluate([[maybe_unused]] const std::vector<std::string>& values) const override;
 
         std::string to_string() const override;
     };

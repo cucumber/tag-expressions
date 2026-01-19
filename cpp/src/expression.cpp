@@ -12,11 +12,11 @@ namespace {
         std::ostringstream oss;
         for (char c : str) {
             if (c == '\\') {
-                oss << "\\\\";
+                oss << R"(\\)";
             } else if (c == '(') {
-                oss << "\\(";
+                oss << R"(\()";
             } else if (c == ')') {
-                oss << "\\)";
+                oss << R"(\))";
             } else if (std::isspace(static_cast<unsigned char>(c))) {
                 oss << '\\' << c;
             } else {
@@ -28,7 +28,7 @@ namespace {
 
 }  // namespace
 
-bool Expression::operator()(const std::unordered_set<std::string>& values) const {
+bool Expression::operator()(const std::vector<std::string>& values) const {
     return evaluate(values);
 }
 
@@ -36,8 +36,8 @@ Literal::Literal(std::string name) :
     name_{std::move(name)} {
 }
 
-bool Literal::evaluate(const std::unordered_set<std::string>& values) const {
-    return values.find(name_) != values.end();
+bool Literal::evaluate(const std::vector<std::string>& values) const {
+    return std::find(values.begin(), values.end(), name_) != values.end();
 }
 
 std::string Literal::to_string() const {
@@ -53,7 +53,7 @@ And::And(std::unique_ptr<Expression> left, std::unique_ptr<Expression> right) :
     right_{std::move(right)} {
 }
 
-bool And::evaluate(const std::unordered_set<std::string>& values) const {
+bool And::evaluate(const std::vector<std::string>& values) const {
     return left_->evaluate(values) && right_->evaluate(values);
 }
 
@@ -76,7 +76,7 @@ Or::Or(std::unique_ptr<Expression> left, std::unique_ptr<Expression> right) :
     right_{std::move(right)} {
 }
 
-bool Or::evaluate(const std::unordered_set<std::string>& values) const {
+bool Or::evaluate(const std::vector<std::string>& values) const {
     return left_->evaluate(values) || right_->evaluate(values);
 }
 
@@ -98,7 +98,7 @@ Not::Not(std::unique_ptr<Expression> term) :
     term_{std::move(term)} {
 }
 
-bool Not::evaluate(const std::unordered_set<std::string>& values) const {
+bool Not::evaluate(const std::vector<std::string>& values) const {
     return !term_->evaluate(values);
 }
 
@@ -114,7 +114,7 @@ const std::unique_ptr<Expression>& Not::term() const {
     return term_;
 }
 
-bool True::evaluate([[maybe_unused]] const std::unordered_set<std::string>& values) const {
+bool True::evaluate([[maybe_unused]] const std::vector<std::string>& values) const {
     return true;
 }
 

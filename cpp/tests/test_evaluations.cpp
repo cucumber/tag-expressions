@@ -6,8 +6,8 @@ using namespace cucumber::tag_expressions;
 
 class EvaluationsTest : public ::testing::Test {
 protected:
-    std::string empty_string = "";
-    std::unordered_set<std::string> empty_set{};
+    const std::string empty_string = "";
+    const std::vector<std::string> empty_set{};
 };
 
 TEST_F(EvaluationsTest, EmptyTag) {
@@ -64,27 +64,27 @@ TEST_F(EvaluationsTest, TagXOrY) {
 }
 
 TEST_F(EvaluationsTest, EscapeParentheses) {
-    auto expr = parse("x\\(1\\) or y\\(2\\)");
+    auto expr = parse(R"(x\(1\) or y\(2\))");
     EXPECT_FALSE(expr->evaluate(empty_set));
     EXPECT_TRUE(expr->evaluate({"x(1)"}));
     EXPECT_TRUE(expr->evaluate({"y(2)"}));
 }
     
 TEST_F(EvaluationsTest, EscapeSpecialCharacters1) {
-    auto expr = parse("x\\\\ or y\\\\\\) or z\\\\");
-    EXPECT_TRUE(expr->evaluate({"x\\"}));
-    EXPECT_TRUE(expr->evaluate({"y\\)"}));
-    EXPECT_TRUE(expr->evaluate({"z\\"}));
+    auto expr = parse(R"(x\\ or y\\\) or z\\)");
+    EXPECT_TRUE(expr->evaluate({R"(x\)"}));
+    EXPECT_TRUE(expr->evaluate({R"(y\))"}));
+    EXPECT_TRUE(expr->evaluate({R"(z\)"}));
     EXPECT_FALSE(expr->evaluate({"x"}));
     EXPECT_FALSE(expr->evaluate({"y)"}));
     EXPECT_FALSE(expr->evaluate({"z"}));
 }    
 
 TEST_F(EvaluationsTest, EscapeSpecialCharacters2) {
-    auto expr = parse("\\\\x or y\\\\ or z\\\\");
-    EXPECT_TRUE(expr->evaluate({"\\x"}));
-    EXPECT_TRUE(expr->evaluate({"y\\"}));
-    EXPECT_TRUE(expr->evaluate({"z\\"}));
+    auto expr = parse(R"(\\x or y\\ or z\\)");
+    EXPECT_TRUE(expr->evaluate({R"(\x)"}));
+    EXPECT_TRUE(expr->evaluate({R"(y\)"}));
+    EXPECT_TRUE(expr->evaluate({R"(z\)"}));
     EXPECT_FALSE(expr->evaluate({"x"}));
     EXPECT_FALSE(expr->evaluate({"y"}));
     EXPECT_FALSE(expr->evaluate({"z"}));

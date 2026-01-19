@@ -53,12 +53,12 @@ TEST_F(ErrorsTest, ThrowsOnUnbalancedOpenParentheses) {
 
 TEST_F(ErrorsTest, ThrowsOnEscapeRegularCharacter) {
     // error: 'Tag expression "x or \y or z" could not be parsed because of syntax error: Invalid escape before "y".'
-    EXPECT_THROW(parse("x or \\y or z"), TagExpressionError);
+    EXPECT_THROW(parse(R"(x or \y or z)"), TagExpressionError);
 }
 
 TEST_F(ErrorsTest, ThrowsOnEscapeNothing) {
     // error: 'Tag expression "x\ or y" could not be parsed because of syntax error: Expected operator.'
-    EXPECT_THROW(parse("x\\ or y"), TagExpressionError);
+    EXPECT_THROW(parse(R"(x\ or y)"), TagExpressionError);
 }
 
 TEST_F(ErrorsTest, ThrowsOnAndMissingRightOperand) {

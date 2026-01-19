@@ -26,7 +26,7 @@ Tag expressions are used to select features, scenarios, etc. in Gherkin files ba
 - **Boolean Operations**: `and`, `or`, `not`
 - **Parentheses Support**: Group expressions with `(` and `)`
 - **Escaped Characters**: Support for tags with spaces and special characters
-- **STL-based**: Uses standard C++ containers (`std::unordered_set<std::string>`, `std::string`, `std::unique_ptr`)
+- **STL-based**: Uses standard C++ containers (`std::vector<std::string>`, `std::string`, `std::unique_ptr`)
 - **Exception Safety**: Provides detailed error messages for invalid expressions
 - **Header-only Option**: Can be used as a library or included directly
 
@@ -67,7 +67,7 @@ cmake --build build --target install
 ```cpp
 #include <cucumber/tag-expressions/parser.hpp>
 #include <iostream>
-#include <unordered_set>
+#include <vector>
 
 using namespace cucumber::tag-expressions;
 
@@ -76,7 +76,7 @@ int main() {
     auto expression = parse("@fast and not @slow");
     
     // Evaluate against a set of tags
-    std::unordered_set<std::string> tags = {"@fast", "@unit"};
+    std::vector<std::string> tags = {"@fast", "@unit"};
     bool matches = expression->evaluate(tags);
     
     std::cout << "Matches: " << (matches ? "yes" : "no") << "\n";
@@ -188,8 +188,8 @@ Parses a tag expression string and returns an expression tree.
 
 #### `Expression` (Abstract Base)
 
-- `bool evaluate(const std::unordered_set<std::string>& values) const` - Evaluate expression against tags
-- `bool operator()(const std::unordered_set<std::string>& values) const` - Callable operator
+- `bool evaluate(const std::vector<std::string>& values) const` - Evaluate expression against tags
+- `bool operator()(const std::vector<std::string>& values) const` - Callable operator
 - `std::string to_string() const` - Convert to string representation
 
 #### `Literal`
@@ -267,7 +267,7 @@ Special characters can be escaped with backslash:
 
 Example:
 ```cpp
-auto expr = parse("tag\\ with\\ spaces");
+auto expr = parse(R"(tag\ with\ spaces)");
 expr->evaluate({"tag with spaces"});  // true
 ```
 

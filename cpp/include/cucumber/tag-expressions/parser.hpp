@@ -2,6 +2,7 @@
 #define CUCUMBER_TAG_EXPRESSIONS_PARSER_HPP_
 
 #include <memory>
+#include <stack>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -17,7 +18,7 @@ namespace cucumber::tag_expressions {
      */
     class TagExpressionError : public std::runtime_error {
     public:
-        explicit TagExpressionError(const std::string& message);
+        explicit TagExpressionError(std::string_view message);
     };
 
     /**
@@ -67,7 +68,7 @@ namespace cucumber::tag_expressions {
         bool is_binary() const;
         bool is_unary() const;
         bool has_lower_precedence_than(const TokenInfo& other) const;
-        bool matches(const std::string& text) const;
+        bool matches(std::string_view text) const;
     };
 
     /**
@@ -93,9 +94,18 @@ namespace cucumber::tag_expressions {
          * @return std::unique_ptr<Expression> Parsed expression tree
          * @throws TagExpressionError If the tag expression is invalid
          */
-        static std::unique_ptr<Expression> parse(const std::string& text);
+        static std::unique_ptr<Expression> parse(std::string_view text);
 
     private:
+        /**
+         * @brief Parses a tag expression from the given parts and text.
+         *
+         * @param parts A vector of string parts that make up the tag expression to be parsed.
+         * @param text A string view of the original text being parsed.
+         * @return A unique pointer to the parsed Expression object.
+         */
+        static std::unique_ptr<Expression> parse(const std::vector<std::string>& parts, std::string_view text);
+
         /**
          * @brief Get token information for a given token enum.
          * 
@@ -112,7 +122,7 @@ namespace cucumber::tag_expressions {
          * @return true if a token was found
          * @return false otherwise
          */
-        static bool select_token(const std::string& text, Token& token);
+        static bool select_token(std::string_view text, Token& token);
 
         /**
          * @brief Creates operand object from parsed text.
@@ -120,7 +130,7 @@ namespace cucumber::tag_expressions {
          * @param text Text to create operand from
          * @return std::unique_ptr<Expression> Operand object created from text
          */
-        static std::unique_ptr<Expression> make_operand(const std::string& text);
+        static std::unique_ptr<Expression> make_operand(std::string_view text);
 
         /**
          * @brief Creates a list of tokens from text.
@@ -129,7 +139,7 @@ namespace cucumber::tag_expressions {
          * @return std::vector<std::string> List of selected tokens
          * @throws TagExpressionError If the tag expression is invalid
          */
-        static std::vector<std::string> tokenize(const std::string& text);
+        static std::vector<std::string> tokenize(std::string_view text);
 
         /**
          * @brief Push a new boolean expression on the expression stack.
@@ -150,10 +160,65 @@ namespace cucumber::tag_expressions {
          * @param error_index Index of the error in the parts list
          * @return std::string Detailed error message with error-position marked
          */
-        static std::string make_error_description(const std::string& message,
-                                                const std::vector<std::string>& parts,
-                                                size_t error_index);
+        static std::string make_error_description(std::string_view message,
+                                                  const std::vector<std::string>& parts,
+                                                  size_t error_index);
 
+        /**
+         * @brief Ensures that a token has the expected type.
+         * 
+         * Validates that a token at a given position in the parts list matches the expected token type.
+         * If the actual token type does not match the expected type, an exception or error is raised.
+         * 
+         * @param parts A vector of string parts that make up the parsed expression.
+         * @param expected The expected TokenType for validation.
+         * @param actual The actual TokenType found at the specified index.
+         * @param last_part A string view representing the last parsed part of the expression.
+         * @param index The position in the parts vector where the token validation occurs.
+         * 
+         * @throws std::exception If the actual token type does not match the expected token type.
+         */
+        static void ensure_expected_token_type(const std::vector<std::string>& parts,
+                                               TokenType expected,
+                                               TokenType actual,
+                                               std::string_view last_part,
+                                               size_t index);
+
+        /**
+         * @brief Handles the preparation of a binary expression before pushing it onto the operations stack.
+         *
+         * This static method manages the precedence and associativity of binary operators in tag expression parsing.
+         * It processes any pending operations with higher or equal precedence before adding a new operator to the stack.
+         *
+         * @param operations A stack of tokens representing pending operations to be processed.
+         * @param expressions A vector of unique pointers to Expression objects that make up the expression tree.
+         * @param token_info Information about the current token being processed, including its type and value.
+         *
+         * @note This method is part of the Shunting Yard algorithm implementation for expression parsing.
+         * @note The method ensures correct operator precedence and handles the conversion of infix notation to an expression tree.
+         */
+        static void before_push_binary_expression(std::stack<Token>& operations,
+                                                  std::vector<std::unique_ptr<Expression>>& expressions,
+                                                  const TokenInfo& token_info);
+
+        /**
+         * @brief Processes operations and expressions when a closing parenthesis is encountered.
+         * 
+         * This static method handles the parsing logic that occurs before pushing a close parenthesis
+         * token onto the operations stack. It manages the precedence and associativity of operators
+         * by popping operations from the stack and converting them into expression nodes.
+         * 
+         * @param operations A stack of tokens representing pending operations to be processed.
+         *                   Operations are popped and converted to expressions based on precedence rules.
+         * @param expressions A vector of unique_ptr to Expression objects that accumulate the
+         *                    resulting expression tree nodes.
+         * 
+         * @note This method is typically called during parsing when a closing parenthesis is encountered,
+         *       ensuring that all operations within the parentheses are properly evaluated and converted
+         *       to their corresponding expression objects before closing the parenthetical scope.
+         */
+        static void before_push_close_parenthesis_expression(std::stack<Token>& operations,
+                                                             std::vector<std::unique_ptr<Expression>>& expressions);
         /**
          * @brief Convenience function to access private members for testing.
          */
@@ -167,7 +232,7 @@ namespace cucumber::tag_expressions {
      * @return std::unique_ptr<Expression> Parsed expression tree
      * @throws TagExpressionError If the tag expression is invalid
      */
-    std::unique_ptr<Expression> parse(const std::string& text);
+    std::unique_ptr<Expression> parse(std::string_view text);
 
 }  // namespace cucumber::tag_expressions
 
