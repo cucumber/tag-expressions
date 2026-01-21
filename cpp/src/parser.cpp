@@ -31,15 +31,15 @@ TokenInfo::TokenInfo(std::string kw, int prec, Associative a, TokenType tt) :
 }
 
 bool TokenInfo::is_operation() const {
-    return (token_type == TokenType::OPERATOR);
+    return token_type == TokenType::OPERATOR;
 }
 
 bool TokenInfo::is_binary() const {
-    return ((keyword == "or") || (keyword == "and"));
+    return matches("or") || matches("and");
 }
 
 bool TokenInfo::is_unary() const {
-    return (keyword == "not");
+    return matches("not");
 }
 
 bool TokenInfo::has_lower_precedence_than(const TokenInfo& other) const {
@@ -219,7 +219,7 @@ void TagExpressionParser::before_push_binary_expression(
 
 void TagExpressionParser::before_push_close_parenthesis_expression(
     std::stack<Token>& operations, std::vector<std::unique_ptr<Expression>>& expressions) {
-    while (operations.top() != Token::OPEN_PARENTHESIS) {
+    while (!operations.empty() && (operations.top() != Token::OPEN_PARENTHESIS)) {
         Token last_operation = operations.top();
         operations.pop();
         push_expression(last_operation, expressions);
@@ -268,15 +268,14 @@ std::unique_ptr<Expression> TagExpressionParser::parse(const std::vector<std::st
 
     auto parse_close_parenthesis_token = [&](size_t index) {
         ensure_expected_token_type(parts, expected_token_type, TokenType::OPERATOR, last_part, index);
+
+        before_push_close_parenthesis_expression(operations, expressions);
         if (operations.empty()) {
             // CASE: TOO FEW OPEN-PARENTHESIS
             std::string message = "Missing '(': Too few open-parens in: " + std::string{text};
             message = make_error_description(message, parts, index);
             throw TagExpressionError(message);
-        }
-
-        before_push_close_parenthesis_expression(operations, expressions);
-        if (operations.top() == Token::OPEN_PARENTHESIS) {
+        } else if (operations.top() == Token::OPEN_PARENTHESIS) {
             operations.pop();
             expected_token_type = TokenType::OPERATOR;
         }

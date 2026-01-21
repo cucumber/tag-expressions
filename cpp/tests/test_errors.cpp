@@ -41,14 +41,34 @@ TEST_F(ErrorsTest, ThrowsOnMissingOperatorBetweenTags) {
     EXPECT_THROW(parse("a b"), TagExpressionError);
 }
 
-TEST_F(ErrorsTest, ThrowsOnUnbalancedCloseParentheses) {
+TEST_F(ErrorsTest, ThrowsOnUnbalancedCloseParentheses1) {
+    // error: 'Tag expression "a and b )" could not be parsed because of syntax error: Unmatched ).'
+    EXPECT_THROW(parse("a and b )"), TagExpressionError);
+}
+
+TEST_F(ErrorsTest, ThrowsOnUnbalancedCloseParentheses2) {
     // error: 'Tag expression "( a and b ) )" could not be parsed because of syntax error: Unmatched ).'
     EXPECT_THROW(parse("( a and b ) )"), TagExpressionError);
 }
 
-TEST_F(ErrorsTest, ThrowsOnUnbalancedOpenParentheses) {
+TEST_F(ErrorsTest, ThrowsOnUnbalancedOpenParentheses1) {
+    // error: 'Tag expression "( a and b" could not be parsed because of syntax error: Unmatched (.'
+    EXPECT_THROW(parse("( a and b"), TagExpressionError);
+}
+
+TEST_F(ErrorsTest, ThrowsOnUnbalancedOpenParentheses2) {
     // error: 'Tag expression "( ( a and b )" could not be parsed because of syntax error: Unmatched (.'
     EXPECT_THROW(parse("( ( a and b )"), TagExpressionError);
+}
+
+TEST_F(ErrorsTest, ThrowsOnWrongExpectedTokenType1) {
+    // error: 'Tag expression "a and ( b" could not be parsed because of syntax error: Unmatched (.'
+    EXPECT_THROW(parse("a and ( b"), TagExpressionError);
+}
+
+TEST_F(ErrorsTest, ThrowsOnWrongExpectedTokenType2) {
+    // error: 'Tag expression "a and ) b" could not be parsed because of syntax error: Unmatched (.'
+    EXPECT_THROW(parse("a and ) b"), TagExpressionError);
 }
 
 TEST_F(ErrorsTest, ThrowsOnEscapeRegularCharacter) {

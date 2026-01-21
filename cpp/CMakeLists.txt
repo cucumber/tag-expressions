@@ -6,25 +6,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Library target
-add_library(cucumber-tag-expressions)
-add_library(cucumber::tag-expressions ALIAS cucumber-tag-expressions)
-target_sources(cucumber-tag-expressions
-    PRIVATE
-        src/expression.cpp
-        src/parser.cpp
-)
-
-target_include_directories(cucumber-tag-expressions
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-)
-
-# Example executable
-add_executable(example examples/basic_usage.cpp)
-target_link_libraries(example PRIVATE cucumber::tag-expressions)
-
 # Main project check
 set(CUCUMBER_TAG_EXPRESSIONS_MAIN_PROJECT OFF)
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
@@ -53,13 +34,6 @@ option(
 )
 
 if(CUCUMBER_TAG_EXPRESSIONS_BUILD_TESTS)
-    if(CUCUMBER_TAG_EXPRESSIONS_ENABLE_COVERAGE)
-        if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-            target_compile_options(cucumber-tag-expressions PRIVATE --coverage -O0 -g)
-            target_link_libraries(cucumber-tag-expressions PRIVATE --coverage)
-        endif()
-    endif()
-
     enable_testing()
 
     # Find Google Test (if available)
@@ -68,17 +42,65 @@ if(CUCUMBER_TAG_EXPRESSIONS_BUILD_TESTS)
         add_executable(tag_expressions_test
             tests/test_errors.cpp
             tests/test_evaluations.cpp
+            tests/test_expression.cpp
+            tests/test_parser.cpp
             tests/test_parsing.cpp
             tests/test_precedence.cpp
         )
+        
+        # Apply coverage flags to test executable
+        if(CUCUMBER_TAG_EXPRESSIONS_ENABLE_COVERAGE)
+            if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+                target_compile_options(tag_expressions_test PRIVATE -fprofile-arcs -ftest-coverage --coverage -O0 -g)
+                target_link_options(tag_expressions_test PRIVATE -fprofile-arcs -ftest-coverage --coverage)
+            endif()
+        endif()
+        
         target_link_libraries(tag_expressions_test
             PRIVATE
                 cucumber::tag-expressions
                 GTest::gtest
                 GTest::gtest_main
+                gcov
         )
         
         add_test(NAME tag_expressions_test COMMAND tag_expressions_test)
+    endif()
+endif()
+
+# Library target
+add_library(cucumber-tag-expressions)
+add_library(cucumber::tag-expressions ALIAS cucumber-tag-expressions)
+
+# Apply coverage flags to library
+if(CUCUMBER_TAG_EXPRESSIONS_ENABLE_COVERAGE)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(cucumber-tag-expressions PRIVATE -fprofile-arcs -ftest-coverage --coverage -O0 -g)
+        target_link_options(cucumber-tag-expressions PRIVATE -fprofile-arcs -ftest-coverage --coverage)
+    endif()
+endif()
+
+target_sources(cucumber-tag-expressions
+    PRIVATE
+        src/expression.cpp
+        src/parser.cpp
+)
+
+target_include_directories(cucumber-tag-expressions
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
+)
+
+# Example executable
+add_executable(example examples/basic_usage.cpp)
+target_link_libraries(example PRIVATE cucumber::tag-expressions)
+
+# Apply coverage flags to example if enabled
+if(CUCUMBER_TAG_EXPRESSIONS_ENABLE_COVERAGE)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_compile_options(example PRIVATE -fprofile-arcs -ftest-coverage --coverage -O0 -g)
+        target_link_options(example PRIVATE -fprofile-arcs -ftest-coverage --coverage)
     endif()
 endif()
 
