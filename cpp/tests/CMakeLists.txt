@@ -28,7 +28,6 @@ if(CUCUMBER_TAG_EXPRESSIONS_BUILD_TESTS)
                 cucumber::tag-expressions
                 GTest::gtest
                 GTest::gtest_main
-                gcov
         )
         
         add_test(NAME tag_expressions_test COMMAND tag_expressions_test)
