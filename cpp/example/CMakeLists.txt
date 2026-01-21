@@ -1,5 +1,6 @@
+cmake_minimum_required(VERSION 3.15)
 project(Cucumber-Tag-Expressions-Example)
 
 add_executable(example src/basic_usage.cpp)
-target_link_libraries(example PRIVATE cucumber::tag-expressions gcov)
+target_link_libraries(example PRIVATE cucumber-tag-expressions gcov)
 
