@@ -42,16 +42,20 @@ Tag expressions are used to select features, scenarios, etc. in Gherkin files ba
 
 ```bash
 # Configure
-cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+or
+
+cmake -S . -B build -DCUCUMBER_TAG_EXPRESSIONS_BUILD_TESTS=ON -DCUCUMBER_TAG_EXPRESSIONS_ENABLE_COVERAGE=ON
 
 # Build
 cmake --build build
 
 # Run example
-./build/example
+./build/example/example
 
 # Run tests (if Google Test is available)
-./build/tag_expressions_test
+./build/tests/tag_expressions_test
 ```
 
 ### Installation
