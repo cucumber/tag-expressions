@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [9.0.0] - 2026-01-25
 ### Changed
 - [Java] Set release version to 17 ([#220](https://github.com/cucumber/tag-expressions/pull/220))
 
@@ -229,7 +231,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v8.1.0...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v9.0.0...HEAD
+[9.0.0]: https://github.com/cucumber/tag-expressions/compare/v8.1.0...v9.0.0
 [8.1.0]: https://github.com/cucumber/tag-expressions/compare/v8.0.0...v8.1.0
 [8.0.0]: https://github.com/cucumber/tag-expressions/compare/v7.0.0...v8.0.0
 [7.0.0]: https://github.com/cucumber/tag-expressions/compare/v6.2.0...v7.0.0

@@ -1,6 +1,6 @@
 {
   "name": "@cucumber/tag-expressions",
-  "version": "8.1.0",
+  "version": "9.0.0",
   "description": "Cucumber Tag Expression parser",
   "type": "module",
   "main": "dist/cjs/src/index.js",
