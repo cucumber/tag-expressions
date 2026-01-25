@@ -11,29 +11,20 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.nio.file.Files.newInputStream;
+import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EvaluationsTest {
-    static class Expectation {
-        final String expression;
-        final List<String> variables;
-        final boolean result;
 
-        public Expectation(String expression, List<String> variables, boolean result) {
-            this.expression = expression;
-            this.variables = variables;
-            this.result = result;
-        }
-    }
-
-    private static List<Expectation> acceptance_tests_pass() throws IOException {
-        List<Map<String, ?>> evaluations = new Yaml().loadAs(newInputStream(Paths.get("..", "testdata", "evaluations.yml")), List.class);
+    @SuppressWarnings("unchecked")
+    static List<Expectation> acceptance_tests_pass() throws IOException {
+        List<Map<String, Object>> evaluations = new Yaml().loadAs(newInputStream(Paths.get("..", "testdata", "evaluations.yml")), List.class);
         return evaluations.stream().flatMap(map -> {
-            String expression = (String) map.get("expression");
-            List<Map<String, ?>> tests = (List<Map<String, ?>>) map.get("tests");
+            String expression = (String) requireNonNull(map.get("expression"));
+            List<Map<String, Object>> tests = (List<Map<String, Object>>) requireNonNull(map.get("tests"));
             return tests.stream().map(test -> {
-                List<String> variables = (List<String>) test.get("variables");
-                boolean result = (boolean) test.get("result");
+                List<String> variables = (List<String>) requireNonNull(test.get("variables"));
+                boolean result = (boolean) requireNonNull(test.get("result"));
                 return new Expectation(expression, variables, result);
             });
         }).collect(Collectors.toList());
@@ -45,5 +36,17 @@ class EvaluationsTest {
         Expression expr = TagExpressionParser.parse(expectation.expression);
         expr.evaluate(expectation.variables);
         assertEquals(expectation.result, expr.evaluate(expectation.variables));
+    }
+
+    static class Expectation {
+        final String expression;
+        final List<String> variables;
+        final boolean result;
+
+        Expectation(String expression, List<String> variables, boolean result) {
+            this.expression = expression;
+            this.variables = variables;
+            this.result = result;
+        }
     }
 }

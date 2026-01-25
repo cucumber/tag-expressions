@@ -3,25 +3,33 @@ package io.cucumber.tagexpressions;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.util.Objects.requireNonNull;
+
 public final class TagExpressionParser {
-    private static final Map<String, Assoc> ASSOC = new HashMap<String, Assoc>() {{
-        put("or", Assoc.LEFT);
-        put("and", Assoc.LEFT);
-        put("not", Assoc.RIGHT);
-    }};
-    private static final Map<String, Integer> PREC = new HashMap<String, Integer>() {{
-        put("(", -2);
-        put(")", -1);
-        put("or", 0);
-        put("and", 1);
-        put("not", 2);
-    }};
+    private static boolean assoc(String token, Assoc assoc) {
+        return switch (token) {
+            case "or", "and" -> assoc == Assoc.LEFT;
+            case "not" -> assoc == Assoc.RIGHT;
+            default -> throw new IllegalArgumentException(token);
+        };
+    }
+
+    private static int prec(String token) {
+        return switch (token) {
+            case "(" -> -2;
+            case ")" -> -1;
+            case "or" -> 0;
+            case "and" -> 1;
+            case "not" -> 2;
+            default -> throw new IllegalArgumentException(token);
+        };
+    }
+
     private static final char ESCAPING_CHAR = '\\';
     private final String infix;
 
@@ -30,7 +38,7 @@ public final class TagExpressionParser {
     }
 
     private TagExpressionParser(String infix) {
-        this.infix = infix;
+        this.infix = requireNonNull(infix);
     }
 
     private Expression parse() {
@@ -47,12 +55,9 @@ public final class TagExpressionParser {
                 expectedTokenType = TokenType.OPERAND;
             } else if (isBinary(token)) {
                 check(expectedTokenType, TokenType.OPERATOR);
-                while (operators.size() > 0 && isOperator(operators.peek()) && (
-                        (ASSOC.get(token) == Assoc.LEFT && PREC.get(token) <= PREC.get(operators.peek()))
-                                ||
-                                (ASSOC.get(token) == Assoc.RIGHT && PREC.get(token) < PREC.get(operators.peek())))
+                while (!operators.isEmpty() && isTokenForOperator(token, operators.peek())
                 ) {
-                    pushExpr(operators.pop(), expressions);
+                    pushExpr(popOperand(operators), expressions);
                 }
                 operators.push(token);
                 expectedTokenType = TokenType.OPERAND;
@@ -62,14 +67,14 @@ public final class TagExpressionParser {
                 expectedTokenType = TokenType.OPERAND;
             } else if (")".equals(token)) {
                 check(expectedTokenType, TokenType.OPERATOR);
-                while (operators.size() > 0 && !"(".equals(operators.peek())) {
-                    pushExpr(operators.pop(), expressions);
+                while (!operators.isEmpty() && !"(".equals(operators.peek())) {
+                    pushExpr(popOperand(operators), expressions);
                 }
-                if (operators.size() == 0) {
-                    throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Unmatched ).", this.infix);
+                if (operators.isEmpty()) {
+                    throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Unmatched ).".formatted(this.infix));
                 }
                 if ("(".equals(operators.peek())) {
-                    operators.pop();
+                    popOperand(operators);
                 }
                 expectedTokenType = TokenType.OPERATOR;
             } else {
@@ -79,14 +84,23 @@ public final class TagExpressionParser {
             }
         }
 
-        while (operators.size() > 0) {
+        while (!operators.isEmpty()) {
             if ("(".equals(operators.peek())) {
-                throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Unmatched (.", infix);
+                throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Unmatched (.".formatted(infix));
             }
-            pushExpr(operators.pop(), expressions);
+            pushExpr(popOperand(operators), expressions);
         }
 
         return expressions.pop();
+    }
+
+    @SuppressWarnings("UnnecessaryParentheses")
+    private boolean isTokenForOperator(String token, String operator) {
+        if (!isOperator(operator)) {
+            return false;
+        }
+        return (assoc(token, Assoc.LEFT) && prec(token) <= prec(operator)) ||
+                (assoc(token, Assoc.RIGHT) && prec(token) < prec(operator));
     }
 
     private static List<String> tokenize(String expr) {
@@ -100,12 +114,12 @@ public final class TagExpressionParser {
                     token.append(c);
                     isEscaped = false;
                 } else {
-                    throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Illegal escape before \"%s\".", expr, c);
+                    throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Illegal escape before \"%s\".".formatted(expr, c));
                 }
             } else if (c == ESCAPING_CHAR) {
                 isEscaped = true;
             } else if (c == '(' || c == ')' || Character.isWhitespace(c)) {
-                if (token.length() > 0) {
+                if (!token.isEmpty()) {
                     tokens.add(token.toString());
                     token = new StringBuilder();
                 }
@@ -116,7 +130,7 @@ public final class TagExpressionParser {
                 token.append(c);
             }
         }
-        if (token.length() > 0) {
+        if (!token.isEmpty()) {
             tokens.add(token.toString());
         }
         return tokens;
@@ -124,38 +138,36 @@ public final class TagExpressionParser {
 
     private void check(TokenType expectedTokenType, TokenType tokenType) {
         if (expectedTokenType != tokenType) {
-            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Expected %s.", infix, expectedTokenType.toString().toLowerCase());
-        }
-    }
-
-    private void pushExpr(String token, Deque<Expression> expressions) {
-        switch (token) {
-            case "and":
-                Expression rightAndExpr = popOperand(expressions);
-                Expression leftAndExpr = popOperand(expressions);
-                expressions.push(new And(leftAndExpr, rightAndExpr));
-                break;
-            case "or":
-                Expression rightOrExpr = popOperand(expressions);
-                Expression leftOrExpr = popOperand(expressions);
-                expressions.push(new Or(leftOrExpr, rightOrExpr));
-                break;
-            case "not":
-                Expression expression = popOperand(expressions);
-                expressions.push(new Not(expression));
-                break;
-            default:
-                expressions.push(new Literal(token));
-                break;
+            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Expected %s.".formatted(infix, expectedTokenType.toString().toLowerCase(Locale.ROOT)));
         }
     }
 
     private <T> T popOperand(Deque<T> stack) {
         if (stack.isEmpty())
-            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Expected operand.", infix);
+            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Expected operand.".formatted(infix));
         return stack.pop();
     }
-    
+
+    private void pushExpr(String token, Deque<Expression> expressions) {
+        Expression expression = switch (token) {
+            case "and" -> {
+                Expression rightAndExpr = popOperand(expressions);
+                Expression leftAndExpr = popOperand(expressions);
+                yield new And(leftAndExpr, rightAndExpr);
+            }
+            case "or" -> {
+                Expression rightOrExpr = popOperand(expressions);
+                Expression leftOrExpr = popOperand(expressions);
+                yield new Or(leftOrExpr, rightOrExpr);
+            }
+            case "not" -> new Not(popOperand(expressions));
+            default -> new Literal(token);
+        };
+        expressions.push(expression);
+    }
+
+
+
     private boolean isUnary(String token) {
         return "not".equals(token);
     }
@@ -165,7 +177,7 @@ public final class TagExpressionParser {
     }
 
     private boolean isOperator(String token) {
-        return ASSOC.get(token) != null;
+        return isBinary(token) || isUnary(token);
     }
 
     private enum TokenType {
@@ -216,7 +228,7 @@ public final class TagExpressionParser {
 
         @Override
         public String toString() {
-            return "( " + left.toString() + " or " + right.toString() + " )";
+            return "( " + left + " or " + right + " )";
         }
     }
 
@@ -236,7 +248,7 @@ public final class TagExpressionParser {
 
         @Override
         public String toString() {
-            return "( " + left.toString() + " and " + right.toString() + " )";
+            return "( " + left + " and " + right + " )";
         }
     }
 
@@ -254,15 +266,15 @@ public final class TagExpressionParser {
 
         @Override
         public String toString() {
-            if (And.class.isInstance(expr) || Or.class.isInstance(expr)) {
+            if (expr instanceof And || expr instanceof Or) {
                 // -- HINT: Binary Operators already have already ' ( ... ) '.
-                return "not " + expr.toString();
+                return "not " + expr;
             }
-            return "not ( " + expr.toString() + " )";
+            return "not ( " + expr + " )";
         }
     }
 
-    private static class True implements Expression {
+    private static final class True implements Expression {
         @Override
         public boolean evaluate(List<String> variables) {
             return true;
