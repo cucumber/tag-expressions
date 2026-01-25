@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [8.1.0] - 2025-11-26
+### Added
+- [.NET] Add a .NET implementation
+
+### Fixed
+- Render the empty tag expression as an empty string ([#222](https://github.com/cucumber/tag-expressions/pull/222))
+- Improve error message for missing operands ([#221](https://github.com/cucumber/tag-expressions/pull/221))
+
 ## [8.0.0] - 2025-10-14
 ### Fixed
 - [Perl] Fix building release artifacts ([#214](https://github.com/cucumber/tag-expressions/pull/214))
@@ -219,7 +227,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v8.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v8.1.0...HEAD
+[8.1.0]: https://github.com/cucumber/tag-expressions/compare/v8.0.0...v8.1.0
 [8.0.0]: https://github.com/cucumber/tag-expressions/compare/v7.0.0...v8.0.0
 [7.0.0]: https://github.com/cucumber/tag-expressions/compare/v6.2.0...v7.0.0
 [6.2.0]: https://github.com/cucumber/tag-expressions/compare/v6.1.2...v6.2.0
@@ -246,4 +255,3 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 [1.1.0]: https://github.com/cucumber/tag-expressions/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/cucumber/tag-expressions/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/cucumber/tag-expressions/releases/tag/v1.0.0
-umber/tag-expressions/releases/tag/v1.0.0

@@ -57,7 +57,7 @@ public final class TagExpressionParser {
                 check(expectedTokenType, TokenType.OPERATOR);
                 while (!operators.isEmpty() && isTokenForOperator(token, operators.peek())
                 ) {
-                    pushExpr(pop(operators), expressions);
+                    pushExpr(popOperand(operators), expressions);
                 }
                 operators.push(token);
                 expectedTokenType = TokenType.OPERAND;
@@ -68,13 +68,13 @@ public final class TagExpressionParser {
             } else if (")".equals(token)) {
                 check(expectedTokenType, TokenType.OPERATOR);
                 while (!operators.isEmpty() && !"(".equals(operators.peek())) {
-                    pushExpr(pop(operators), expressions);
+                    pushExpr(popOperand(operators), expressions);
                 }
                 if (operators.isEmpty()) {
                     throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Unmatched ).".formatted(this.infix));
                 }
                 if ("(".equals(operators.peek())) {
-                    pop(operators);
+                    popOperand(operators);
                 }
                 expectedTokenType = TokenType.OPERATOR;
             } else {
@@ -88,7 +88,7 @@ public final class TagExpressionParser {
             if ("(".equals(operators.peek())) {
                 throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Unmatched (.".formatted(infix));
             }
-            pushExpr(pop(operators), expressions);
+            pushExpr(popOperand(operators), expressions);
         }
 
         return expressions.pop();
@@ -142,29 +142,31 @@ public final class TagExpressionParser {
         }
     }
 
-    private <T> T pop(Deque<T> stack) {
+    private <T> T popOperand(Deque<T> stack) {
         if (stack.isEmpty())
-            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of an empty stack".formatted(infix));
+            throw new TagExpressionException("Tag expression \"%s\" could not be parsed because of syntax error: Expected operand.".formatted(infix));
         return stack.pop();
     }
 
-    private void pushExpr(String token, Deque<Expression> stack) {
+    private void pushExpr(String token, Deque<Expression> expressions) {
         Expression expression = switch (token) {
             case "and" -> {
-                Expression rightAndExpr = pop(stack);
-                Expression leftAndExpr = pop(stack);
+                Expression rightAndExpr = popOperand(expressions);
+                Expression leftAndExpr = popOperand(expressions);
                 yield new And(leftAndExpr, rightAndExpr);
             }
             case "or" -> {
-                Expression rightOrExpr = pop(stack);
-                Expression leftOrExpr = pop(stack);
+                Expression rightOrExpr = popOperand(expressions);
+                Expression leftOrExpr = popOperand(expressions);
                 yield new Or(leftOrExpr, rightOrExpr);
             }
-            case "not" -> new Not(pop(stack));
+            case "not" -> new Not(popOperand(expressions));
             default -> new Literal(token);
         };
-        stack.push(expression);
+        expressions.push(expression);
     }
+
+
 
     private boolean isUnary(String token) {
         return "not".equals(token);
@@ -280,7 +282,7 @@ public final class TagExpressionParser {
 
         @Override
         public String toString() {
-            return "true";
+            return "";
         }
     }
 }

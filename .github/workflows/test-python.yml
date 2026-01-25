@@ -22,20 +22,18 @@ on:
 jobs:
   test-python-linting:
     runs-on: "ubuntu-latest"
-    strategy:
-      fail-fast: false
     defaults:
       run:
         working-directory: python
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
 
     - name: Install uv and set the python version
-      uses: astral-sh/setup-uv@v7
+      uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7
       with:
         enable-cache: true
         python-version: "3.14"
-        version: "0.9.7"
+        version: "0.9.26"
 
     - name: Linting
       run: uvx ruff check
@@ -60,14 +58,14 @@ jobs:
       run:
         working-directory: python
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
 
       - name: Install uv and set the python version
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@61cb8a9741eeb8a550a1b8544337180c0fc8476b # v7
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
-          version: "0.9.7"
+          version: "0.9.26"
 
       - name: Run tests
         run: uv run pytest

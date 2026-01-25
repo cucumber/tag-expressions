@@ -1,3 +1,11 @@
+- expression: ''
+  tests:
+    - variables: []
+      result: true
+    - variables: ['x']
+      result: true
+    - variables: ['y']
+      result: true
 - expression: 'not x'
   tests:
     - variables: ['x']

@@ -23,13 +23,14 @@ jobs:
   test-perl:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: true
       matrix:
         perl: [ "5.14", "5.20", "5.26", "5.32" ]
     steps:
     - name: Check out repository
-      uses: actions/checkout@v5
+      uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
     - name: Setup Perl environment
-      uses: shogo82148/actions-setup-perl@v1
+      uses: shogo82148/actions-setup-perl@fa3bdcb0144a50651e317f30949bb4491e74a6e4 # v1
       with:
         perl-version: ${{ matrix.perl }}
         working-directory: perl

@@ -222,7 +222,7 @@ class True_(Expression):  # noqa: N801
         return True
 
     def __str__(self):
-        return "true"
+        return ""
 
     def __repr__(self):
         return "True_()"

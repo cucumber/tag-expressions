@@ -79,7 +79,7 @@ module Cucumber
       end
 
       def to_s
-        'true'
+        ''
       end
     end
   end
