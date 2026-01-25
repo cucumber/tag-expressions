@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- [Java] Set release version to 17 ([#220](https://github.com/cucumber/tag-expressions/pull/220))
 
 ## [8.1.0] - 2025-11-26
 ### Added
