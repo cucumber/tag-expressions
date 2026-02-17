@@ -19,7 +19,7 @@ const ASSOC: { [key: string]: string } = {
  *
  * This expression can be evaluated by passing in an array of literals that resolve to true
  */
-export default function parse(infix: string): Node {
+export function parse(infix: string): Node {
   const tokens = tokenize(infix)
   if (tokens.length === 0) {
     return new True()
@@ -164,7 +164,7 @@ function peek(stack: string[]) {
   return stack[stack.length - 1]
 }
 
-interface Node {
+export interface Node {
   evaluate(variables: string[]): boolean
 }
 
@@ -241,3 +241,8 @@ class True implements Node {
     return ''
   }
 }
+
+/**
+ * @deprecated Use the named export `parse` instead: `import { parse } from '@cucumber/tag-expressions'`
+ */
+export default parse
