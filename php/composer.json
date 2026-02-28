@@ -23,7 +23,7 @@
         "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-phpunit": "^2.0",
         "phpunit/phpunit": "^10.5.46 || ^11.5",
-        "symfony/yaml": "^6.4 || ^7.2"
+        "symfony/yaml": "^6.4 || ^7.2 || ^8.0"
     },
     "homepage": "https://github.com/cucumber/tag-expressions",
     "support": {
