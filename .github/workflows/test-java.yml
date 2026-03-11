@@ -17,7 +17,6 @@ on:
       - java/**
       - testdata/**
       - .github/**
-  workflow_call:
 
 jobs:
   test-java:

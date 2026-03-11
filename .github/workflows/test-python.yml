@@ -17,7 +17,6 @@ on:
       - python/**
       - testdata/**
       - .github/**
-  workflow_call:
 
 jobs:
   test-python-linting:

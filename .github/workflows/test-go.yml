@@ -17,7 +17,6 @@ on:
       - go/**
       - testdata/**
       - .github/**
-  workflow_call:
 
 jobs:
   test-go:
