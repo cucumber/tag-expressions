@@ -1,5 +1,7 @@
 name: test-javascript-stryker
 
+permissions: {}
+
 on:
   push:
     branches:
