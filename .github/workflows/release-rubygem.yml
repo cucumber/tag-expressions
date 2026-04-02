@@ -1,5 +1,7 @@
 name: Release Ruby
 
+permissions: {}
+
 on:
   push:
     branches: [release/*]
@@ -11,10 +13,12 @@ jobs:
     environment: Release
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.4.8'
-          bundler-cache: true
+          persist-credentials: false
+
+      - uses: ruby/setup-ruby@3ff19f5e2baf30647122352b96108b1fbe250c64 # v1.299.0
+        with:
+          ruby-version: '3.4.9'
       - uses: cucumber/action-publish-rubygem@d8918cbdee789cfc78f346a96a59596b87795be1 # v1.0.0
         with:
           rubygems_api_key: ${{ secrets.RUBYGEMS_API_KEY }}
