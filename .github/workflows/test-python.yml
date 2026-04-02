@@ -36,7 +36,7 @@ jobs:
       with:
         enable-cache: true
         python-version: "3.14"
-        version: "0.11.2"
+        version: "0.11.3"
 
     - name: Linting
       run: uvx ruff check
@@ -70,7 +70,7 @@ jobs:
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
-          version: "0.11.2"
+          version: "0.11.3"
 
       - name: Run tests
         run: uv run pytest
