@@ -25,7 +25,7 @@ public class EvaluationsTest
     }
 
     [TestMethod]
-    [DynamicData(nameof(Expectations), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(Expectations))]
     public void EvaluatedExpression_MatchesExpectedResult(Expectation expectation)
     {
         var parser = new TagExpressions.TagExpressionParser();

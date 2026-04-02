@@ -26,7 +26,7 @@ public sealed class ParsingTest
     }
 
     [TestMethod]
-    [DynamicData(nameof(Expectations), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(Expectations))]
     public void ParsedExpression_ToString_MatchesOriginalInput(Expectation expectation)
     {
         var expression = expectation["expression"];

@@ -27,13 +27,13 @@ public class ErrorsTest
     }
 
     [TestMethod]
-    [DynamicData(nameof(Expectations), DynamicDataSourceType.Method)]
+    [DynamicData(nameof(Expectations))]
     public void ParsedExpression_ShouldThrow(Expectation expectation)
     {
         var expression = expectation["expression"];
         var error = expectation["error"];
         var parser = new TagExpressionParser();
-        var ex = Assert.ThrowsException<TagExpressionException>(() => parser.Parse(expression));
+        var ex = Assert.Throws<TagExpressionException>(() => parser.Parse(expression));
         Assert.AreEqual(error, ex.Message);
     }
 }
