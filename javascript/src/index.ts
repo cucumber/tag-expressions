@@ -28,7 +28,7 @@ export function parse(infix: string): Node {
   const operators: string[] = []
   let expectedTokenType = OPERAND
 
-  tokens.forEach(function (token) {
+  tokens.forEach((token) => {
     if (isUnary(token)) {
       check(expectedTokenType, OPERAND)
       operators.push(token)
@@ -195,7 +195,7 @@ class Or implements Node {
   }
 
   public toString() {
-    return '( ' + this.leftExpr.toString() + ' or ' + this.rightExpr.toString() + ' )'
+    return `( ${this.leftExpr.toString()} or ${this.rightExpr.toString()} )`
   }
 }
 
@@ -210,7 +210,7 @@ class And implements Node {
   }
 
   public toString() {
-    return '( ' + this.leftExpr.toString() + ' and ' + this.rightExpr.toString() + ' )'
+    return `( ${this.leftExpr.toString()} and ${this.rightExpr.toString()} )`
   }
 }
 
@@ -224,16 +224,15 @@ class Not implements Node {
   public toString() {
     if (this.expr instanceof And || this.expr instanceof Or) {
       // -- HINT: Binary Operators already have already '( ... )'.
-      return 'not ' + this.expr.toString()
+      return `not ${this.expr.toString()}`
     }
     // -- OTHERWISE:
-    return 'not ( ' + this.expr.toString() + ' )'
+    return `not ( ${this.expr.toString()} )`
   }
 }
 
 class True implements Node {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public evaluate(variables: string[]) {
+  public evaluate(_variables: string[]) {
     return true
   }
 
