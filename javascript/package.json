@@ -2,27 +2,15 @@
   "name": "@cucumber/tag-expressions",
   "version": "9.1.0",
   "description": "Cucumber Tag Expression parser",
-  "type": "module",
-  "main": "dist/cjs/src/index.js",
-  "types": "dist/cjs/src/index.d.ts",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "dist/cjs",
-    "dist/esm"
+    "dist"
   ],
-  "module": "dist/esm/src/index.js",
-  "jsnext:main": "dist/esm/src/index.js",
-  "exports": {
-    ".": {
-      "import": "./dist/esm/src/index.js",
-      "require": "./dist/cjs/src/index.js"
-    }
-  },
   "scripts": {
-    "build:cjs": "tsc --build tsconfig.build-cjs.json && cp package.cjs.json dist/cjs/package.json",
-    "build:esm": "tsc --build tsconfig.build-esm.json",
-    "build": "npm run build:cjs && npm run build:esm",
-    "test": "mocha && npm run test:cjs",
-    "test:cjs": "npm run build:cjs && mocha --no-config dist/cjs/test",
+    "build": "tsc --project tsconfig.build.json",
+    "test": "mocha",
     "stryker": "TAG_EXPRESSIONS_TEST_DATA_DIR=$(pwd)/../testdata stryker run",
     "prepublishOnly": "npm run build",
     "fix": "biome check --fix --error-on-warnings",
@@ -47,9 +35,10 @@
     "@stryker-mutator/core": "9.6.1",
     "@stryker-mutator/mocha-runner": "9.6.1",
     "@stryker-mutator/typescript-checker": "9.6.1",
+    "@tsconfig/recommended": "^1.0.13",
     "@types/js-yaml": "^4.0.3",
     "@types/mocha": "10.0.10",
-    "@types/node": "22.19.19",
+    "@types/node": "^22",
     "js-yaml": "^4.1.0",
     "mocha": "11.7.6",
     "pretty-quick": "4.2.2",
