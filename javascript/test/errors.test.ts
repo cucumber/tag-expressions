@@ -2,8 +2,8 @@ import assert from 'node:assert'
 import fs from 'node:fs'
 import yaml from 'js-yaml'
 
-import parse from '../src/index'
-import { testDataDir } from './testDataDir'
+import parse from '../src/index.js'
+import { testDataDir } from './testDataDir.js'
 
 type ErrorTest = {
   expression: string
