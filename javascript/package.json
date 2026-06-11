@@ -2,7 +2,7 @@
   "name": "@cucumber/tag-expressions",
   "version": "9.1.0",
   "description": "Cucumber Tag Expression parser",
-  "type": "commonjs",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -10,8 +10,9 @@
   ],
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
+    "postbuild": "node -e \"require('.')\"",
     "test": "mocha",
-    "stryker": "TAG_EXPRESSIONS_TEST_DATA_DIR=$(pwd)/../testdata stryker run",
+    "stryker": "NODE_OPTIONS=\"--loader ts-node/esm\" TAG_EXPRESSIONS_TEST_DATA_DIR=$(pwd)/../testdata stryker run",
     "prepublishOnly": "npm run build",
     "fix": "biome check --fix --error-on-warnings",
     "lint": "biome check --error-on-warnings"

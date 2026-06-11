@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Changed
 - [NET] - Upgraded Test project dependencies and adjusted test code due to breaking changes in MSTest v4.
+- BREAKING CHANGE: [JavaScript] Switch to ESM ([#280](https://github.com/cucumber/tag-expressions/pull/280))
 
 ## [9.1.0] - 2026-02-17
 ### Changed
