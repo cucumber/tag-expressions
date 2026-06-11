@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [10.0.0] - 2026-06-11
 ### Changed
 - [NET] - Upgraded Test project dependencies and adjusted test code due to breaking changes in MSTest v4.
 - BREAKING CHANGE: [JavaScript] Switch to ESM ([#280](https://github.com/cucumber/tag-expressions/pull/280))
@@ -238,7 +240,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v9.1.0...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v10.0.0...HEAD
+[10.0.0]: https://github.com/cucumber/tag-expressions/compare/v9.1.0...v10.0.0
 [9.1.0]: https://github.com/cucumber/tag-expressions/compare/v9.0.0...v9.1.0
 [9.0.0]: https://github.com/cucumber/tag-expressions/compare/v8.1.0...v9.0.0
 [8.1.0]: https://github.com/cucumber/tag-expressions/compare/v8.0.0...v8.1.0
