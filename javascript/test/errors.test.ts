@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import fs from 'node:fs'
-import yaml from 'js-yaml'
+import * as yaml from 'js-yaml'
 
 import parse from '../src/index.js'
 import { testDataDir } from './testDataDir.js'
