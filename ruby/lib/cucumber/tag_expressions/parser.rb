@@ -18,6 +18,7 @@ module Cucumber
         tokens.each { |token| expected_token_type = handle_sequential_tokens(token, infix_expression, expected_token_type) }
         while @operators.any?
           raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Unmatched (." if @operators.last == '('
+
           push_expression(infix_expression, @operators.pop)
         end
         @expressions.pop
