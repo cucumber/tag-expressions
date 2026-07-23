@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'cucumber/tag_expressions/expressions'
+require_relative 'expressions'
 
 module Cucumber
   module TagExpressions

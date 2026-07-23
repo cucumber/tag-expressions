@@ -1,3 +1,3 @@
 # frozen_string_literal: true
 
-require 'cucumber/tag_expressions/parser'
+require_relative 'tag_expressions/parser'
