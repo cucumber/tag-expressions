@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'cucumber/tag_expressions/expressions'
+require_relative 'expressions'
 
 module Cucumber
   module TagExpressions
@@ -18,6 +18,7 @@ module Cucumber
         tokens.each { |token| expected_token_type = handle_sequential_tokens(token, infix_expression, expected_token_type) }
         while @operators.any?
           raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Unmatched (." if @operators.last == '('
+
           push_expression(infix_expression, @operators.pop)
         end
         @expressions.pop
@@ -68,9 +69,9 @@ module Cucumber
 
       def push_expression(infix_expression, token)
         case token
-        when 'and' then @expressions.push(And.new(*popOperand(infix_expression, @expressions, 2)))
-        when 'or'  then @expressions.push(Or.new(*popOperand(infix_expression, @expressions, 2)))
-        when 'not' then @expressions.push(Not.new(popOperand(infix_expression, @expressions)))
+        when 'and' then @expressions.push(And.new(*pop_operand(infix_expression, @expressions, 2)))
+        when 'or'  then @expressions.push(Or.new(*pop_operand(infix_expression, @expressions, 2)))
+        when 'not' then @expressions.push(Not.new(pop_operand(infix_expression, @expressions)))
         else            @expressions.push(Literal.new(token))
         end
       end
@@ -123,7 +124,7 @@ module Cucumber
         raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Expected #{expected_token_type}."
       end
 
-      def popOperand(infix_expression, array, amount = 1)
+      def pop_operand(infix_expression, array, amount = 1)
         result = array.pop(amount)
         raise "Tag expression \"#{infix_expression}\" could not be parsed because of syntax error: Expected operand." if result.length != amount
 

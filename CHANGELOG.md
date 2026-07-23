@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+- [Ruby] Minimum ruby version is now bumped from `2.6` to `3.1` (With minor refactors to improve file loading / `Literal` node sanitization)
 
 ## [10.0.0] - 2026-06-11
 ### Changed

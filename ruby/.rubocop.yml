@@ -3,15 +3,20 @@ require:
   - rubocop-rake
   - rubocop-rspec
 
-inherit_from: .rubocop_todo.yml
-
 inherit_mode:
   merge:
     - Exclude
 
 AllCops:
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 3.1
   NewCops: enable
+
+# Several methods are structured to be identical cross-language. So there is no point flagging them constantly
+Metrics:
+  Enabled: false
+
+Gemspec/DevelopmentDependencies:
+  Enabled: false
 
 Gemspec/RequireMFA:
   Enabled: false
