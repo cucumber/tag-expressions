@@ -154,7 +154,7 @@ class TestTagExpressionParser:
         assert expected == tokens
 
     # -- TESTS FOR: TagExpressionParser.parse()
-    correct_test_data = [
+    correct_test_data = (
         ("a and b", "( a and b )"),
         ("a or (b)", "( a or b )"),
         ("not   a", "not ( a )"),
@@ -163,7 +163,7 @@ class TestTagExpressionParser:
             "not a or b and not c or not d or e and f",
             "( ( ( not ( a ) or ( b and not ( c ) ) ) or not ( d ) ) or ( e and f ) )",
         ),
-    ]
+    )
 
     @pytest.mark.parametrize("text, expected", correct_test_data)
     def test_parse(self, text, expected):
