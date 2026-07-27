@@ -14,7 +14,7 @@ These selected items are normally included in a test run.
 from .parser import TagExpressionError, TagExpressionParser, parse
 
 __all__ = [
-    "parse",
-    "TagExpressionParser",
     "TagExpressionError",
+    "TagExpressionParser",
+    "parse",
 ]

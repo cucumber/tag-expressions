@@ -129,7 +129,7 @@ class And(Expression):
 
     def __str__(self):
         if not self.terms:
-            return ""  # noqa
+            return ""
         expression_text = " and ".join([str(term) for term in self.terms])
         return f"( {expression_text} )"
 
@@ -169,7 +169,7 @@ class Or(Expression):
 
     def __str__(self):
         if not self.terms:
-            return ""  # noqa
+            return ""
         expression_text = " or ".join([str(term) for term in self.terms])
         return f"( {expression_text} )"
 

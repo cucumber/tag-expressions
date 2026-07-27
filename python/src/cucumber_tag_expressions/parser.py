@@ -9,6 +9,7 @@ Examples:
 """
 
 from enum import Enum
+from typing import ClassVar
 
 from cucumber_tag_expressions.model import And, Literal, Not, Or, True_
 
@@ -195,7 +196,7 @@ class TagExpressionParser:
         http://rosettacode.org/wiki/Parsing/Shunting-yard_algorithm
     """
 
-    TOKEN_MAP = {token.keyword: token for token in Token.__members__.values()}
+    TOKEN_MAP: ClassVar[dict[str, Token]] = {token.keyword: token for token in Token.__members__.values()}
 
     @classmethod
     def select_token(cls, text):
@@ -421,12 +422,11 @@ class TagExpressionParser:
         Returns:
             str: Detailed error message with error-position marked.
         """
-        if error_index > len(parts):
-            error_index = len(parts)  # noqa
+        error_index = min(error_index, len(parts))
         good_text_size = len(" ".join(parts[:error_index]))
         error_pos = len("Expression: ") + good_text_size + 1
         template = "Expression: {expression}\n%s^ (HERE)" % ("_" * error_pos)
-        if message:  # noqa
+        if message:
             template = "{message}\n" + template
         expression = " ".join(parts)
         return template.format(message=message, expression=expression)

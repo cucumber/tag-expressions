@@ -59,7 +59,7 @@ class TestTagExpression:
     def test_complex_example(self):
         tag_expression_text = "not @a or @b and not @c or not @d or @e and @f"
         tag_expression = TagExpressionParser.parse(tag_expression_text)
-        assert tag_expression.evaluate("@a @c @d".split()) is False
+        assert tag_expression.evaluate(["@a", "@c", "@d"]) is False
 
     def test_with_escaped_chars(self):
         # -- SOURCE: TagExpressionParserTest.java
