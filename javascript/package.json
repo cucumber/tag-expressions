@@ -12,7 +12,7 @@
     "build": "tsc --project tsconfig.build.json",
     "postbuild": "node -e \"require('.')\"",
     "test": "mocha",
-    "stryker": "NODE_OPTIONS=\"--loader ts-node/esm\" TAG_EXPRESSIONS_TEST_DATA_DIR=$(pwd)/../testdata stryker run",
+    "stryker": "NODE_OPTIONS=\"--import tsx\" TAG_EXPRESSIONS_TEST_DATA_DIR=$(pwd)/../testdata stryker run",
     "prepublishOnly": "npm run build",
     "fix": "biome check --fix --error-on-warnings",
     "lint": "biome check --error-on-warnings"
@@ -43,7 +43,7 @@
     "js-yaml": "^5.0.0",
     "mocha": "11.8.0",
     "pretty-quick": "4.2.2",
-    "ts-node": "10.9.2",
+    "tsx": "^4.23.5",
     "typescript": "7.0.2"
   },
   "directories": {
