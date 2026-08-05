@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [11.0.1] - 2026-08-05
 ### Fixed
 - [Java] Use version range for `org.jspecify:jspecify`
 
@@ -246,7 +248,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v11.0.0...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v11.0.1...HEAD
+[11.0.1]: https://github.com/cucumber/tag-expressions/compare/v11.0.0...v11.0.1
 [11.0.0]: https://github.com/cucumber/tag-expressions/compare/v10.0.0...v11.0.0
 [10.0.0]: https://github.com/cucumber/tag-expressions/compare/v9.1.0...v10.0.0
 [9.1.0]: https://github.com/cucumber/tag-expressions/compare/v9.0.0...v9.1.0
