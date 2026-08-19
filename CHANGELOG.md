@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- [CPP] Add a cpp implementation ([#241](https://github.com/cucumber/tag-expressions/pull/241))
 
 ## [11.0.1] - 2026-08-05
 ### Fixed
