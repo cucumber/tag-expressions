@@ -1,12 +1,13 @@
 module github.com/cucumber/tag-expressions/go/v11
 
 require (
-	github.com/stretchr/testify v1.12.0
+	github.com/stretchr/testify v1.12.1
 	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
 	github.com/kr/pretty v0.2.0 // indirect
+	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 )
 
