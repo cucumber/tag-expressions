@@ -17,38 +17,31 @@ namespace cucumber::tag_expressions
 {
     namespace
     {
-        void EnsureExpectedTokenType(TokenType tokenType, TokenType expected, std::string_view lastPart)
+        Error SyntaxError(std::string_view expression, std::string_view reason)
+        {
+            return Error("Tag expression \"" + std::string{ expression } + "\" could not be parsed because of syntax error: " + std::string{ reason } + ".");
+        }
+
+        void EnsureExpectedTokenType(std::string_view expression, TokenType tokenType, TokenType expected)
         {
             if (tokenType != expected)
             {
-                throw Error("(Syntax error. Expected " + std::string{ TokenTypeMap().at(expected) } + " after " + std::string{ lastPart } + ")");
+                throw SyntaxError(expression, "Expected " + std::string{ TokenTypeMap().at(expected) });
             }
         }
 
-        void RequireArgCount(const Token& token, std::deque<std::unique_ptr<Expression>>& expressions, std::size_t number)
+        void RequireArgCount(std::string_view expression, std::deque<std::unique_ptr<Expression>>& expressions, std::size_t number)
         {
             if (expressions.size() < number)
             {
-
-                std::string expressionsStr{};
-                for (const auto& expr : expressions)
-                {
-                    if (!expressionsStr.empty())
-                    {
-                        expressionsStr += ", ";
-                    }
-
-                    expressionsStr += static_cast<std::string>(*expr);
-                }
-
-                throw Error("(" + std::string{ token.keyword } + ": Too few operands (expressions={" + expressionsStr + "}))");
+                throw SyntaxError(expression, "Expected operand");
             }
         }
 
         template<class T>
-        void PushBinary(const Token& token, std::deque<std::unique_ptr<Expression>>& expressions)
+        void PushBinary(std::string_view expression, std::deque<std::unique_ptr<Expression>>& expressions)
         {
-            RequireArgCount(token, expressions, 2);
+            RequireArgCount(expression, expressions, 2);
 
             auto term2 = std::move(expressions.back());
             expressions.pop_back();
@@ -59,9 +52,9 @@ namespace cucumber::tag_expressions
         }
 
         template<class T>
-        void PushUnary(const Token& token, std::deque<std::unique_ptr<Expression>>& expressions)
+        void PushUnary(std::string_view expression, std::deque<std::unique_ptr<Expression>>& expressions)
         {
-            RequireArgCount(token, expressions, 1);
+            RequireArgCount(expression, expressions, 1);
 
             auto term = std::move(expressions.back());
             expressions.pop_back();
@@ -69,19 +62,19 @@ namespace cucumber::tag_expressions
             expressions.push_back(std::make_unique<T>(std::move(term)));
         }
 
-        void PushExpression(const Token& token, std::deque<std::unique_ptr<Expression>>& expressions)
+        void PushExpression(std::string_view expression, const Token& token, std::deque<std::unique_ptr<Expression>>& expressions)
         {
             if (token == OR)
             {
-                PushBinary<OrExpression>(token, expressions);
+                PushBinary<OrExpression>(expression, expressions);
             }
             else if (token == AND)
             {
-                PushBinary<AndExpression>(token, expressions);
+                PushBinary<AndExpression>(expression, expressions);
             }
             else if (token == NOT)
             {
-                PushUnary<NotExpression>(token, expressions);
+                PushUnary<NotExpression>(expression, expressions);
             }
             else
             {
@@ -101,7 +94,7 @@ namespace cucumber::tag_expressions
                 {
                     if ((ch != '(' && ch != ')' && ch != '\\') && !std::isspace(ch, std::locale()))
                     {
-                        throw Error("Tag expression \"" + std::string{ expression } + "\" could not be parsed because of syntax error: Illegal escape before \"" + ch + "\".");
+                        throw SyntaxError(expression, "Illegal escape before \"" + std::string{ ch } + "\"");
                     }
 
                     token += ch;
@@ -161,7 +154,6 @@ namespace cucumber::tag_expressions
 
         std::stack<Token> operations;
         std::deque<std::unique_ptr<Expression>> expressions;
-        std::string lastPart = "BEGIN";
         auto expectedTokenType = TokenType::operand;
 
         for (auto index = 0; index < tokens.size(); ++index)
@@ -170,41 +162,41 @@ namespace cucumber::tag_expressions
 
             if (const auto* token = SelectToken(part); token == nullptr)
             {
-                EnsureExpectedTokenType(TokenType::operand, expectedTokenType, lastPart);
+                EnsureExpectedTokenType(expression, TokenType::operand, expectedTokenType);
                 expressions.push_back(std::make_unique<LiteralExpression>(part));
                 expectedTokenType = TokenType::operator_;
             }
             else if (*token == NOT || *token == OPEN_PARENTHESIS)
             {
-                EnsureExpectedTokenType(TokenType::operand, expectedTokenType, lastPart);
+                EnsureExpectedTokenType(expression, TokenType::operand, expectedTokenType);
                 operations.push(*token);
                 expectedTokenType = TokenType::operand;
             }
             else if (token->IsOperation())
             {
-                EnsureExpectedTokenType(TokenType::operator_, expectedTokenType, lastPart);
+                EnsureExpectedTokenType(expression, TokenType::operator_, expectedTokenType);
                 while (!operations.empty() && operations.top().IsOperation() && token->HasLowerPrecedenceThan(operations.top()))
                 {
                     auto lastOperation = operations.top();
                     operations.pop();
-                    PushExpression(lastOperation, expressions);
+                    PushExpression(expression, lastOperation, expressions);
                 }
                 operations.push(*token);
                 expectedTokenType = TokenType::operand;
             }
             else if (*token == CLOSE_PARENTHESIS)
             {
-                EnsureExpectedTokenType(TokenType::operator_, expectedTokenType, lastPart);
+                EnsureExpectedTokenType(expression, TokenType::operator_, expectedTokenType);
                 while (!operations.empty() && operations.top() != OPEN_PARENTHESIS)
                 {
                     auto lastOperation = operations.top();
                     operations.pop();
-                    PushExpression(lastOperation, expressions);
+                    PushExpression(expression, lastOperation, expressions);
                 }
 
                 if (operations.empty())
                 {
-                    throw Error("Missing '(': Too few open-parens in: " + std::string{ expression });
+                    throw SyntaxError(expression, "Unmatched )");
                 }
 
                 if (operations.top() == OPEN_PARENTHESIS)
@@ -213,8 +205,6 @@ namespace cucumber::tag_expressions
                     expectedTokenType = TokenType::operator_;
                 }
             }
-
-            lastPart = part;
         }
 
         while (!operations.empty())
@@ -224,10 +214,10 @@ namespace cucumber::tag_expressions
 
             if (lastOperation == OPEN_PARENTHESIS)
             {
-                throw Error("Unclosed '(': Too many open-parens in: " + std::string{ expression });
+                throw SyntaxError(expression, "Unmatched (");
             }
 
-            PushExpression(lastOperation, expressions);
+            PushExpression(expression, lastOperation, expressions);
         }
 
         return std::move(expressions.back());
