@@ -1,85 +1,72 @@
 #include "cucumber/tag-expressions/Parser.hpp"
-#include "yaml-cpp/node/emit.h"
-#include "yaml-cpp/node/node.h"
 #include "yaml-cpp/node/parse.h"
 #include "yaml-cpp/yaml.h"
+#include "gmock/gmock.h"
+#include "gtest/gtest.h"
 #include <cctype>
-#include <cstdlib>
 #include <filesystem>
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
-#include <memory>
+#include <ostream>
 #include <string>
 #include <string_view>
-#include <utility>
 #include <vector>
 
 namespace cucumber::tag_expressions
 {
-    struct TestParsingFixture : testing::Test
-    {
-        TestParsingFixture(std::string_view expression, std::string_view formatted)
-            : expression{ expression }
-            , formatted{ formatted }
-        {}
-
-        void TestBody() override
-        {
-            const auto tagExpression = Parse(expression);
-
-            ASSERT_THAT(tagExpression, testing::NotNull());
-            const auto actualText = static_cast<std::string>(*tagExpression);
-            EXPECT_THAT(actualText, testing::StrEq(formatted));
-        }
-
-        std::string expression;
-        std::string formatted;
-    };
-
     namespace
     {
-        std::vector<std::pair<std::string, YAML::Node>> GetTestData(const std::filesystem::path& path)
+        std::string Sanitize(std::string_view text)
         {
-            std::vector<std::pair<std::string, YAML::Node>> testdata;
-
-            if (std::filesystem::is_regular_file(path) && (path.extension() == ".yml" || path.extension() == ".yaml"))
-                testdata.emplace_back(path.string(), YAML::LoadFile(path.string()));
-            else
-                for (const auto& file : std::filesystem::directory_iterator(path))
-                    if (file.is_regular_file() && (file.path().extension() == ".yml" || file.path().extension() == ".yaml"))
-                        testdata.emplace_back(file.path().string(), YAML::LoadFile(file.path().string()));
-
-            return testdata;
+            std::string result;
+            for (const char c : text)
+            {
+                result += std::isalnum(static_cast<unsigned char>(c)) ? c : '_';
+            }
+            return result.empty() ? std::string{ "empty" } : result;
         }
 
-        std::vector<testing::TestInfo*> RegisterMyTests()
+        struct ParsingParam
         {
-            std::vector<testing::TestInfo*> tests;
-            const auto testdataPath{ std::filesystem::path{ TESTDATA_SRC } / "parsing.yml" };
+            std::string expression;
+            std::string formatted;
+        };
 
-            std::size_t lineNumber = 2;
+        void PrintTo(const ParsingParam& param, std::ostream* stream)
+        {
+            *stream << "'" << param.expression << "' => '" << param.formatted << "'";
+        }
 
-            for (const auto& [file, testdata] : GetTestData(testdataPath))
+        std::vector<ParsingParam> GetParsingParams()
+        {
+            std::vector<ParsingParam> params;
+            const std::filesystem::path testdataPath{ std::filesystem::path{ TESTDATA_SRC } / "parsing.yml" };
+            const auto testdata = YAML::LoadFile(testdataPath.string());
+
+            for (const auto& node : testdata)
             {
-                for (const auto& node : testdata)
-                {
-                    auto factory = [node = node]() -> TestParsingFixture*
-                    {
-                        return new TestParsingFixture(node["expression"].as<std::string>(), node["formatted"].as<std::string>());
-                    };
-
-                    const auto testName = ("Test_" + std::to_string(tests.size()) + "_" + std::to_string(lineNumber));
-                    auto* testInfo = testing::RegisterTest("TestParsing", testName.c_str(), nullptr, nullptr, testdataPath.string().c_str(), lineNumber, factory);
-
-                    tests.push_back(testInfo);
-
-                    lineNumber += 2;
-                }
+                params.push_back({ node["expression"].as<std::string>(), node["formatted"].as<std::string>() });
             }
 
-            return tests;
+            return params;
         }
+
+        struct TestParsing : testing::TestWithParam<ParsingParam>
+        {};
     }
 
-    auto TestParsing = RegisterMyTests();
+    TEST_P(TestParsing, FormatsExpression)
+    {
+        const auto& param = GetParam();
+
+        const auto tagExpression = Parse(param.expression);
+        ASSERT_THAT(tagExpression, testing::NotNull());
+
+        const auto actualText = static_cast<std::string>(*tagExpression);
+        EXPECT_THAT(actualText, testing::StrEq(param.formatted));
+    }
+
+    INSTANTIATE_TEST_SUITE_P(FromTestData, TestParsing, testing::ValuesIn(GetParsingParams()),
+        [](const testing::TestParamInfo<ParsingParam>& info)
+        {
+            return Sanitize(info.param.expression) + "_" + std::to_string(info.index);
+        });
 }

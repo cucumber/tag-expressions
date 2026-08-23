@@ -1,98 +1,81 @@
 #include "cucumber/tag-expressions/Parser.hpp"
-#include "yaml-cpp/node/emit.h"
-#include "yaml-cpp/node/node.h"
-#include "yaml-cpp/node/parse.h"
 #include "yaml-cpp/yaml.h"
-#include <cstdlib>
+#include <cctype>
+#include <cstddef>
 #include <filesystem>
+#include <functional>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <ostream>
 #include <set>
 #include <string>
 #include <string_view>
-#include <utility>
 #include <vector>
 
 namespace cucumber::tag_expressions
 {
-    struct TestEvaluationsFixture : testing::Test
-    {};
-
-    struct TestEvaluations : TestEvaluationsFixture
-    {
-        TestEvaluations(std::string_view expression, YAML::Node variables, bool result)
-            : expression{ expression }
-            , variables{ variables }
-            , result{ result }
-        {}
-
-        void TestBody() override
-        {
-            const auto tagExpression = Parse(expression);
-            ASSERT_THAT(tagExpression, testing::NotNull());
-
-            std::set<std::string, std::less<>> tags;
-            for (const auto& var : variables)
-                tags.insert(var.as<std::string>());
-
-            EXPECT_THAT(tagExpression->Evaluate(tags), testing::Eq(result));
-        }
-
-    private:
-        std::string expression;
-        YAML::Node variables;
-        bool result;
-    };
-
     namespace
     {
-        std::vector<std::pair<std::string, YAML::Node>> GetTestData(const std::filesystem::path& path)
+        std::string Sanitize(std::string_view text)
         {
-            std::vector<std::pair<std::string, YAML::Node>> testdata;
-
-            if (std::filesystem::is_regular_file(path) && (path.extension() == ".yml" || path.extension() == ".yaml"))
-                testdata.emplace_back(path.string(), YAML::LoadFile(path.string()));
-            else
-                for (const auto& file : std::filesystem::directory_iterator(path))
-                    if (file.is_regular_file() && (file.path().extension() == ".yml" || file.path().extension() == ".yaml"))
-                        testdata.emplace_back(file.path().string(), YAML::LoadFile(file.path().string()));
-
-            return testdata;
+            std::string result;
+            for (const char c : text)
+                result += std::isalnum(static_cast<unsigned char>(c)) ? c : '_';
+            return result.empty() ? std::string{ "empty" } : result;
         }
 
-        std::vector<testing::TestInfo*> RegisterMyTests()
+        struct EvaluationParam
         {
-            std::vector<testing::TestInfo*> tests;
-            const auto testdataPath{ std::filesystem::path{ TESTDATA_SRC } / "evaluations.yml" };
+            std::string expression;
+            std::vector<std::string> variables;
+            bool result;
+        };
 
-            std::size_t lineNumber = 4;
+        // Determines how Google Test prints the parameter value.
+        void PrintTo(const EvaluationParam& param, std::ostream* stream)
+        {
+            *stream << "'" << param.expression << "' [";
+            for (std::size_t i = 0; i < param.variables.size(); ++i)
+                *stream << (i == 0 ? "" : ", ") << param.variables[i];
+            *stream << "] => " << (param.result ? "true" : "false");
+        }
 
-            for (const auto& [file, testdata] : GetTestData(testdataPath))
-            {
-                for (const auto& node : testdata)
-                {
-                    for (const auto& test : node["tests"])
-                    {
-                        auto factory = [node = node, test = test]() -> TestEvaluationsFixture*
-                        {
-                            return new TestEvaluations(node["expression"].as<std::string>(), test["variables"], test["result"].as<bool>());
-                        };
+        std::vector<EvaluationParam> GetEvaluationParams()
+        {
+            std::vector<EvaluationParam> params;
+            const std::filesystem::path testdataPath{ std::filesystem::path{ TESTDATA_SRC } / "evaluations.yml" };
+            const auto testdata = YAML::LoadFile(testdataPath.string());
 
-                        const auto testName = ("Test_" + std::to_string(tests.size()) + "_" + std::to_string(lineNumber));
-                        auto* testInfo = testing::RegisterTest("TestEvaluations", testName.c_str(), nullptr, nullptr, testdataPath.string().c_str(), lineNumber, factory);
+            for (const auto& node : testdata)
+                for (const auto& test : node["tests"])
+                    params.push_back({ node["expression"].as<std::string>(), test["variables"].as<std::vector<std::string>>(), test["result"].as<bool>() });
 
-                        tests.push_back(testInfo);
-
-                        lineNumber += 2;
-                    }
-
-                    lineNumber += 2;
-                }
-            }
-
-            return tests;
+            return params;
         }
     }
 
-    auto testEvaluations = RegisterMyTests();
+    struct TestEvaluations : testing::TestWithParam<EvaluationParam>
+    {};
+
+    TEST_P(TestEvaluations, EvaluatesExpression)
+    {
+        const auto& param = GetParam();
+
+        const auto tagExpression = Parse(param.expression);
+        ASSERT_THAT(tagExpression, testing::NotNull());
+
+        const std::set<std::string, std::less<>> tags(param.variables.begin(), param.variables.end());
+
+        EXPECT_THAT(tagExpression->Evaluate(tags), testing::Eq(param.result));
+    }
+
+    INSTANTIATE_TEST_SUITE_P(FromTestData, TestEvaluations, testing::ValuesIn(GetEvaluationParams()),
+        [](const testing::TestParamInfo<EvaluationParam>& info)
+        {
+            std::string name = Sanitize(info.param.expression);
+            for (const auto& variable : info.param.variables)
+                name += "_" + Sanitize(variable);
+            name += info.param.result ? "_true" : "_false";
+            return name + "_" + std::to_string(info.index);
+        });
 }
