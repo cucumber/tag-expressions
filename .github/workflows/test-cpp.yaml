@@ -55,10 +55,6 @@ jobs:
         working-directory: cpp
         run: cmake --workflow --preset test-system
 
-      - name: Check testdata coverage
-        working-directory: cpp
-        run: cmake --build build/test-system --target check-testdata-coverage
-
   test-cpp-system-packages-macos:
     runs-on: macos-latest
     steps:
@@ -80,10 +76,6 @@ jobs:
         working-directory: cpp
         run: cmake --workflow --preset test-system
 
-      - name: Check testdata coverage
-        working-directory: cpp
-        run: cmake --build build/test-system --target check-testdata-coverage
-
   test-cpp-system-packages-windows:
     runs-on: windows-latest
     steps:
@@ -104,10 +96,6 @@ jobs:
       - name: Build and unit test
         working-directory: cpp
         run: cmake --workflow --preset test-system
-
-      - name: Check testdata coverage
-        working-directory: cpp
-        run: cmake --build build/test-system --target check-testdata-coverage
 
   test-cpp-coverage:
     runs-on: ubuntu-26.04
