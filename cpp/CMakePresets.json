@@ -49,9 +49,11 @@
             "name": "coverage",
             "displayName": "Coverage build (system dependencies)",
             "description": "Build with unit tests and code coverage instrumentation using system dependencies.",
-            "inherits": "test-system",
+            "inherits": "base",
             "cacheVariables": {
-                "CUCUMBER_TAG_EXPRESSIONS_ENABLE_COVERAGE": "On"
+                "CUCUMBER_TAG_EXPRESSIONS_BUILD_TESTS": "On",
+                "CUCUMBER_TAG_EXPRESSIONS_ENABLE_COVERAGE": "On",
+                "CMAKE_BUILD_TYPE": "Debug"
             }
         }
     ],

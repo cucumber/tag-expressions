@@ -70,7 +70,7 @@ jobs:
           save: ${{ github.ref == 'refs/heads/main' }}
 
       - name: Install dependencies
-        run: brew install googletest libyaml
+        run: brew install googletest yaml-cpp
 
       - name: Build and unit test
         working-directory: cpp
@@ -89,7 +89,7 @@ jobs:
       - name: Install dependencies
         shell: pwsh
         run: |
-          vcpkg install gtest libyaml --triplet x64-windows
+          vcpkg install gtest yaml-cpp --triplet x64-windows
           # Expose the vcpkg toolchain so find_package() locates the packages.
           echo "CMAKE_TOOLCHAIN_FILE=$env:VCPKG_INSTALLATION_ROOT/scripts/buildsystems/vcpkg.cmake" >> $env:GITHUB_ENV
 
