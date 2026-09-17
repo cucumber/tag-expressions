@@ -2,7 +2,6 @@ add_executable(cucumber_tag_expressions.test)
 
 target_link_libraries(cucumber_tag_expressions.test PUBLIC
     cucumber_tag_expressions_lib
-    GTest::gmock
     GTest::gmock_main
     yaml-cpp::yaml-cpp
 )
