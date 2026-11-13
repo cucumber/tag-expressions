@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
-project(cucumber_tag_expressions VERSION 11.0.1 LANGUAGES CXX)
+project(cucumber_tag_expressions VERSION 11.1.0 LANGUAGES CXX)
 
 # Options
 if(POLICY CMP0077)

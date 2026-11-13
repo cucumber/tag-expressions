@@ -10,21 +10,21 @@
     </parent>
 
     <artifactId>tag-expressions</artifactId>
-    <version>11.0.2-SNAPSHOT</version>
+    <version>11.1.0</version>
     <packaging>jar</packaging>
     <name>Cucumber Tag Expressions</name>
     <description>Parses boolean infix expressions</description>
     <url>https://github.com/cucumber/tag-expressions</url>
 
     <properties>
-        <project.build.outputTimestamp>1785961982</project.build.outputTimestamp>
+        <project.build.outputTimestamp>1794574557</project.build.outputTimestamp>
     </properties>
 
     <scm>
         <connection>scm:git:https://github.com/cucumber/tag-expressions.git</connection>
         <developerConnection>scm:git:git@github.com:cucumber/tag-expressions.git</developerConnection>
         <url>https://github.com/cucumber/tag-expressions.git</url>
-        <tag>HEAD</tag>
+        <tag>v11.1.0</tag>
     </scm>
 
     <dependencyManagement>

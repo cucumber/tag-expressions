@@ -6,9 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [11.1.0] - 2026-11-13
 ### Added
 - [cpp] add C++ implementation ([#309](https://github.com/cucumber/tag-expressions/pull/309))
-
 
 ## [11.0.1] - 2026-08-05
 ### Fixed
@@ -251,7 +252,8 @@ by [aslakhellesoy](https://github.com/aslakhellesoy))
 ### Added
 - First stable release!
 
-[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v11.0.1...HEAD
+[Unreleased]: https://github.com/cucumber/tag-expressions/compare/v11.1.0...HEAD
+[11.1.0]: https://github.com/cucumber/tag-expressions/compare/v11.0.1...v11.1.0
 [11.0.1]: https://github.com/cucumber/tag-expressions/compare/v11.0.0...v11.0.1
 [11.0.0]: https://github.com/cucumber/tag-expressions/compare/v10.0.0...v11.0.0
 [10.0.0]: https://github.com/cucumber/tag-expressions/compare/v9.1.0...v10.0.0
