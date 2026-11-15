@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- [Java] Add OSGI Bundle name ([#329](https://github.com/cucumber/tag-expressions/pull/329))
 
 ## [11.1.0] - 2026-11-13
 ### Added
