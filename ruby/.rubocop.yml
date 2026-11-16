@@ -1,4 +1,4 @@
-require:
+plugins:
   - rubocop-performance
   - rubocop-rake
   - rubocop-rspec
@@ -14,6 +14,13 @@ AllCops:
 # Several methods are structured to be identical cross-language. So there is no point flagging them constantly
 Metrics:
   Enabled: false
+
+# This file includes several types of expression all with a single public API `#evaluate` - Which sometimes will return
+# an evaluation and sometimes a boolean. So we don't want to flag the method name as a predicate method, because strictly
+# speaking, it isn't always a predicate method. It is a method that evaluates an expression and returns the result of that evaluation.
+Naming/PredicateMethod:
+  Exclude:
+    - 'lib/cucumber/tag_expressions/expressions.rb'
 
 Gemspec/DevelopmentDependencies:
   Enabled: false
